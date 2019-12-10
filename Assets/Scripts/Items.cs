@@ -30,7 +30,7 @@ public class Items : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (bornTime + lifeTime < Time.time)
+        if (bornTime + lifeTime < Time.deltaTime)
             Destroy(this.gameObject);
     }
 }
