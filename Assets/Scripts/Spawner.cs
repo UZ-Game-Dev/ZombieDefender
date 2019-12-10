@@ -26,10 +26,10 @@ public class Spawner : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(bornTime + spawnDelay < Time.time)
+        if(bornTime + spawnDelay < Time.deltaTime)
         {
             Spawn(0);
-            bornTime = Time.time;
+            bornTime = Time.deltaTime;
         }
     }
 
