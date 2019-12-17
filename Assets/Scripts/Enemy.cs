@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(RandomItem))]
 public class Enemy : MonoBehaviour
 {
     [Header("Definiowane w panelu")]
@@ -41,7 +42,7 @@ public class Enemy : MonoBehaviour
         if (_health <= 0)
         {
             Death();
-            //SpawnItem();
+            GetComponent<RandomItem>().randomItemDrop();
         }
     }
 
