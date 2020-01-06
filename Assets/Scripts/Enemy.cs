@@ -1,21 +1,27 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(RandomItem))]
+[RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
     [Header("Definiowane w panelu")]
     [SerializeField]
     private float _health = 10f;
+    [SerializeField]
+    private float _attackSpeed = 1f;
+    [SerializeField]
+    private float _attackCooldownStart = 1f;
 
     [Header("Definiowane dynamicznie")]
     public GameObject player;
-    private Vector3 _point;
+    private Vector3 _target;
     private NavMeshAgent _agent;
-    
+    private bool _attack = false;
+    private float _attackCooldown = 0f;
+
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -24,15 +30,51 @@ public class Enemy : MonoBehaviour
 
     public void GoToPoint ()
     {
-        player = GameObject.Find("Player");
-        _point = player.transform.position;
-
-        _agent.SetDestination(_point);
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            _target = player.transform.position;
+            _agent.SetDestination(_target);
+        }
+        else Debug.Log("Nie znaleziono gracza!");
+        
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log(other.name);
+        Debug.Log(collider.name);
+        if (collider.tag.Equals("Player"))
+        {
+            _attack = true;
+            StartCoroutine(Attack());
+        }
+    }
+
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.tag.Equals("Player"))
+        {
+            _attack = false;
+        }
+    }
+
+    private IEnumerator Attack()
+    {
+        _agent.isStopped = true;
+        _attackCooldown = _attackCooldownStart;
+
+        while (_attack)
+        {
+            _attackCooldown -= Time.deltaTime;
+
+            if (_attackCooldown <= 0f)
+            {
+                //player.TakeDamage(Random.Range(2, 4));
+                Debug.Log("*AAŁA* Kurwa gryzie!");
+                _attackCooldown = 1f / _attackSpeed;
+            }
+            yield return null;
+        }
     }
 
     public void TakeDamage(float dmg)
@@ -48,6 +90,7 @@ public class Enemy : MonoBehaviour
 
     public void Death()
     {
+        //Main.S.countEnemy--;
         Destroy(gameObject);
     }
 }
