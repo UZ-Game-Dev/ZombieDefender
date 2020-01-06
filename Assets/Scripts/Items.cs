@@ -33,4 +33,10 @@ public class Items : MonoBehaviour
         if (bornTime + lifeTime < Time.deltaTime)
             Destroy(this.gameObject);
     }
+
+    private void OnMouseDown()
+    {
+        //Main.S.PickUpItem(type);
+        Destroy(this.gameObject);
+    }
 }
