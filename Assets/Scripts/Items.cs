@@ -18,20 +18,16 @@ public class Items : MonoBehaviour
     public eIteamsType type = eIteamsType.none;
     public float lifeTime = 10;
 
-    [Header("Definiowane dynamicznie")]
-    public float bornTime = 0;
-
     // Start is called before the first frame update
     void Start()
     {
-        bornTime = Time.time;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (bornTime + lifeTime < Time.deltaTime)
-            Destroy(this.gameObject);
+        Destroy(this.gameObject, lifeTime);
     }
 
     private void OnMouseDown()
