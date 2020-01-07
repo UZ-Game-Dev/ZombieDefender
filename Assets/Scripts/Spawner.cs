@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    public static Spawner S;
+
     [Header("Definiowane w panelu inspekcyjnym")]
     public GameObject[] spawnerPoints;
     public GameObject[] enemyPrefabs;
@@ -11,11 +13,12 @@ public class Spawner : MonoBehaviour
 
     [Header("Definiowane dynamicznie")]
     public float bornTime = 0;
+    public bool isEnableToSpawn = true;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        S = this;
     }
 
     // Update is called once per frame
@@ -24,12 +27,17 @@ public class Spawner : MonoBehaviour
         
     }
 
-    private void FixedUpdate()
+    public void SpawnStart(int sum)
     {
-        if(bornTime + spawnDelay < Time.deltaTime)
+        StartCoroutine(SpawnZombie(sum));
+    }
+
+    IEnumerator SpawnZombie(int sum)
+    {
+        for (int i = 0; i < sum; i++)
         {
+            yield return new WaitForSeconds(spawnDelay);
             Spawn(0);
-            bornTime = Time.deltaTime;
         }
     }
 
@@ -40,6 +48,8 @@ public class Spawner : MonoBehaviour
 
         Transform objTransform = obj.GetComponent<Transform>();
         objTransform.position = spawnerPoints[randomPosition].GetComponent<Transform>().position;
+
+        Main.S.countEnemy++;
     }
 
     //Rysuje przestrzeń w której będzie odbywać się gra
