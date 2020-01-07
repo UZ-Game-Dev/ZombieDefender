@@ -63,8 +63,6 @@ public class Main : MonoBehaviour
     void WaveMenagment()
     {
         if (countEnemy <= 0)
-            Spawner.S.isEnableToSpawn = true;
-        if (countEnemy >= 5) //Zamiast 5 liczba przeciwnikow z danego poziomu
-            Spawner.S.isEnableToSpawn = false;
+            Spawner.S.SpawnStart(5);
     }
 }

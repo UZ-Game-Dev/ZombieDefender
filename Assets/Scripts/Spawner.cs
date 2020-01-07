@@ -27,12 +27,17 @@ public class Spawner : MonoBehaviour
         
     }
 
-    private void FixedUpdate()
+    public void SpawnStart(int sum)
     {
-        if(bornTime + spawnDelay < Time.deltaTime && isEnableToSpawn)
+        StartCoroutine(SpawnZombie(sum));
+    }
+
+    IEnumerator SpawnZombie(int sum)
+    {
+        for (int i = 0; i < sum; i++)
         {
+            yield return new WaitForSeconds(spawnDelay);
             Spawn(0);
-            bornTime = Time.deltaTime;
         }
     }
 
