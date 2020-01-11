@@ -7,7 +7,7 @@ public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
 
-    enum WeaponType {Bow, MachineGun}  //itp. itd.
+    enum WeaponType {eBow, eMachineGun}  //itp. itd.
     List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public int ammo;
     bool isReloading=false;
@@ -30,7 +30,7 @@ public class Weapon : MonoBehaviour
             currentAmmo = maxAmmo;
             reloadSpeed = 1f;
             damage = 10f;
-            type = WeaponType.Bow;
+            type = WeaponType.eBow;
         }
 
         public override void Upgrade()
@@ -45,14 +45,13 @@ public class Weapon : MonoBehaviour
     private void Start()
     {
         Bow bow=new Bow();
-        weapons.Add(bow);
         weapon = bow;
-        ammo = bow.maxAmmo;
+        ammo = weapon.maxAmmo;
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Mouse X") && ammo > 0 && !isReloading)
+        if (Input.GetButtonDown("Fire1") && ammo > 0 && !isReloading)
             Shoot();
 
         if (Input.GetButtonDown("R") && !isReloading)
@@ -60,7 +59,7 @@ public class Weapon : MonoBehaviour
             StartCoroutine("Reload");
             isReloading = true;
         }
-
+        
         if (Input.GetButtonDown("E") && !isReloading)
             SwapWeapons(1);
 
@@ -91,9 +90,9 @@ public class Weapon : MonoBehaviour
     public void Shoot()
     {
         ammo--;
-        RaycastHit2D hit = Physics2D.Raycast(weaponModel.transform.position, weaponModel.transform.right);
+        RaycastHit hit;
 
-        if(hit)
+        if(Physics.Raycast(weaponModel.transform.position, weaponModel.transform.right,out hit, Mathf.Infinity))
         {
             Enemy enemy=hit.transform.GetComponent<Enemy>();
             enemy.TakeDamage(weapon.damage);
