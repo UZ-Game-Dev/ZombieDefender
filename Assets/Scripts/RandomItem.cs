@@ -43,7 +43,10 @@ public class RandomItem : MonoBehaviour
             {
                 if (randomValue <= _itemList[j].dropWeight)
                 {
-                    Instantiate(_itemList[j].item, _itemList[j].item.transform.position, _itemList[j].item.transform.rotation);
+                    GameObject items = Instantiate(_itemList[j].item, this.transform.position, UnityEngine.Random.rotation) as GameObject;
+                    items.GetComponent<Rigidbody>().AddForce(-this.transform.right * UnityEngine.Random.Range(25f, 50f) + this.transform.up * UnityEngine.Random.Range(0, 25));
+
+                    //Instantiate(_itemList[j].item, this.transform.position, UnityEngine.Random.rotation);
                     return;
                 }
                 randomValue -= _itemList[j].dropWeight;
