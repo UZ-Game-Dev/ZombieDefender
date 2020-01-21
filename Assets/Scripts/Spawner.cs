@@ -36,8 +36,8 @@ public class Spawner : MonoBehaviour
     {
         for (int i = 0; i < sum; i++)
         {
-            yield return new WaitForSeconds(spawnDelay);
             Spawn(0);
+            yield return new WaitForSeconds(spawnDelay);
         }
     }
 

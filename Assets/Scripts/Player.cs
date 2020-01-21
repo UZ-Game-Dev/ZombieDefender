@@ -30,15 +30,16 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Vector2 mouse = (Vector2)mainCamera.ScreenToViewportPoint(Input.mousePosition);
-        Vector2 playerPosition = mainCamera.WorldToViewportPoint(player.transform.position);
-        shootingDirection = mouse - playerPosition;
+        Vector2 mouse = Input.mousePosition - mainCamera.WorldToScreenPoint(player.transform.position);
+        shootingDirection = mouse;
         Rotate();
     }
 
     private void Rotate()
     {
+        //float angle = Mathf.RoundToInt(Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg);
         float angle = Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg;
-        player.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
+        //angle = Mathf.Clamp(angle, -50, 50);
+        player.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 }
