@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class Player : MonoBehaviour
         hp -= amount;
         if (hp <= 0)
         {
-            //ekran game over itd.
+            SceneManager.LoadScene("DeathScene");
         }
     }
 

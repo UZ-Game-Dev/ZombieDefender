@@ -10,6 +10,8 @@ public class Spawner : MonoBehaviour
     public GameObject[] spawnerPoints;
     public GameObject[] enemyPrefabs;
     public float spawnDelay = 5f;
+    public Vector3 gameAreaPosition;
+    public Vector3 gameAreaScale;
 
     [Header("Definiowane dynamicznie")]
     public float bornTime = 0;
@@ -56,6 +58,6 @@ public class Spawner : MonoBehaviour
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
-        Gizmos.DrawWireCube(new Vector3(0,2.5f,0), new Vector3(10,5, 5));
+        Gizmos.DrawWireCube(gameAreaPosition, gameAreaScale);
     }
 }

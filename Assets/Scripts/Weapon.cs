@@ -32,7 +32,7 @@ public class Weapon : MonoBehaviour
             maxAmmo = 1;
             currentAmmo = maxAmmo;
             reloadSpeed = 1f;
-            damage = 6f;
+            damage = 10f;
             type = WeaponType.eBow;
         }
 
@@ -98,7 +98,7 @@ public class Weapon : MonoBehaviour
         Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.right);
         RaycastHit hit;
 
-        float shotDistance = 14;
+        float shotDistance = 13f;
 
         if (Physics.Raycast(ray, out hit, shotDistance))
         {
