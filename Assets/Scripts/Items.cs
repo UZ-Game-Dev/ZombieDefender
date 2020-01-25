@@ -47,6 +47,7 @@ public class Items : MonoBehaviour
             if (_progress > 1.1)
             {
                 _progressbarItems.enabled = false;
+                Debug.Log("Zebrałem: "+type);
                 //Main.S.PickUpItem(type);
                 Destroy(this.gameObject);
             }

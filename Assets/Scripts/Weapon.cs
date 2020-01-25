@@ -10,8 +10,11 @@ public class Weapon : MonoBehaviour
     enum WeaponType {eBow, eMachineGun}  //itp. itd.
     List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public int ammo;
+    public GameObject tracerBox;
+
     bool isReloading=false;
     WeaponDefinition weapon;
+    private LineRenderer tracer;
 
     abstract class WeaponDefinition
     {
@@ -44,6 +47,7 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
+        tracer = tracerBox.GetComponent<LineRenderer>();
         Bow bow=new Bow();
         weapon = bow;
         ammo = weapon.maxAmmo;
@@ -89,13 +93,35 @@ public class Weapon : MonoBehaviour
 
     public void Shoot()
     {
-        ammo--;
+
+        //ammo--;
+        Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.right);
         RaycastHit hit;
 
-        if(Physics.Raycast(weaponModel.transform.position, weaponModel.transform.right,out hit, Mathf.Infinity))
+        float shotDistance = 13f;
+
+        if (Physics.Raycast(ray, out hit, shotDistance))
         {
-            Enemy enemy=hit.transform.GetComponent<Enemy>();
-            enemy.TakeDamage(weapon.damage);
+            Debug.Log("Trafiłem w: " + hit.transform.name);
+            shotDistance = hit.distance;
+
+            if (hit.transform.tag.Equals("Enemy"))
+            {
+                Enemy enemy = hit.transform.GetComponent<Enemy>();
+                enemy.TakeDamage(weapon.damage);
+            }
         }
+
+        //Debug.DrawLine(weaponModel.transform.position, weaponModel.transform.position + ray.direction * shotDistance);
+        StartCoroutine("RenderTracer", ray.direction * shotDistance);
+    }
+
+    IEnumerator RenderTracer(Vector3 hitPoint)
+    {
+        tracerBox.SetActive(true);
+        tracer.SetPosition(0, weaponModel.transform.position);
+        tracer.SetPosition(1, weaponModel.transform.position + hitPoint);
+        yield return null;
+        tracerBox.SetActive(false);
     }
 }

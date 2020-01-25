@@ -69,8 +69,9 @@ public class Enemy : MonoBehaviour
 
             if (_attackCooldown <= 0f)
             {
-                //player.TakeDamage(Random.Range(2, 4));
-                Debug.Log("*AAŁA* Kurwa gryzie!");
+                int _takeDamage = Random.Range(2, 5);
+                player.gameObject.transform.GetChild(0).GetComponent<Player>().TakeDamage(_takeDamage);
+                Debug.Log("*AAŁA* Kurwa gryzie! -" + _takeDamage);
                 _attackCooldown = 1f / _attackSpeed;
             }
             yield return null;
@@ -90,7 +91,7 @@ public class Enemy : MonoBehaviour
 
     public void Death()
     {
-        //Main.S.countEnemy--;
+        Main.S.countEnemy--;
         Destroy(gameObject);
     }
 }
