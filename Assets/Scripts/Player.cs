@@ -43,4 +43,9 @@ public class Player : MonoBehaviour
         //angle = Mathf.Clamp(angle, -50, 50);
         player.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
+
+    public int GetHP()
+    {
+        return hp;
+    }
 }

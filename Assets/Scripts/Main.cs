@@ -2,43 +2,81 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class Level
+{
+    public int maxEnemyCountOnLevel;
+    public float waveDelay = 2f;
+    public float spawnDelay = 5f;
+}
+
 public class Main : MonoBehaviour
 {
-
-    //TEMP
-    public enum eIteamsType
-    {
-        none,
-        eCoin,
-        eGoldBar,
-        eLife
-    }
-    //END TEMP
-
     public static Main S;
 
     [Header("Definiowane w panelu inspekcyjnym")]
     public int gold = 5;
-    public float waveDelay = 2f;
+    public Level[] levelArray;
+    public GameObject buttonPrefab;
 
     [Header("Definiowane dynamicznie")]
     public int countEnemy;
+    public int currentLevel = 0;
+    public bool isWaitingForNextWave = false;
+    private Player _player;
+    public IEnumerator shopCoroutine;
 
     // Start is called before the first frame update
     void Awake()
     {
         if (S != null)
             Debug.LogError("Sigleton Main juz istnieje");
-        S = this;        
+        S = this;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        _player = player.GetComponentInChildren<Player>();
+    }
+
+    private void Start()
+    {
+        shopCoroutine = EnableShop();
+        LoadLevel();
     }
 
     // Update is called once per frame
     void Update()
     {
-        WaveMenagment();
+        if(countEnemy <= 0 && !isWaitingForNextWave)
+        {
+            StartCoroutine(shopCoroutine);
+        }
+
+        Debug.Log("MAIN: LVL:" + currentLevel + "   ENEMY LEFT: " + countEnemy + "    COIN: " + gold + "   HP: " + _player.GetHP());
     }
 
-    void PickUpItem(eIteamsType type)
+    public void StopWaveCoroutine()
+    {
+        StopCoroutine(shopCoroutine);
+        shopCoroutine = EnableShop();
+        buttonPrefab.SetActive(false);
+        isWaitingForNextWave = false;
+        currentLevel++;
+        LoadLevel();
+    }
+
+    private IEnumerator EnableShop()
+    {
+        isWaitingForNextWave = true;
+        buttonPrefab.SetActive(true);
+        yield return new WaitForSeconds(levelArray[currentLevel].waveDelay);
+        shopCoroutine = EnableShop();
+        buttonPrefab.SetActive(false);
+        isWaitingForNextWave = false;
+        currentLevel++;
+        LoadLevel();
+    }
+
+    public void PickUpItem(eIteamsType type)
     {
         switch(type)
         {
@@ -51,7 +89,7 @@ public class Main : MonoBehaviour
                 break;
 
             case eIteamsType.eLife:
-                //Player.HP += 5;
+                _player.Heal(25);
                 break;
 
             default:
@@ -60,9 +98,12 @@ public class Main : MonoBehaviour
         }
     }
 
-    void WaveMenagment()
+    void LoadLevel()
     {
-        if (countEnemy <= 0)
-            Spawner.S.SpawnStart(5);
+        if (currentLevel >= levelArray.Length)
+            currentLevel = levelArray.Length - 1;
+
+        countEnemy = levelArray[currentLevel].maxEnemyCountOnLevel;
+        Spawner.S.SpawnStart(levelArray[currentLevel].maxEnemyCountOnLevel);
     }
 }
