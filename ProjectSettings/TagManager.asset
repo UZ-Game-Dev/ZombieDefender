@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Coin
   - Shop
+  - Weapon
+  - UI
   layers:
   - Default
   - TransparentFX

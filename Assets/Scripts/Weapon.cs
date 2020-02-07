@@ -7,33 +7,39 @@ public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
 
-    enum WeaponType {eBow, eMachineGun}  //itp. itd.
+    public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}  //itp. itd.
     List<WeaponDefinition> weapons = new List<WeaponDefinition>();
-    public int ammo;
+    //public int ammo;
     public GameObject tracerBox;
 
-    bool isReloading=false;
-    WeaponDefinition weapon;
+    private bool isReloading=false;
+    private WeaponDefinition weapon;
     private LineRenderer tracer;
+    private UI _ui;
 
-    abstract class WeaponDefinition
+    //--------------------------------------------------
+
+    public abstract class WeaponDefinition
     {
-        public int currentAmmo, maxAmmo, level;
+        public int currentAmmo, ammo, capacity, level;
         public float reloadSpeed, damage;
+        public string name;
         public WeaponType type;
 
         public abstract void Upgrade();
     }
 
-    class Bow: WeaponDefinition
+    public class Pistol: WeaponDefinition
     {
-        public Bow()
+        public Pistol()
         {
-            maxAmmo = 1;
-            currentAmmo = maxAmmo;
+            capacity = 7;
+            currentAmmo = capacity;
+            ammo = 100;
             reloadSpeed = 1f;
             damage = 10f;
-            type = WeaponType.eBow;
+            name = "Pistolet";
+            type = WeaponType.ePistol;
         }
 
         public override void Upgrade()
@@ -45,22 +51,28 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    //-------------------------------------------------
+
+    public bool isReloadingActive() { return isReloading; }
+
     private void Start()
     {
         tracer = tracerBox.GetComponent<LineRenderer>();
-        Bow bow=new Bow();
-        weapon = bow;
-        ammo = weapon.maxAmmo;
+        Pistol pistol=new Pistol();
+        weapon = pistol;
+        GameObject ui = GameObject.FindGameObjectWithTag("UI");
+        _ui = ui.GetComponentInChildren<UI>();
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1") && ammo > 0 && !isReloading)
+        if (Input.GetButtonDown("Fire1") && weapon.currentAmmo > 0 && !isReloading)
             Shoot();
 
-        if (Input.GetButtonDown("R") && !isReloading)
+        if (Input.GetButtonDown("R") && !isReloading && weapon.ammo != 0 && weapon.currentAmmo != weapon.capacity)
         {
             StartCoroutine("Reload");
+            _ui.StartCoroutine("ShowReloadingBar");
             isReloading = true;
         }
         
@@ -69,6 +81,11 @@ public class Weapon : MonoBehaviour
 
         if (Input.GetButtonDown("Q") && !isReloading)
             SwapWeapons(-1);
+    }
+
+    public WeaponDefinition GetWeapon()
+    {
+        return weapon;
     }
 
     void SwapWeapons(int dir)
@@ -87,14 +104,24 @@ public class Weapon : MonoBehaviour
     IEnumerator Reload()
     {
         yield return new WaitForSeconds(weapon.reloadSpeed);
-        ammo = weapon.maxAmmo;
+        int amount = weapon.capacity - weapon.currentAmmo;
+        if (weapon.ammo >= amount)
+        {
+            weapon.currentAmmo = weapon.capacity;
+            weapon.ammo -= amount;
+        }
+        else
+        {
+            weapon.currentAmmo += weapon.ammo;
+            weapon.ammo = 0;
+        }
         isReloading = false;
     }
 
     public void Shoot()
     {
 
-        //ammo--;
+        weapon.currentAmmo--;
         Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.right);
         RaycastHit hit;
 

@@ -8,23 +8,26 @@ public class Player : MonoBehaviour
     public GameObject player;
     public Camera mainCamera;
     Vector3 shootingDirection;
-    private int hp;
+    private int _maxHP, _hp;
 
     public Player()
     {
-        hp = 100;
+        _maxHP = 100;
+        _hp = 100;
     }
 
     public void Heal(int amount)
     {
-        hp += amount;
+        if (_hp + amount > _maxHP) _hp = _maxHP;
+        else _hp += amount;
     }
 
     public void TakeDamage(int amount)
     {
-        hp -= amount;
-        if (hp <= 0)
+        _hp -= amount;
+        if (_hp <= 0)
         {
+            _hp = 0;
             SceneManager.LoadScene("DeathScene");
         }
     }
@@ -46,6 +49,6 @@ public class Player : MonoBehaviour
 
     public int GetHP()
     {
-        return hp;
+        return _hp;
     }
 }
