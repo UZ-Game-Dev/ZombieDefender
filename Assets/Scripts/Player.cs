@@ -42,8 +42,8 @@ public class Player : MonoBehaviour
     private void Rotate()
     {
         //float angle = Mathf.RoundToInt(Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg);
-        float angle = Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg;
-        //angle = Mathf.Clamp(angle, -50, 50);
+        float angle = Mathf.Atan2(shootingDirection.y-Camera.main.transform.eulerAngles.x, shootingDirection.x) * Mathf.Rad2Deg;
+        angle = Mathf.Clamp(angle, -80, 80);
         player.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
