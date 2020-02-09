@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic }  //itp. itd.
+
 public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
 
-    public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}  //itp. itd.
     List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     //public int ammo;
     public GameObject tracerBox;
-
     private bool isReloading=false;
     private WeaponDefinition weapon;
     private LineRenderer tracer;
@@ -66,7 +66,7 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1") && weapon.currentAmmo > 0 && !isReloading)
+        if (Input.GetButtonDown("Fire1") && weapon.currentAmmo > 0 && !isReloading && Main.S.isEnableToShoot)
             Shoot();
 
         if (Input.GetButtonDown("R") && !isReloading && weapon.ammo != 0 && weapon.currentAmmo != weapon.capacity)
