@@ -43,14 +43,15 @@ public class UI : MonoBehaviour
     {
         reloadingProgress.gameObject.SetActive(true);
 
-        if (reloadingProgress.value < reloadingProgress.maxValue)
-        {
+        //if (reloadingProgress.value < reloadingProgress.maxValue)
+        //{
 
-            yield return new WaitForSeconds(0.01f);
-            reloadingProgress.value += 0.017f;
+            yield return new WaitForSeconds(0.02f);
+            reloadingProgress.value += 0.02f;
             StartCoroutine("ShowReloadingBar");
-        }
-        else
+        //}
+
+        if (reloadingProgress.value >= reloadingProgress.maxValue)
         {
             reloadingProgress.value = 0;
             reloadingProgress.gameObject.SetActive(false);

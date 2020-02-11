@@ -47,7 +47,6 @@ public class Weapon : MonoBehaviour
             level++;
             damage++;
             reloadSpeed-=0.2f;
-            // Player.money--;
         }
     }
 
@@ -69,7 +68,6 @@ public class Weapon : MonoBehaviour
             level++;
             damage++;
             reloadSpeed -= 0.2f;
-            // Player.money--;
         }
     }
 
@@ -82,7 +80,7 @@ public class Weapon : MonoBehaviour
             ammo = 100;
             reloadSpeed = 2f;
             damage = 7f;
-            name = "Karabin automatyczny";
+            name = "AK-47";
             type = WeaponType.eAutomatic;
         }
 
@@ -91,7 +89,6 @@ public class Weapon : MonoBehaviour
             level++;
             damage++;
             reloadSpeed -= 0.2f;
-            // Player.money--;
         }
     }
 
