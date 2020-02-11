@@ -10,7 +10,7 @@ public class HealthUI : MonoBehaviour
     public Transform target;
 
     private Transform _ui;
-    private Image _healthSlider;
+    private Slider _healthSlider;
 
     private void Start()
     {
@@ -19,7 +19,7 @@ public class HealthUI : MonoBehaviour
             if (c.renderMode == RenderMode.WorldSpace)
             {
                 _ui = Instantiate(uiProfab,c.transform).transform;
-                _healthSlider = _ui.GetChild(0).GetComponent<Image>();
+                _healthSlider = _ui.GetComponent<Slider>();
                 break;
             }
         }
@@ -40,7 +40,7 @@ public class HealthUI : MonoBehaviour
             Destroy(_ui.gameObject);
         }
 
-        _healthSlider.fillAmount = HP/maxHP;
+        _healthSlider.value = HP/maxHP;
     }
 
     public void SetActive(bool active)
