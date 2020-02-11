@@ -37,7 +37,7 @@ public class Weapon : MonoBehaviour
             currentAmmo = capacity;
             ammo = 100;
             reloadSpeed = 1f;
-            damage = 10f;
+            damage = 5f;
             name = "Pistolet";
             type = WeaponType.ePistol;
         }
@@ -46,10 +46,56 @@ public class Weapon : MonoBehaviour
         {
             level++;
             damage++;
-            reloadSpeed--;
+            reloadSpeed-=0.2f;
             // Player.money--;
         }
     }
+
+    public class SemiAutomatic : WeaponDefinition
+    {
+        public SemiAutomatic()
+        {
+            capacity = 12;
+            currentAmmo = capacity;
+            ammo = 100;
+            reloadSpeed = 1.4f;
+            damage = 7f;
+            name = "Karabin półautomatyczny";
+            type = WeaponType.eSemiAutomatic;
+        }
+
+        public override void Upgrade()
+        {
+            level++;
+            damage++;
+            reloadSpeed -= 0.2f;
+            // Player.money--;
+        }
+    }
+
+    public class Automatic : WeaponDefinition
+    {
+        public Automatic()
+        {
+            capacity = 24;
+            currentAmmo = capacity;
+            ammo = 100;
+            reloadSpeed = 2f;
+            damage = 7f;
+            name = "Karabin automatyczny";
+            type = WeaponType.eAutomatic;
+        }
+
+        public override void Upgrade()
+        {
+            level++;
+            damage++;
+            reloadSpeed -= 0.2f;
+            // Player.money--;
+        }
+    }
+
+
 
     //-------------------------------------------------
 
@@ -59,7 +105,12 @@ public class Weapon : MonoBehaviour
     {
         tracer = tracerBox.GetComponent<LineRenderer>();
         Pistol pistol=new Pistol();
+        SemiAutomatic semi = new SemiAutomatic();
+        Automatic auto = new Automatic();
         weapon = pistol;
+        weapons.Add(pistol);
+        weapons.Add(semi);
+        weapons.Add(auto);
         GameObject ui = GameObject.FindGameObjectWithTag("UI");
         _ui = ui.GetComponentInChildren<UI>();
     }

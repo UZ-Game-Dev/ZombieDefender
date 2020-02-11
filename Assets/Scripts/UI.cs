@@ -47,7 +47,7 @@ public class UI : MonoBehaviour
         {
 
             yield return new WaitForSeconds(0.01f);
-            reloadingProgress.value += 0.022f;
+            reloadingProgress.value += 0.017f;
             StartCoroutine("ShowReloadingBar");
         }
         else
