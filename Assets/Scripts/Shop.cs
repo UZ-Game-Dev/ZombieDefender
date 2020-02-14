@@ -8,6 +8,7 @@ public class Shop : MonoBehaviour
     [Header("Definiowane w panelu inspekcyjnym")]
     public GameObject shopPanel;
     public TextMeshProUGUI timerToNextWave;
+    public int maxGoldForSkip = 20;
     public int amunationPrice = 10;
     public int amunationPiecesToBuy = 5;
 
@@ -45,7 +46,12 @@ public class Shop : MonoBehaviour
 
     public void NextWave()
     {
-        Debug.Log("NEXT WAVE");
+        int bonusGold = (int)_timer;
+        Debug.Log("NEXT WAVE +zlota: " + bonusGold);
+        if (bonusGold > maxGoldForSkip)
+            bonusGold = maxGoldForSkip;
+
+        Main.S.gold += (int)_timer;
         Main.S.StopWaveCoroutine();
     }
 

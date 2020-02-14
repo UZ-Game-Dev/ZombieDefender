@@ -16,6 +16,10 @@ public class Weapon : MonoBehaviour
     private WeaponDefinition weapon;
     private LineRenderer tracer;
     private UI _ui;
+    public AudioClip gunShotEffect;
+    public AudioClip gunReloadEffect;
+    public AudioSource audioSource;
+    
 
     //--------------------------------------------------
 
@@ -36,7 +40,7 @@ public class Weapon : MonoBehaviour
             capacity = 7;
             currentAmmo = capacity;
             ammo = 100;
-            reloadSpeed = 1f;
+            reloadSpeed = 2.3f;
             damage = 10f;
             name = "Pistolet";
             type = WeaponType.ePistol;
@@ -62,6 +66,9 @@ public class Weapon : MonoBehaviour
         weapon = pistol;
         GameObject ui = GameObject.FindGameObjectWithTag("UI");
         _ui = ui.GetComponentInChildren<UI>();
+        //SOUND
+        audioSource = this.gameObject.GetComponent<AudioSource>();
+        audioSource.clip = gunShotEffect;
     }
 
     private void Update()
@@ -71,6 +78,8 @@ public class Weapon : MonoBehaviour
 
         if (Input.GetButtonDown("R") && !isReloading && weapon.ammo != 0 && weapon.currentAmmo != weapon.capacity)
         {
+            audioSource.clip = gunReloadEffect;
+            audioSource.Play();
             StartCoroutine("Reload");
             _ui.StartCoroutine("ShowReloadingBar");
             isReloading = true;
@@ -116,11 +125,12 @@ public class Weapon : MonoBehaviour
             weapon.ammo = 0;
         }
         isReloading = false;
+        audioSource.clip = gunShotEffect;
     }
 
     public void Shoot()
     {
-
+        audioSource.Play();
         weapon.currentAmmo--;
         Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.right);
         RaycastHit hit;
