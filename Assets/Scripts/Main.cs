@@ -7,7 +7,8 @@ public class Level
 {
     public int maxEnemyCountOnLevel;
     public float waveDelay = 2f;
-    public float spawnDelay = 5f;
+    public Vector2 minMaxSpawnDelay = new Vector2(1,5);
+    public int hpZombie = 5;
 }
 
 public class Main : MonoBehaviour

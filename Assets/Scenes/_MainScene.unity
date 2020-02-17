@@ -10074,21 +10074,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 5
   levelArray:
-  - maxEnemyCountOnLevel: 2
-    waveDelay: 10
-    spawnDelay: 5
-  - maxEnemyCountOnLevel: 3
-    waveDelay: 10
-    spawnDelay: 4
   - maxEnemyCountOnLevel: 4
-    waveDelay: 8
-    spawnDelay: 3
+    waveDelay: 15
+    minMaxSpawnDelay: {x: 4, y: 6}
+    hpZombie: 25
+  - maxEnemyCountOnLevel: 4
+    waveDelay: 15
+    minMaxSpawnDelay: {x: 3, y: 5}
+    hpZombie: 25
   - maxEnemyCountOnLevel: 5
-    waveDelay: 8
-    spawnDelay: 2
+    waveDelay: 14
+    minMaxSpawnDelay: {x: 3, y: 5}
+    hpZombie: 25
   - maxEnemyCountOnLevel: 6
-    waveDelay: 8
-    spawnDelay: 1
+    waveDelay: 13
+    minMaxSpawnDelay: {x: 3, y: 4}
+    hpZombie: 25
+  - maxEnemyCountOnLevel: 6
+    waveDelay: 12
+    minMaxSpawnDelay: {x: 2, y: 6}
+    hpZombie: 35
+  - maxEnemyCountOnLevel: 8
+    waveDelay: 11
+    minMaxSpawnDelay: {x: 2, y: 5}
+    hpZombie: 35
+  - maxEnemyCountOnLevel: 8
+    waveDelay: 11
+    minMaxSpawnDelay: {x: 2, y: 4}
+    hpZombie: 35
+  - maxEnemyCountOnLevel: 10
+    waveDelay: 10
+    minMaxSpawnDelay: {x: 2, y: 4}
+    hpZombie: 35
+  - maxEnemyCountOnLevel: 10
+    waveDelay: 10
+    minMaxSpawnDelay: {x: 2, y: 3}
+    hpZombie: 25
+  - maxEnemyCountOnLevel: 15
+    waveDelay: 10
+    minMaxSpawnDelay: {x: 2, y: 3}
+    hpZombie: 35
   shopPanel: {fileID: 1958940685}
   isEnableToShoot: 1
   countEnemy: 0

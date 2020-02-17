@@ -41,7 +41,8 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < sum; i++)
         {
             Spawn(0);
-            yield return new WaitForSeconds(Main.S.levelArray[Main.S.currentLevel].spawnDelay);
+            float range = Random.Range(Main.S.levelArray[Main.S.currentLevel].minMaxSpawnDelay.x, Main.S.levelArray[Main.S.currentLevel].minMaxSpawnDelay.y);
+            yield return new WaitForSeconds(range);
         }
         //StopCoroutine(corutine);
     }
@@ -53,6 +54,9 @@ public class Spawner : MonoBehaviour
 
         Transform objTransform = obj.GetComponent<Transform>();
         objTransform.position = spawnerPoints[randomPosition].GetComponent<Transform>().position;
+
+        Enemy enemy = obj.GetComponent<Enemy>();
+        enemy.SetMaxHP(Main.S.levelArray[Main.S.currentLevel].hpZombie);
 
         //Main.S.countEnemy++; //Nie potrzebne 
     }
