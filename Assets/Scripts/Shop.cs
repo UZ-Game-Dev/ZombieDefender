@@ -66,6 +66,34 @@ public class Shop : MonoBehaviour
         }
     }
 
+    public void BuyHealth()
+    {
+        if(Main.S.gold >= Player.S.healthUpragdeCost)
+        {
+            Debug.Log("Kupuję Zdrowię");
+            Main.S.gold -= Player.S.healthUpragdeCost;
+            if(Player.S.healthLevel < Player.S.maxHealthLevel)
+            {
+                Player.S.healthLevel++;
+                Player.S.maxHP += 20;
+            }
+            if (Player.S.GetHP() < Player.S.maxHP)
+                Player.S.Heal(Player.S.maxHP);
+        }
+        
+    }
+
+    public void BuyPistol()
+    {
+        if (Main.S.gold >= 1)
+        {
+            Debug.Log("Kupuję Pistolet");
+            if (weapon == null) FindWeaponObject();
+            Main.S.gold -= 1;
+            weapon.GetWeapon().Upgrade();
+        }
+    }
+
     public void BuySemiAutomaticGun()
     {
         Debug.Log("Kupuję karabin półautomatyczny");
@@ -84,11 +112,6 @@ public class Shop : MonoBehaviour
     public void BuySpikes()
     {
         Debug.Log("Kupuję kupuje kolce");
-    }
-
-    public void BuyBuildingRepairs()
-    {
-        Debug.Log("Kupuję naprawiam budynki");
     }
 
     private void FindWeaponObject()

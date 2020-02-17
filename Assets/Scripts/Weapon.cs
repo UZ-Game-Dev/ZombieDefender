@@ -49,7 +49,7 @@ public class Weapon : MonoBehaviour
         public override void Upgrade()
         {
             level++;
-            damage++;
+            damage += 5;
             reloadSpeed--;
             // Player.money--;
         }
