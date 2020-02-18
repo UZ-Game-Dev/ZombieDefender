@@ -8,6 +8,7 @@ public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic }  //itp. itd.
 public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
+    public Transform slad;
 
     List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     //public int ammo;
@@ -122,7 +123,7 @@ public class Weapon : MonoBehaviour
     {
 
         weapon.currentAmmo--;
-        Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.right);
+        Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.forward);
         RaycastHit hit;
 
         float shotDistance = 13f;
@@ -140,15 +141,8 @@ public class Weapon : MonoBehaviour
         }
 
         //Debug.DrawLine(weaponModel.transform.position, weaponModel.transform.position + ray.direction * shotDistance);
-        StartCoroutine("RenderTracer", ray.direction * shotDistance);
-    }
 
-    IEnumerator RenderTracer(Vector3 hitPoint)
-    {
-        tracerBox.SetActive(true);
-        tracer.SetPosition(0, weaponModel.transform.position);
-        tracer.SetPosition(1, weaponModel.transform.position + hitPoint);
-        yield return null;
-        tracerBox.SetActive(false);
+        Transform sladBox = Instantiate(slad, weaponModel.transform.position, weaponModel.transform.rotation);
+        sladBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
     }
 }

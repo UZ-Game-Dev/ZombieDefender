@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e42950e61b1189c4d868612add57c19c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - materiaCollisionFalse: {fileID: 2100000, guid: 754a31ca121016849b1f266d6f2c4d62,
+      type: 2}
+  - materiaCollisionTrue: {fileID: 2100000, guid: 7b84b24072273cd489c25046538d8078,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

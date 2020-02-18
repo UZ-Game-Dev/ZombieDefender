@@ -93,7 +93,7 @@ public class Enemy : MonoBehaviour
                 switch (_hitObject.tag)
                 {
                     case "DefensiveObject":
-                        //_hitObject.transform.root.GetComponent<DefensiveObject>().TakeDamage(_takeDamage);
+                        _hitObject.transform.root.GetComponent<DefensiveObject>().TakeDamage(_takeDamage);
                         break;
                     case "Player":
                         player.gameObject.transform.GetChild(0).GetComponent<Player>().TakeDamage(_takeDamage);

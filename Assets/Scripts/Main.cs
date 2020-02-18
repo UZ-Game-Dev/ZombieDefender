@@ -71,7 +71,7 @@ public class Main : MonoBehaviour
         isWaitingForNextWave = true;
         isEnableToShoot = false;
         shopPanel.SetActive(true);
-        shopPanel.GetComponent<Shop>().SetTimer(levelArray[currentLevel].waveDelay);
+        this.GetComponent<Shop>().SetTimer(levelArray[currentLevel].waveDelay);
         yield return new WaitForSeconds(levelArray[currentLevel].waveDelay);
         StopWaveCoroutine();
     }
