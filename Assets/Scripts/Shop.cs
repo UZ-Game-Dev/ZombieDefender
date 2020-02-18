@@ -132,7 +132,7 @@ public class Shop : MonoBehaviour
     public void NextWave()
     {
         Debug.Log("NEXT WAVE");
-isActive = false;
+        isActive = false;
         int bonusGold = (int)_timer;
         Debug.Log("NEXT WAVE +zlota: " + bonusGold);
         if (bonusGold > maxGoldForSkip)

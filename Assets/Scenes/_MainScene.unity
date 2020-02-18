@@ -8754,7 +8754,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1958940687}
+      - m_Target: {fileID: 963194232}
         m_MethodName: BuyPistol
         m_Mode: 1
         m_Arguments:
@@ -10326,7 +10326,7 @@ GameObject:
   - component: {fileID: 963194232}
   - component: {fileID: 963194231}
   - component: {fileID: 963194230}
-  - component: {fileID: 963194232}
+  - component: {fileID: 963194233}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -10550,6 +10550,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shopPanel: {fileID: 1958940685}
   timerToNextWave: {fileID: 127631231}
+  maxGoldForSkip: 20
   DefensiveObjectsArray:
   - prefabs: {fileID: 6067040661931549595, guid: f287d6d8deac86142adf59c91cb45eb9,
       type: 3}
@@ -10565,7 +10566,8 @@ MonoBehaviour:
     price: 10
   amunationPrice: 10
   amunationPiecesToBuy: 5
-  isActive: 0--- !u!82 &963194232
+  isActive: 0
+--- !u!82 &963194233
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13062,7 +13064,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1353209627
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22088,24 +22090,6 @@ RectTransform:
   m_AnchoredPosition: {x: -1.4165, y: 0}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1958940687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1958940685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd087d0b15b8a0c4cae500539ff7640b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shopPanel: {fileID: 1958940685}
-  timerToNextWave: {fileID: 127631231}
-  maxGoldForSkip: 20
-  amunationPrice: 10
-  amunationPiecesToBuy: 5
-  isActive: 0
 --- !u!114 &1958940688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22770,7 +22754,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2048231590
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23612,7 +23596,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1958940687}
+      - m_Target: {fileID: 963194232}
         m_MethodName: BuyHealth
         m_Mode: 1
         m_Arguments:
