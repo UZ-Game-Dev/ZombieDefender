@@ -5,10 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    public static Player S;
     public GameObject player;
     public Camera mainCamera;
+    public int healthLevel = 0;
+    public int maxHealthLevel = 10;
+    public int healthUpragdeCost = 25;
+
     Vector3 shootingDirection;
     private int _maxHP, _hp, _hpLevel = 0, _cost = 10;
+    
+
+    public void Awake()
+    {
+        if (S != null) Debug.LogError("Singleton Player juz istnieje proba utworzenia w " + this.gameObject.name);
+        S = this;
+    }
 
     public Player()
     {
@@ -50,8 +62,8 @@ public class Player : MonoBehaviour
     private void Rotate()
     {
         //float angle = Mathf.RoundToInt(Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg);
-        float angle = Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg;
-        //angle = Mathf.Clamp(angle, -50, 50);
+        float angle = Mathf.Atan2(shootingDirection.y-Camera.main.transform.eulerAngles.x, shootingDirection.x) * Mathf.Rad2Deg;
+        angle = Mathf.Clamp(angle, -80, 80);
         player.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
@@ -63,5 +75,10 @@ public class Player : MonoBehaviour
     public int GetCost()
     {
         return _cost;
+    }
+    public int maxHP
+    {
+        get { return _maxHP; }
+        set { _maxHP = value; }
     }
 }

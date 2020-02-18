@@ -10,6 +10,8 @@ TagManager:
   - Shop
   - Weapon
   - UI
+  - DefensiveObject
+  - DefensiveSpikes
   layers:
   - Default
   - TransparentFX
@@ -19,9 +21,9 @@ TagManager:
   - UI
   - 
   - 
-  - Coin
+  - Items
   - Enemy
-  - 
+  - PostProcessing
   - 
   - 
   - 

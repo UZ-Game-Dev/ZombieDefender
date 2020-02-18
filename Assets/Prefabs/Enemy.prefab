@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3303120952008065686}
   - component: {fileID: 117157845647850210}
   - component: {fileID: 677762537622377767}
+  - component: {fileID: -7181140863694319664}
   - component: {fileID: 8220046988156393231}
   m_Layer: 9
   m_Name: Enemy
@@ -33,7 +34,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 16}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_Children: []
+  m_Children:
+  - {fileID: 4246351071839294010}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -151,10 +153,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2235f9e332e284d9b6d0af5e4cb42e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 10
+  mask:
+    serializedVersion: 2
+    m_Bits: 4
+  _health: 25
   _attackSpeed: 1
   _attackCooldownStart: 1
   player: {fileID: 0}
+--- !u!114 &-7181140863694319664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6929471611503255034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90be24b0221553745b878ea92a5d255e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiProfab: {fileID: 3908071524511783841, guid: dfb70bd4c4bb8424ba1f67833777a238,
+    type: 3}
+  target: {fileID: 4246351071839294010}
 --- !u!136 &8220046988156393231
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -169,3 +189,33 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &9003568054561125639
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4246351071839294010}
+  m_Layer: 0
+  m_Name: Health UI target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4246351071839294010
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9003568054561125639}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.25, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_Children: []
+  m_Father: {fileID: 4143971238150778023}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

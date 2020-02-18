@@ -3,20 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic } 
+
 public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
-
+    public Transform slad;
+    
     public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}
     List<WeaponDefinition> weapons = new List<WeaponDefinition>();
-    //public int ammo;
     public GameObject tracerBox;
-
     private bool isReloading=false;
     private WeaponDefinition weapon;
     private LineRenderer tracer;
     private UI _ui;
     private int _nextShot = 4;
+    public AudioClip gunShotEffect;
+    public AudioClip gunReloadEffect;
+    public AudioSource audioSource;
+    
 
     //--------------------------------------------------
 
@@ -123,6 +128,9 @@ public class Weapon : MonoBehaviour
         weapons.Add(auto);
         GameObject ui = GameObject.FindGameObjectWithTag("UI");
         _ui = ui.GetComponentInChildren<UI>();
+        //SOUND
+        audioSource = this.gameObject.GetComponent<AudioSource>();
+        audioSource.clip = gunShotEffect;
     }
 
     private void FixedUpdate()
@@ -132,7 +140,7 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1") && weapon.currentAmmo > 0 && !isReloading && weapon.fireRate>0 && _nextShot == 0)
+        if (Input.GetButton("Fire1") && weapon.currentAmmo > 0 && !isReloading && weapon.fireRate>0 && _nextShot == 0 && Main.S.isEnableToShoot)
         {
             Shoot();
             if(weapon.type != WeaponType.eAutomatic) weapon.fireRate--;
@@ -143,6 +151,8 @@ public class Weapon : MonoBehaviour
 
         if ((Input.GetButtonDown("R") && !isReloading && weapon.ammo != 0 && weapon.currentAmmo != weapon.capacity) || (weapon.currentAmmo == 0 && !isReloading))
         {
+            audioSource.clip = gunReloadEffect;
+            audioSource.Play();
             StartCoroutine("Reload");
             _ui.StartCoroutine("ShowReloadingBar");
             isReloading = true;
@@ -188,13 +198,14 @@ public class Weapon : MonoBehaviour
             weapon.ammo = 0;
         }
         isReloading = false;
+        audioSource.clip = gunShotEffect;
     }
 
     public void Shoot()
     {
-
+        audioSource.Play();
         weapon.currentAmmo--;
-        Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.right);
+        Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.forward);
         RaycastHit hit;
 
         float shotDistance = 13f;
@@ -212,15 +223,8 @@ public class Weapon : MonoBehaviour
         }
 
         //Debug.DrawLine(weaponModel.transform.position, weaponModel.transform.position + ray.direction * shotDistance);
-        StartCoroutine("RenderTracer", ray.direction * shotDistance);
-    }
 
-    IEnumerator RenderTracer(Vector3 hitPoint)
-    {
-        tracerBox.SetActive(true);
-        tracer.SetPosition(0, weaponModel.transform.position);
-        tracer.SetPosition(1, weaponModel.transform.position + hitPoint);
-        yield return null;
-        tracerBox.SetActive(false);
+        Transform sladBox = Instantiate(slad, weaponModel.transform.position, weaponModel.transform.rotation);
+        sladBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
     }
 }

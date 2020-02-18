@@ -7,7 +7,8 @@ public class Level
 {
     public int maxEnemyCountOnLevel;
     public float waveDelay = 2f;
-    public float spawnDelay = 5f;
+    public Vector2 minMaxSpawnDelay = new Vector2(1,5);
+    public int hpZombie = 5;
 }
 
 public class Main : MonoBehaviour
@@ -17,9 +18,10 @@ public class Main : MonoBehaviour
     [Header("Definiowane w panelu inspekcyjnym")]
     public int gold = 5;
     public Level[] levelArray;
-    public GameObject buttonPrefab;
+    public GameObject shopPanel;
 
     [Header("Definiowane dynamicznie")]
+    public bool isEnableToShoot = true;
     public int countEnemy;
     public int currentLevel = 0;
     public bool isWaitingForNextWave = false;
@@ -51,14 +53,15 @@ public class Main : MonoBehaviour
             StartCoroutine(shopCoroutine);
         }
 
-        Debug.Log("MAIN: LVL:" + currentLevel + "   ENEMY LEFT: " + countEnemy + "    COIN: " + gold + "   HP: " + _player.GetHP());
+        //Debug.Log("MAIN: LVL:" + currentLevel + "   ENEMY LEFT: " + countEnemy + "    COIN: " + gold + "   HP: " + _player.GetHP());
     }
 
     public void StopWaveCoroutine()
     {
         StopCoroutine(shopCoroutine);
         shopCoroutine = EnableShop();
-        buttonPrefab.SetActive(false);
+        shopPanel.SetActive(false);
+        isEnableToShoot = true;
         isWaitingForNextWave = false;
         currentLevel++;
         LoadLevel();
@@ -67,13 +70,11 @@ public class Main : MonoBehaviour
     private IEnumerator EnableShop()
     {
         isWaitingForNextWave = true;
-        buttonPrefab.SetActive(true);
+        isEnableToShoot = false;
+        shopPanel.SetActive(true);
+        this.GetComponent<Shop>().SetTimer(levelArray[currentLevel].waveDelay);
         yield return new WaitForSeconds(levelArray[currentLevel].waveDelay);
-        shopCoroutine = EnableShop();
-        buttonPrefab.SetActive(false);
-        isWaitingForNextWave = false;
-        currentLevel++;
-        LoadLevel();
+        StopWaveCoroutine();
     }
 
     public void PickUpItem(eIteamsType type)
