@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public GameObject player;
     public Camera mainCamera;
     Vector3 shootingDirection;
-    private int _maxHP, _hp;
+    private int _maxHP, _hp, _hpLevel = 0, _cost = 10;
 
     public Player()
     {
@@ -20,6 +20,14 @@ public class Player : MonoBehaviour
     {
         if (_hp + amount > _maxHP) _hp = _maxHP;
         else _hp += amount;
+    }
+
+    public void UpgradeHP()
+    {
+        Main.S.gold -= _cost;
+        _hpLevel++;
+        _cost += _hpLevel * 2;
+        _maxHP += 10;
     }
 
     public void TakeDamage(int amount)
@@ -50,5 +58,10 @@ public class Player : MonoBehaviour
     public int GetHP()
     {
         return _hp;
+    }
+
+    public int GetCost()
+    {
+        return _cost;
     }
 }

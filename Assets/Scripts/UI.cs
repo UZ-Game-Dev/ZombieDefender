@@ -28,10 +28,11 @@ public class UI : MonoBehaviour
 
     private void setTexts()
     {
-        ammo.text = _weapon.GetWeapon().currentAmmo + "/" + _weapon.GetWeapon().capacity + "  [" + _weapon.GetWeapon().ammo + "]";
+        if(_weapon.GetWeapon().type != Weapon.WeaponType.ePistol) ammo.text = _weapon.GetWeapon().currentAmmo + "/" + _weapon.GetWeapon().capacity + "  [" + _weapon.GetWeapon().ammo + "]";
+        else ammo.text = _weapon.GetWeapon().currentAmmo + "/" + _weapon.GetWeapon().capacity;
         weaponName.text = _weapon.GetWeapon().name;
         gold.text = "Złoto: " + Main.S.gold;
-        wave.text = "Fala: " + Main.S.currentLevel;
+        wave.text = "Fala: " + Main.S.currentLevel+1;
     }
 
     private void setHP()
@@ -43,13 +44,13 @@ public class UI : MonoBehaviour
     {
         reloadingProgress.gameObject.SetActive(true);
 
-        //if (reloadingProgress.value < reloadingProgress.maxValue)
-        //{
+        if (reloadingProgress.value < reloadingProgress.maxValue)
+        {
 
             yield return new WaitForSeconds(0.02f);
-            reloadingProgress.value += 0.02f;
+            reloadingProgress.value += 0.034f;
             StartCoroutine("ShowReloadingBar");
-        //}
+        }
 
         if (reloadingProgress.value >= reloadingProgress.maxValue)
         {

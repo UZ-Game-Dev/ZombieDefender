@@ -7,7 +7,7 @@ public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
 
-    public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}  //itp. itd.
+    public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}
     List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     //public int ammo;
     public GameObject tracerBox;
@@ -16,12 +16,13 @@ public class Weapon : MonoBehaviour
     private WeaponDefinition weapon;
     private LineRenderer tracer;
     private UI _ui;
+    private int _nextShot = 4;
 
     //--------------------------------------------------
 
     public abstract class WeaponDefinition
     {
-        public int currentAmmo, ammo, capacity, level;
+        public int currentAmmo, ammo, capacity, level, maxFireRate, fireRate, moneyForUpgrade;
         public float reloadSpeed, damage;
         public string name;
         public WeaponType type;
@@ -33,20 +34,24 @@ public class Weapon : MonoBehaviour
     {
         public Pistol()
         {
-            capacity = 7;
+            capacity = 15;
             currentAmmo = capacity;
-            ammo = 100;
-            reloadSpeed = 1f;
+            ammo = 15;
+            reloadSpeed = 1.4f;
             damage = 5f;
-            name = "Pistolet";
+            name = "Beretta";
             type = WeaponType.ePistol;
+            maxFireRate = 1;
+            fireRate = maxFireRate;
+            moneyForUpgrade = 10;
         }
 
         public override void Upgrade()
         {
             level++;
-            damage++;
-            reloadSpeed-=0.2f;
+            damage += 1f;
+            reloadSpeed-=0.05f;
+            moneyForUpgrade += 2;
         }
     }
 
@@ -54,20 +59,24 @@ public class Weapon : MonoBehaviour
     {
         public SemiAutomatic()
         {
-            capacity = 12;
+            capacity = 24;
             currentAmmo = capacity;
             ammo = 100;
-            reloadSpeed = 1.4f;
+            reloadSpeed = 1.7f;
             damage = 7f;
-            name = "Karabin półautomatyczny";
+            name = "Karabin półaut.";
             type = WeaponType.eSemiAutomatic;
+            maxFireRate = 4;
+            fireRate = maxFireRate;
+            moneyForUpgrade = 18;
         }
 
         public override void Upgrade()
         {
             level++;
-            damage++;
-            reloadSpeed -= 0.2f;
+            damage += 1.5f;
+            reloadSpeed -= 0.05f;
+            moneyForUpgrade += 4;
         }
     }
 
@@ -75,20 +84,24 @@ public class Weapon : MonoBehaviour
     {
         public Automatic()
         {
-            capacity = 24;
+            capacity = 30;
             currentAmmo = capacity;
             ammo = 100;
             reloadSpeed = 2f;
-            damage = 7f;
+            damage = 10f;
             name = "AK-47";
             type = WeaponType.eAutomatic;
+            maxFireRate = 1;
+            fireRate = maxFireRate;
+            moneyForUpgrade = 25;
         }
 
         public override void Upgrade()
         {
             level++;
-            damage++;
-            reloadSpeed -= 0.2f;
+            damage += 2f;
+            reloadSpeed -= 0.05f;
+            moneyForUpgrade += 6;
         }
     }
 
@@ -112,12 +125,23 @@ public class Weapon : MonoBehaviour
         _ui = ui.GetComponentInChildren<UI>();
     }
 
+    private void FixedUpdate()
+    {
+        if (_nextShot != 0) _nextShot--;
+    }
+
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1") && weapon.currentAmmo > 0 && !isReloading)
+        if (Input.GetButton("Fire1") && weapon.currentAmmo > 0 && !isReloading && weapon.fireRate>0 && _nextShot == 0)
+        {
             Shoot();
+            if(weapon.type != WeaponType.eAutomatic) weapon.fireRate--;
+            _nextShot = 4;
+        }
 
-        if (Input.GetButtonDown("R") && !isReloading && weapon.ammo != 0 && weapon.currentAmmo != weapon.capacity)
+        if (Input.GetButtonUp("Fire1")) weapon.fireRate = weapon.maxFireRate;
+
+        if ((Input.GetButtonDown("R") && !isReloading && weapon.ammo != 0 && weapon.currentAmmo != weapon.capacity) || (weapon.currentAmmo == 0 && !isReloading))
         {
             StartCoroutine("Reload");
             _ui.StartCoroutine("ShowReloadingBar");
@@ -156,7 +180,7 @@ public class Weapon : MonoBehaviour
         if (weapon.ammo >= amount)
         {
             weapon.currentAmmo = weapon.capacity;
-            weapon.ammo -= amount;
+            if(weapon.type != WeaponType.ePistol) weapon.ammo -= amount;
         }
         else
         {
