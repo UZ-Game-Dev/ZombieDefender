@@ -125,4 +125,10 @@ public class Enemy : MonoBehaviour
         Main.S.countEnemy--;
         Destroy(gameObject);
     }
+
+    public void SetMaxHP(int hp)
+    {
+        _maxHP = hp;
+        _health = hp;
+    }
 }

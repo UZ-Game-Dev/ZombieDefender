@@ -17,6 +17,7 @@ public class Shop : MonoBehaviour
     [Header("Definiowane w panelu inspekcyjnym")]
     public GameObject shopPanel;
     public TextMeshProUGUI timerToNextWave;
+    public int maxGoldForSkip = 20;
     public DefensiveObjects[] DefensiveObjectsArray;
     public int amunationPrice = 10;
     public int amunationPiecesToBuy = 5;
@@ -130,8 +131,14 @@ public class Shop : MonoBehaviour
 
     public void NextWave()
     {
-        isActive = false;
         Debug.Log("NEXT WAVE");
+isActive = false;
+        int bonusGold = (int)_timer;
+        Debug.Log("NEXT WAVE +zlota: " + bonusGold);
+        if (bonusGold > maxGoldForSkip)
+            bonusGold = maxGoldForSkip;
+
+        Main.S.gold += (int)_timer;
         Main.S.StopWaveCoroutine();
     }
 
@@ -146,6 +153,34 @@ public class Shop : MonoBehaviour
         }
     }
 
+    public void BuyHealth()
+    {
+        if(Main.S.gold >= Player.S.healthUpragdeCost)
+        {
+            Debug.Log("Kupuję Zdrowię");
+            Main.S.gold -= Player.S.healthUpragdeCost;
+            if(Player.S.healthLevel < Player.S.maxHealthLevel)
+            {
+                Player.S.healthLevel++;
+                Player.S.maxHP += 20;
+            }
+            if (Player.S.GetHP() < Player.S.maxHP)
+                Player.S.Heal(Player.S.maxHP);
+        }
+        
+    }
+
+    public void BuyPistol()
+    {
+        if (Main.S.gold >= 1)
+        {
+            Debug.Log("Kupuję Pistolet");
+            if (weapon == null) FindWeaponObject();
+            Main.S.gold -= 1;
+            weapon.GetWeapon().Upgrade();
+        }
+    }
+
     public void BuySemiAutomaticGun()
     {
         Debug.Log("Kupuję karabin półautomatyczny");
@@ -154,6 +189,16 @@ public class Shop : MonoBehaviour
     public void BuyAutomaticGun()
     {
         Debug.Log("Kupuję karabin automatyczny");
+    }
+
+    public void BuyStealFency()
+    {
+        Debug.Log("Kupuję kubuje płot stalowy");
+    }
+
+    public void BuySpikes()
+    {
+        Debug.Log("Kupuję kupuje kolce");
     }
 
     private void FindWeaponObject()

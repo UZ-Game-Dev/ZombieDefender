@@ -5,10 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    public static Player S;
     public GameObject player;
     public Camera mainCamera;
+    public int healthLevel = 0;
+    public int maxHealthLevel = 10;
+    public int healthUpragdeCost = 25;
+
     Vector3 shootingDirection;
     private int _maxHP, _hp;
+    
+
+    public void Awake()
+    {
+        if (S != null) Debug.LogError("Singleton Player juz istnieje proba utworzenia w " + this.gameObject.name);
+        S = this;
+    }
 
     public Player()
     {
@@ -50,5 +62,11 @@ public class Player : MonoBehaviour
     public int GetHP()
     {
         return _hp;
+    }
+
+    public int maxHP
+    {
+        get { return _maxHP; }
+        set { _maxHP = value; }
     }
 }
