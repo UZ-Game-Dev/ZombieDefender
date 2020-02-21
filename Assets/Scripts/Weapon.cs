@@ -30,7 +30,6 @@ public class Weapon : MonoBehaviour
         protected int currentAmmo, ammo, capacity, level, maxFireRate, fireRate, moneyForUpgrade, buyingPrice;
         protected float reloadSpeed, damage;
         protected string name;
-        //protected bool isBought = false;
         protected WeaponType type;
 
         public abstract void Upgrade();
@@ -45,7 +44,6 @@ public class Weapon : MonoBehaviour
         public float GetReloadSpeed() { return reloadSpeed; }
         public float GetDamage() { return damage; }
         public string GetName() { return name; }
-        //public bool WasWeaponBought() { return isBought; }
         public WeaponType GetType() { return type; }
         
         public void SetFireRate(int a) { fireRate = a; }
@@ -98,7 +96,7 @@ public class Weapon : MonoBehaviour
             maxFireRate = 4;
             fireRate = maxFireRate;
             moneyForUpgrade = 18;
-            buyingPrice = 1;
+            buyingPrice = 30;
         }
 
         public override void Upgrade()
@@ -133,7 +131,7 @@ public class Weapon : MonoBehaviour
             maxFireRate = 1;
             fireRate = maxFireRate;
             moneyForUpgrade = 25;
-            buyingPrice = 1;
+            buyingPrice = 40;
         }
 
         public override void Upgrade()
@@ -167,12 +165,8 @@ public class Weapon : MonoBehaviour
     {
         tracer = tracerBox.GetComponent<LineRenderer>();
         Pistol pistol=new Pistol();
-        //SemiAutomatic semi = new SemiAutomatic();
-        Automatic auto = new Automatic();
         weapon = pistol;
         weapons.Add(pistol);
-        //weapons.Add(semi);
-        weapons.Add(auto);
         GameObject ui = GameObject.FindGameObjectWithTag("UI");
         _ui = ui.GetComponentInChildren<UI>();
         //SOUND
