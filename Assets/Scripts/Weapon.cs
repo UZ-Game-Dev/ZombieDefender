@@ -11,28 +11,46 @@ public class Weapon : MonoBehaviour
     public Transform slad;
     
     public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}
-    List<WeaponDefinition> weapons = new List<WeaponDefinition>();
+    public List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public GameObject tracerBox;
     private bool isReloading=false;
     private WeaponDefinition weapon;
     private LineRenderer tracer;
     private UI _ui;
-    private int _nextShot = 4;
+    private int _nextShot = 8;
     public AudioClip gunShotEffect;
     public AudioClip gunReloadEffect;
     public AudioSource audioSource;
-    
+
 
     //--------------------------------------------------
 
     public abstract class WeaponDefinition
     {
-        public int currentAmmo, ammo, capacity, level, maxFireRate, fireRate, moneyForUpgrade;
-        public float reloadSpeed, damage;
-        public string name;
-        public WeaponType type;
+        protected int currentAmmo, ammo, capacity, level, maxFireRate, fireRate, moneyForUpgrade, buyingPrice;
+        protected float reloadSpeed, damage;
+        protected string name;
+        //protected bool isBought = false;
+        protected WeaponType type;
 
         public abstract void Upgrade();
+        public abstract void Buy();
+        public int GetAmmo() { return ammo; }
+        public int GetCurrentAmmo() { return currentAmmo; }
+        public int GetCapacity() { return capacity; }
+        public int GetFireRate() { return fireRate; }
+        public int GetMaxFireRate() { return maxFireRate; }
+        public int GetBuyingPrice() { return buyingPrice; }
+        public int GetMoneyForUpgrade() { return moneyForUpgrade; }
+        public float GetReloadSpeed() { return reloadSpeed; }
+        public float GetDamage() { return damage; }
+        public string GetName() { return name; }
+        //public bool WasWeaponBought() { return isBought; }
+        public WeaponType GetType() { return type; }
+        
+        public void SetFireRate(int a) { fireRate = a; }
+        public void SetCurrentAmmo(int a) { currentAmmo = a; }
+        public void SetAmmo(int a) { ammo = a; }
     }
 
     public class Pistol: WeaponDefinition
@@ -53,11 +71,17 @@ public class Weapon : MonoBehaviour
 
         public override void Upgrade()
         {
-            level++;
-            damage += 1f;
-            reloadSpeed-=0.05f;
-            moneyForUpgrade += 2;
+            if (Main.S.gold >= moneyForUpgrade)
+            {
+                Main.S.gold -= moneyForUpgrade;
+                level++;
+                damage += 1f;
+                reloadSpeed -= 0.05f;
+                moneyForUpgrade += 2;
+            }
         }
+
+        public override void Buy() { throw new NotImplementedException(); }
     }
 
     public class SemiAutomatic : WeaponDefinition
@@ -66,22 +90,32 @@ public class Weapon : MonoBehaviour
         {
             capacity = 24;
             currentAmmo = capacity;
-            ammo = 100;
+            ammo = capacity * 2;
             reloadSpeed = 1.7f;
             damage = 7f;
-            name = "Karabin półaut.";
+            name = "Semi M.G.";
             type = WeaponType.eSemiAutomatic;
             maxFireRate = 4;
             fireRate = maxFireRate;
             moneyForUpgrade = 18;
+            buyingPrice = 1;
         }
 
         public override void Upgrade()
         {
-            level++;
-            damage += 1.5f;
-            reloadSpeed -= 0.05f;
-            moneyForUpgrade += 4;
+            if(Main.S.gold >= moneyForUpgrade)
+            {
+                Main.S.gold -= moneyForUpgrade;
+                level++;
+                damage += 1.5f;
+                reloadSpeed -= 0.05f;
+                moneyForUpgrade += 4;
+            }
+        }
+
+        public override void Buy()
+        {
+
         }
     }
 
@@ -91,7 +125,7 @@ public class Weapon : MonoBehaviour
         {
             capacity = 30;
             currentAmmo = capacity;
-            ammo = 100;
+            ammo = capacity * 2;
             reloadSpeed = 2f;
             damage = 10f;
             name = "AK-47";
@@ -99,14 +133,26 @@ public class Weapon : MonoBehaviour
             maxFireRate = 1;
             fireRate = maxFireRate;
             moneyForUpgrade = 25;
+            buyingPrice = 1;
         }
 
         public override void Upgrade()
         {
-            level++;
-            damage += 2f;
-            reloadSpeed -= 0.05f;
-            moneyForUpgrade += 6;
+            if (Main.S.gold >= moneyForUpgrade)
+            {
+                Main.S.gold -= moneyForUpgrade;
+                level++;
+                damage += 2f;
+                reloadSpeed -= 0.05f;
+                moneyForUpgrade += 6;
+                Debug.Log("ULEPSZONO KARABIN AUTOMATYCZNY");
+            }
+            else Debug.Log("NIE STAĆ MNIE");
+        }
+
+        public override void Buy()
+        {
+
         }
     }
 
@@ -115,16 +161,17 @@ public class Weapon : MonoBehaviour
     //-------------------------------------------------
 
     public bool isReloadingActive() { return isReloading; }
+    public void turnOffReloading() { isReloading = false; }
 
     private void Start()
     {
         tracer = tracerBox.GetComponent<LineRenderer>();
         Pistol pistol=new Pistol();
-        SemiAutomatic semi = new SemiAutomatic();
+        //SemiAutomatic semi = new SemiAutomatic();
         Automatic auto = new Automatic();
         weapon = pistol;
         weapons.Add(pistol);
-        weapons.Add(semi);
+        //weapons.Add(semi);
         weapons.Add(auto);
         GameObject ui = GameObject.FindGameObjectWithTag("UI");
         _ui = ui.GetComponentInChildren<UI>();
@@ -140,21 +187,20 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1") && weapon.currentAmmo > 0 && !isReloading && weapon.fireRate>0 && _nextShot == 0 && Main.S.isEnableToShoot)
+        if (Input.GetButton("Fire1") && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
         {
             Shoot();
-            if(weapon.type != WeaponType.eAutomatic) weapon.fireRate--;
-            _nextShot = 4;
+            if(weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
+            _nextShot = 8;
         }
 
-        if (Input.GetButtonUp("Fire1")) weapon.fireRate = weapon.maxFireRate;
+        if (Input.GetButtonUp("Fire1")) weapon.SetFireRate(weapon.GetMaxFireRate());
 
-        if ((Input.GetButtonDown("R") && !isReloading && weapon.ammo != 0 && weapon.currentAmmo != weapon.capacity) || (weapon.currentAmmo == 0 && !isReloading))
+        if (Input.GetButtonDown("R") && !isReloading && weapon.GetAmmo() != 0 && weapon.GetCurrentAmmo() != weapon.GetCapacity())
         {
             audioSource.clip = gunReloadEffect;
             audioSource.Play();
             StartCoroutine("Reload");
-            _ui.StartCoroutine("ShowReloadingBar");
             isReloading = true;
         }
         
@@ -185,26 +231,25 @@ public class Weapon : MonoBehaviour
 
     IEnumerator Reload()
     {
-        yield return new WaitForSeconds(weapon.reloadSpeed);
-        int amount = weapon.capacity - weapon.currentAmmo;
-        if (weapon.ammo >= amount)
+        yield return new WaitForSeconds(weapon.GetReloadSpeed());
+        int amount = weapon.GetCapacity() - weapon.GetCurrentAmmo();
+        if (weapon.GetAmmo() >= amount)
         {
-            weapon.currentAmmo = weapon.capacity;
-            if(weapon.type != WeaponType.ePistol) weapon.ammo -= amount;
+            weapon.SetCurrentAmmo(weapon.GetCapacity());
+            if(weapon.GetType() != WeaponType.ePistol) weapon.SetAmmo(weapon.GetAmmo()-amount);
         }
         else
         {
-            weapon.currentAmmo += weapon.ammo;
-            weapon.ammo = 0;
+            weapon.SetCurrentAmmo(weapon.GetCurrentAmmo()+weapon.GetAmmo());
+            weapon.SetAmmo(0);
         }
-        isReloading = false;
         audioSource.clip = gunShotEffect;
     }
 
     public void Shoot()
     {
         audioSource.Play();
-        weapon.currentAmmo--;
+        weapon.SetCurrentAmmo(weapon.GetCurrentAmmo()-1);
         Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.forward);
         RaycastHit hit;
 
@@ -218,7 +263,7 @@ public class Weapon : MonoBehaviour
             if (hit.transform.tag.Equals("Enemy"))
             {
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
-                enemy.TakeDamage(weapon.damage);
+                enemy.TakeDamage(weapon.GetDamage());
             }
         }
 

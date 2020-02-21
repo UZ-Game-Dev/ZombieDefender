@@ -307,7 +307,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Machine gun
+  m_Text: Machine Gun
 --- !u!222 &63128894
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8069,7 +8069,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Semi machinie gun
+  m_Text: Semi Machinie Gun
 --- !u!222 &563056333
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11091,7 +11091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.9622642, b: 0.26878262, a: 1}
+  m_Color: {r: 0, g: 0.8207547, b: 0.23115133, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -12480,7 +12480,7 @@ GameObject:
   - component: {fileID: 1312900043}
   - component: {fileID: 1312900042}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: PistolUpgradeCost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14131,7 +14131,7 @@ GameObject:
   - component: {fileID: 1517989772}
   - component: {fileID: 1517989771}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: SemiPrice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21378,7 +21378,7 @@ GameObject:
   - component: {fileID: 1899332893}
   - component: {fileID: 1899332892}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: AutoPrice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21573,6 +21573,9 @@ MonoBehaviour:
   gold: {fileID: 1784630734}
   weaponName: {fileID: 1896934189}
   wave: {fileID: 1915620221}
+  pistolUpgrade: {fileID: 1312900042}
+  semiUpgrade: {fileID: 1517989771}
+  autoUpgrade: {fileID: 1899332892}
 --- !u!1001 &1909339274
 PrefabInstance:
   m_ObjectHideFlags: 0

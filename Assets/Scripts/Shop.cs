@@ -31,6 +31,11 @@ public class Shop : MonoBehaviour
     private GameObject _defensiveObject;
     private int _defensiveObjectsNumber;
 
+    private void Start()
+    {
+        GameObject wpn = GameObject.FindGameObjectWithTag("Weapon");
+        weapon = wpn.GetComponentInChildren<Weapon>();
+    }
 
     //_______________DefensiveObject______________________
 
@@ -144,12 +149,12 @@ public class Shop : MonoBehaviour
 
     public void BuyAmmunation()
     {
-        if (Main.S.gold >= amunationPrice)
+        if (Main.S.gold >= amunationPrice && weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol)
         {
             Debug.Log("KUPUJE AMMO");
             Main.S.gold -= amunationPrice;
             if (weapon == null) FindWeaponObject();
-            weapon.GetWeapon().ammo += amunationPiecesToBuy;
+            weapon.GetWeapon().SetAmmo(weapon.GetWeapon().GetAmmo() + amunationPiecesToBuy);
         }
     }
 
@@ -172,23 +177,46 @@ public class Shop : MonoBehaviour
 
     public void BuyPistol()
     {
-        if (Main.S.gold >= 1)
-        {
-            Debug.Log("Kupuję Pistolet");
-            if (weapon == null) FindWeaponObject();
-            Main.S.gold -= 1;
-            weapon.GetWeapon().Upgrade();
-        }
+        weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.ePistol).Upgrade();
     }
 
     public void BuySemiAutomaticGun()
     {
         Debug.Log("Kupuję karabin półautomatyczny");
+        Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic) weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
+
+        if (semi == null)
+        {
+            semi = new Weapon.SemiAutomatic();
+            if (Main.S.gold >= semi.GetBuyingPrice())
+            {
+                Main.S.gold -= semi.GetBuyingPrice();
+                weapon.weapons.Add(semi);
+            }
+        }
+        else
+        {
+            weapon.weapons.Find(gun => gun.GetType()==Weapon.WeaponType.eSemiAutomatic).Upgrade();
+        }
     }
 
     public void BuyAutomaticGun()
     {
-        Debug.Log("Kupuję karabin automatyczny");
+        Weapon.Automatic auto = (Weapon.Automatic)weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eAutomatic);
+
+        if (auto == null)
+        {
+            auto = new Weapon.Automatic();
+            if (Main.S.gold >= auto.GetBuyingPrice())
+            {
+                Main.S.gold -= auto.GetBuyingPrice();
+                weapon.weapons.Add(auto);
+            }
+        }
+        else
+        {
+            weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).Upgrade();
+        }
     }
 
     public void BuyStealFency()
