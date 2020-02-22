@@ -31,7 +31,7 @@ public class DefensiveObject : MonoBehaviour
 
     private void Update()
     {
-        if (Main.S.isEnableToShoot)
+        if (Main.S.isEnableToShoot || Main.S.shopPanel.gameObject.activeSelf == true)
         {
             this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         }
