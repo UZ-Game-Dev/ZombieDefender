@@ -14551,7 +14551,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickButton: {fileID: 8300000, guid: ba8760e57ef75104f88f75654cdfe4ef, type: 3}
-  zombieAttack: {fileID: 8300000, guid: 820f48ef2919f854bb6de3328aaaf48c, type: 3}
   zombieDeath: {fileID: 8300000, guid: bca85b451d53bd74f8a6bb8ac8af3ca1, type: 3}
 --- !u!1001 &1510189806
 PrefabInstance:
@@ -16313,7 +16312,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1732657589}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -22803,7 +22802,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1958940686
 RectTransform:
   m_ObjectHideFlags: 0
