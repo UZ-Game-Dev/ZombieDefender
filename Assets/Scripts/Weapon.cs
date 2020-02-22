@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
     public Transform slad;
     
     public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}
-    List<WeaponDefinition> weapons = new List<WeaponDefinition>();
+    public List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public GameObject tracerBox;
     private bool isReloading=false;
     private WeaponDefinition weapon;
@@ -56,6 +56,7 @@ public class Weapon : MonoBehaviour
             level++;
             damage += 1f;
             reloadSpeed-=0.05f;
+            Main.S.gold -= moneyForUpgrade;
             moneyForUpgrade += 2;
         }
     }
@@ -81,6 +82,7 @@ public class Weapon : MonoBehaviour
             level++;
             damage += 1.5f;
             reloadSpeed -= 0.05f;
+            Main.S.gold -= moneyForUpgrade;
             moneyForUpgrade += 4;
         }
     }
@@ -106,6 +108,7 @@ public class Weapon : MonoBehaviour
             level++;
             damage += 2f;
             reloadSpeed -= 0.05f;
+            Main.S.gold -= moneyForUpgrade;
             moneyForUpgrade += 6;
         }
     }

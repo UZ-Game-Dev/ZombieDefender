@@ -57,6 +57,8 @@ public class Spawner : MonoBehaviour
 
         Enemy enemy = obj.GetComponent<Enemy>();
         enemy.SetMaxHP(Main.S.levelArray[Main.S.currentLevel].hpZombie);
+        float range = Random.Range(Main.S.levelArray[Main.S.currentLevel].minMaxZombieSpeed.x, Main.S.levelArray[Main.S.currentLevel].minMaxZombieSpeed.y);
+        enemy.SetSpeed(range);
 
         //Main.S.countEnemy++; //Nie potrzebne 
     }
