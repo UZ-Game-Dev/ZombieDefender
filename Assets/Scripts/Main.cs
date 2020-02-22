@@ -89,7 +89,6 @@ public class Main : MonoBehaviour
 
     private IEnumerator EnableShop()
     {
-        this.GetComponent<Shop>().UpdatePrice();
         isWaitingForNextWave = true;
         isEnableToShoot = false;
         shopPanel.SetActive(true);

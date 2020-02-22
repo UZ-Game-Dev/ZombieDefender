@@ -35,8 +35,9 @@ public class Shop : MonoBehaviour
 
     private void Start()
     {
-        GameObject wpn = GameObject.FindGameObjectWithTag("Weapon");
-        weapon = wpn.GetComponentInChildren<Weapon>();
+        FindWeaponObject();
+        shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
+        UpdatePrice();
     }
 
     //_______________DefensiveObject______________________
@@ -132,12 +133,6 @@ public class Shop : MonoBehaviour
     }
 
     //____________SHP_PRICE_DISPLEY____________________
-    private void Start()
-    {
-        FindWeaponObject();
-        shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
-        UpdatePrice();
-    }
     public void FixedUpdate()
     {
         if(isActive)
@@ -147,14 +142,14 @@ public class Shop : MonoBehaviour
     }
     public void UpdatePrice()
     {
-        foreach(Button button in shopButtonsArray)
+        foreach (Button button in shopButtonsArray)
         {
             if (button.name == "NextWaveButton") continue;
             TextMeshProUGUI buttonTxt = button.GetComponentInChildren<TextMeshProUGUI>();
             string buttonName = button.name;
             string text = "";
-            
-            switch(buttonName)
+
+            switch (buttonName)
             {
                 case "BuyAmmo":
                     text = "+" + amunationPiecesToBuy + " / $" + amunationPrice + "\nBUY";
@@ -162,19 +157,10 @@ public class Shop : MonoBehaviour
                 case "BuyHealth":
                     text = "+" + Player.S.GetHpBonusPerLevel() + "hp / $" + Player.S.GetHpUpgradeCost() + "\nBUY";
                     break;
-                case "BuyGun":
-                    text = "+Damage \n-Reload Speed \n$" + weapon.weapons[0].moneyForUpgrade + "\nBUY";
-                    break;
-                case "BuySemiAutomaticGun":
-                    text = "+Damage \n-Reload Speed \n$" + weapon.weapons[1].moneyForUpgrade + "\nBUY";
-                    break;
-                case "BuyAutomaticGun":
-                    text = "+Damage \n-Reload Speed \n$" + weapon.weapons[2].moneyForUpgrade + "\nBUY";
-                    break;
             }
             if (!text.Equals("")) buttonTxt.text = text;
         }
-    }
+    } 
     //_______________SHOP_BUTTONS______________________
 
     public void NextWave()
@@ -218,11 +204,6 @@ public class Shop : MonoBehaviour
 
     public void BuySemiAutomaticGun()
     {
-        if (Main.S.gold >= weapon.weapons[0].moneyForUpgrade)
-        {
-            Debug.Log("Kupuję karabin półautomatyczny");
-            weapon.weapons[1].Upgrade();
-        }
         Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic) weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
 
         if (semi == null)
