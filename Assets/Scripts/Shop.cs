@@ -33,6 +33,11 @@ public class Shop : MonoBehaviour
     private int _defensiveObjectsNumber;
     private Button[] shopButtonsArray;
 
+    private void Start()
+    {
+        GameObject wpn = GameObject.FindGameObjectWithTag("Weapon");
+        weapon = wpn.GetComponentInChildren<Weapon>();
+    }
 
     //_______________DefensiveObject______________________
 
@@ -50,7 +55,7 @@ public class Shop : MonoBehaviour
 
         Vector3 transformPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-        _defensiveObjectGhost = Instantiate(DefensiveObjectsArray[objectNumber].prefabsGhost, new Vector3(Mathf.Clamp(transformPosition.x, -2.25f, 6), DefensiveObjectsArray[objectNumber].startingPosition.y, DefensiveObjectsArray[objectNumber].startingPosition.z), DefensiveObjectsArray[objectNumber].prefabsGhost.transform.rotation);
+        _defensiveObjectGhost = Instantiate(DefensiveObjectsArray[objectNumber].prefabsGhost, new Vector3(Mathf.Clamp(transformPosition.x, -2.25f, 5), DefensiveObjectsArray[objectNumber].startingPosition.y, DefensiveObjectsArray[objectNumber].startingPosition.z), DefensiveObjectsArray[objectNumber].prefabsGhost.transform.rotation);
         _defensiveObjectGhost.GetComponent<DefensiveObjectGhost>().SetActualDistance(actualDistance);
 
         _defensiveObject = DefensiveObjectsArray[objectNumber].prefabs;
@@ -79,18 +84,15 @@ public class Shop : MonoBehaviour
     {
         //_______________DefensiveObject______________________
 
-        if (!_isisMovingDefensiveObjects)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && Main.S.gold >= DefensiveObjectsArray[0].price && !_isisMovingDefensiveObjects)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && Main.S.gold >= DefensiveObjectsArray[0].price)
-            {
-                _defensiveObjectsNumber = 0;
-                MovingDefensiveObjects(_defensiveObjectsNumber);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2) && Main.S.gold >= DefensiveObjectsArray[1].price)
-            {
-                _defensiveObjectsNumber = 1;
-                MovingDefensiveObjects(_defensiveObjectsNumber);
-            }
+            _defensiveObjectsNumber = 0;
+            MovingDefensiveObjects(_defensiveObjectsNumber);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && Main.S.gold >= DefensiveObjectsArray[1].price && !_isisMovingDefensiveObjects)
+        {
+            _defensiveObjectsNumber = 1;
+            MovingDefensiveObjects(_defensiveObjectsNumber);
         }
 
         if (Input.GetButtonUp("Fire1") && !isActive && _isisMovingDefensiveObjects && !DefensiveObjectGhost.S.GetCollision())
@@ -190,12 +192,12 @@ public class Shop : MonoBehaviour
 
     public void BuyAmmunation()
     {
-        if (Main.S.gold >= amunationPrice)
+        if (Main.S.gold >= amunationPrice && weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol)
         {
             Debug.Log("KUPUJE AMMO");
             Main.S.gold -= amunationPrice;
             if (weapon == null) FindWeaponObject();
-            weapon.GetWeapon().ammo += amunationPiecesToBuy;
+            weapon.GetWeapon().SetAmmo(weapon.GetWeapon().GetAmmo() + amunationPiecesToBuy);
         }
     }
 
@@ -211,11 +213,7 @@ public class Shop : MonoBehaviour
 
     public void BuyPistol()
     {
-        if (Main.S.gold >= weapon.weapons[0].moneyForUpgrade)
-        {
-            Debug.Log("Kupuję Pistolet");
-            weapon.weapons[0].Upgrade();
-        }
+        weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.ePistol).Upgrade();
     }
 
     public void BuySemiAutomaticGun()
@@ -225,15 +223,40 @@ public class Shop : MonoBehaviour
             Debug.Log("Kupuję karabin półautomatyczny");
             weapon.weapons[1].Upgrade();
         }
+        Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic) weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
+
+        if (semi == null)
+        {
+            semi = new Weapon.SemiAutomatic();
+            if (Main.S.gold >= semi.GetBuyingPrice())
+            {
+                Main.S.gold -= semi.GetBuyingPrice();
+                weapon.weapons.Add(semi);
+            }
+        }
+        else
+        {
+            weapon.weapons.Find(gun => gun.GetType()==Weapon.WeaponType.eSemiAutomatic).Upgrade();
+        }
     }
 
     public void BuyAutomaticGun()
     {
-        if (Main.S.gold >= weapon.weapons[0].moneyForUpgrade)
+        Weapon.Automatic auto = (Weapon.Automatic)weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eAutomatic);
+
+        if (auto == null)
         {
-            Debug.Log("Kupuję karabin automatyczny");
-            weapon.weapons[2].Upgrade();
-        }   
+            auto = new Weapon.Automatic();
+            if (Main.S.gold >= auto.GetBuyingPrice())
+            {
+                Main.S.gold -= auto.GetBuyingPrice();
+                weapon.weapons.Add(auto);
+            }
+        }
+        else
+        {
+            weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).Upgrade();
+        }
     }
 
     public void BuyStealFency()

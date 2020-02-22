@@ -122,9 +122,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dropChance: 95
   _itemList:
-  - item: {fileID: 8923497107722105115, guid: 3c073dbc5d3accf4db6085763e5981a1, type: 3}
+  - item: {fileID: 1391340264705400164, guid: 3f6bf6de055e8414db610506e094cb2e, type: 3}
     dropWeight: 80
-  - item: {fileID: 4965279214905976146, guid: abfda10f9d4084f469eed0929ef6252f, type: 3}
+  - item: {fileID: 3038264728945481247, guid: cd1f2b70ad12f3e429d1804f3994c8b3, type: 3}
     dropWeight: 10
 --- !u!54 &117157845647850210
 Rigidbody:

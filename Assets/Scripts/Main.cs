@@ -51,10 +51,29 @@ public class Main : MonoBehaviour
     {
         if(countEnemy <= 0 && !isWaitingForNextWave)
         {
-            StartCoroutine(shopCoroutine);
+            isWaitingForNextWave = true;
+            StartCoroutine(AreThereItems());
         }
 
         //Debug.Log("MAIN: LVL:" + currentLevel + "   ENEMY LEFT: " + countEnemy + "    COIN: " + gold + "   HP: " + _player.GetHP());
+    }
+
+    private IEnumerator AreThereItems()
+    {
+        while (true)
+        {
+            Items[] _gos = FindObjectsOfType(typeof(Items)) as Items[];
+
+            if (_gos.Length == 0)
+            {
+                StartCoroutine(shopCoroutine);
+                break;
+            }
+            else
+            {
+                yield return new WaitForSecondsRealtime(0.1f);
+            }
+        }
     }
 
     public void StopWaveCoroutine()
