@@ -28,4 +28,16 @@ public class DefensiveObject : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void Update()
+    {
+        if (Main.S.isEnableToShoot)
+        {
+            this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        }
+    }
 }

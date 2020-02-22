@@ -82,18 +82,15 @@ public class Shop : MonoBehaviour
     {
         //_______________DefensiveObject______________________
 
-        if (!_isisMovingDefensiveObjects)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && Main.S.gold >= DefensiveObjectsArray[0].price && !_isisMovingDefensiveObjects)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && Main.S.gold >= DefensiveObjectsArray[0].price)
-            {
-                _defensiveObjectsNumber = 0;
-                MovingDefensiveObjects(_defensiveObjectsNumber);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2) && Main.S.gold >= DefensiveObjectsArray[1].price)
-            {
-                _defensiveObjectsNumber = 1;
-                MovingDefensiveObjects(_defensiveObjectsNumber);
-            }
+            _defensiveObjectsNumber = 0;
+            MovingDefensiveObjects(_defensiveObjectsNumber);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && Main.S.gold >= DefensiveObjectsArray[1].price && !_isisMovingDefensiveObjects)
+        {
+            _defensiveObjectsNumber = 1;
+            MovingDefensiveObjects(_defensiveObjectsNumber);
         }
 
         if (Input.GetButtonUp("Fire1") && !isActive && _isisMovingDefensiveObjects && !DefensiveObjectGhost.S.GetCollision())

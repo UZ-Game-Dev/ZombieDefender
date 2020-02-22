@@ -52,7 +52,7 @@ public class DefensiveObjectGhost : MonoBehaviour
         Vector3 mousePosition = Input.mousePosition;
         mousePosition.z = _actualDistance;
         Vector3 transformPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        this.transform.position = new Vector3(Mathf.Clamp(transformPosition.x, -2.25f, 6), transform.position.y, transform.position.z);
+        this.transform.position = new Vector3(Mathf.Clamp(transformPosition.x, -2.25f, 5), transform.position.y, transform.position.z);
     }
 
     private void OnTriggerEnter(Collider collider)
