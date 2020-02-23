@@ -7,7 +7,7 @@ public class DefensiveObject : MonoBehaviour
 {
     [Header("Definiowane w panelu")]
     [SerializeField]
-    private float _health = 6f;
+    private float _health = 10f;
     
     private HealthUI _healthUI;
     private float _maxHP;
@@ -20,7 +20,7 @@ public class DefensiveObject : MonoBehaviour
 
     public void TakeDamage(float dmg)
     {
-        _health -= dmg;
+        _health -= 1;
         _healthUI.updateHP(_health, _maxHP);
 
         if (_health <= 0)

@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
                 }
 
                 Debug.Log("*GRRR!* " + _hitObject.tag + " -" + _takeDamage);
-                _attackCooldown = 1f / _attackSpeed;
+                _attackCooldown = 2f / _attackSpeed;
             }
             yield return null;
         }

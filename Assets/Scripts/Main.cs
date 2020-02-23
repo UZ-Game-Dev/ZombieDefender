@@ -108,11 +108,11 @@ public class Main : MonoBehaviour
         switch(type)
         {
             case eIteamsType.eCoin:
-                gold += 1;
+                gold += 2;
                 break;
 
             case eIteamsType.eGoldBar:
-                gold += 10;
+                gold += 8;
                 break;
 
             case eIteamsType.eLife:
