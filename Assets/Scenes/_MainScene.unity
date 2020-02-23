@@ -13074,7 +13074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56711cd09389d9f4284ed7402425eb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 6
+  gold: 8
   levelArray:
   - maxEnemyCountOnLevel: 4
     waveDelay: 15
@@ -13121,11 +13121,11 @@ MonoBehaviour:
     minMaxSpawnDelay: {x: 1, y: 2}
     minMaxZombieSpeed: {x: 1, y: 4}
     hpZombie: 35
-  - maxEnemyCountOnLevel: 15
+  - maxEnemyCountOnLevel: 20
     waveDelay: 10
-    minMaxSpawnDelay: {x: 1, y: 2}
+    minMaxSpawnDelay: {x: 1, y: 1}
     minMaxZombieSpeed: {x: 1, y: 4}
-    hpZombie: 35
+    hpZombie: 40
   shopPanel: {fileID: 1958940685}
   cursorCrosshairs: {fileID: 2800000, guid: 78acf186124029446807498932457b0a, type: 3}
   isEnableToShoot: 1
