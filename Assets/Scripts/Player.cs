@@ -54,9 +54,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Vector2 mouse = Input.mousePosition - mainCamera.WorldToScreenPoint(player.transform.position);
-        shootingDirection = mouse;
-        Rotate();
+        if (!PauseMenu.S.GetIsPaused())
+        {
+            Vector2 mouse = Input.mousePosition - mainCamera.WorldToScreenPoint(player.transform.position);
+            shootingDirection = mouse;
+            Rotate();
+        }
     }
 
     private void Rotate()
