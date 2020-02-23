@@ -10,6 +10,15 @@ public class Menu : MonoBehaviour
         SceneManager.LoadScene("_MainScene");
     }
 
+    public void ButtonCredits(GameObject creditsPanel)
+    {
+        creditsPanel.SetActive(true);
+
+    }
+    public void ButtonCloseCredits(GameObject creditsPanel)
+    {
+        creditsPanel.SetActive(false);
+    }
     public void ButtonExit()
     {
         Application.Quit();

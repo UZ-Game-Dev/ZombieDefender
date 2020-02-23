@@ -9,6 +9,11 @@ public class UI : MonoBehaviour
     public Slider hp, reloadingProgress;
     public TextMeshProUGUI ammo, gold, weaponName, wave, pistolUpgrade, semiUpgrade, autoUpgrade, hpPercentage, hpUpgrade;
     public TextMeshProUGUI gunReloadTime, gunDamage, semiReloadTime, semiDamage, autoReloadTime, autoDamage;
+
+        
+    public Button buyAmmoButton;
+    public TextMeshProUGUI bytAmmoText;
+
     private Player _player;
     private Weapon _weapon;
 
@@ -44,26 +49,55 @@ public class UI : MonoBehaviour
 
         if(!Main.S.isEnableToShoot)
         {
-            pistolUpgrade.text = _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetMoneyForUpgrade()+"$\nUPGRADE";
+            pistolUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetMoneyForUpgrade()+"$";
 
             Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
             if (semi == null)
             {
                 semi = new Weapon.SemiAutomatic();
-                semiUpgrade.text = semi.GetBuyingPrice() + "$\nBUY";
+                semiUpgrade.text = "Cost: " + semi.GetBuyingPrice() + "$\n \n ";
             }
-            else semiUpgrade.text = _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).GetMoneyForUpgrade() + "$\nUPGRADE";
+            else semiUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).GetMoneyForUpgrade() + "$";
 
             Weapon.Automatic auto = (Weapon.Automatic)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eAutomatic);
             if (auto == null)
             {
                 auto = new Weapon.Automatic();
-                autoUpgrade.text = auto.GetBuyingPrice() + "$\nBUY";
+                autoUpgrade.text = "Cost: " + auto.GetBuyingPrice() + "$\n \n ";
             }
-            else autoUpgrade.text = _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$\nUPGRADE";
+            else autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
 
-            if (_player.GetHpLevel() == _player.GetMaxHpLevel()) hpUpgrade.text = "25$\nHEAL";
-            else hpUpgrade.text = "+20 / 25$\nBUY";
+            //Sklep - Panel HP
+            if (_player.GetHpLevel() == _player.GetMaxHpLevel())
+            {
+                hpUpgrade.text = "Health level: " + Player.S.GetHpLevel() + " / " + Player.S.GetMaxHpLevel() +"\n" +
+                    " " + 
+                    "\nCost: " + Player.S.GetHpUpgradeCost() + "$\n ";
+               // hpUpgrade.text = "25$\nHEAL";
+            }
+            else
+            {
+                hpUpgrade.text = "Health level: " + Player.S.GetHpLevel() + " / " + Player.S.GetMaxHpLevel() + "\n" +
+                    Player.S.GetMaxHP() + " -> " + (Player.S.GetMaxHP() + Player.S.GetHpBonusPerLevel()) +
+                    "\nCost: " + Player.S.GetHpUpgradeCost() + "$\n ";
+               // hpUpgrade.text = "25$\nHEAL";
+            }
+
+            //Sklep - Panel Ammo
+            if(_weapon.GetWeapon().GetType() == Weapon.WeaponType.ePistol)
+            {
+                bytAmmoText.text = "+" + Main.S.GetComponent<Shop>().amunationPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().amunationPrice + "$\n ";
+                buyAmmoButton.interactable = false;
+                buyAmmoButton.GetComponent<Image>().enabled = false;
+                bytAmmoText.text += "You can not buy ammunation for " + _weapon.GetWeapon().GetName();
+            }
+            else
+            {
+                bytAmmoText.text = "+" + Main.S.GetComponent<Shop>().amunationPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().amunationPrice + "$\n ";
+                buyAmmoButton.interactable = true;
+                buyAmmoButton.GetComponent<Image>().enabled = true;
+                bytAmmoText.text += "\n \n ";
+            }
 
             gunReloadTime.text = "Reload Spd.: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetReloadSpeed() + " -> " + (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetReloadSpeed() - 0.05f);
             gunDamage.text = "Damage: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetDamage() + " -> " + (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetDamage() + 1);

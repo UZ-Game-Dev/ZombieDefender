@@ -167,7 +167,6 @@ public class Shop : MonoBehaviour
             Debug.Log("Kupuję Zdrowię");
             Player.S.UpgradeHP();
         }
-        
     }
 
     public void BuyPistol()

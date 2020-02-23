@@ -191,6 +191,7 @@ public class Weapon : MonoBehaviour
             {
                 _triggerReleased = true;
                 audioSource.Stop();
+                audioSource.volume = 1;
                 audioSource.clip = triggerReleased;
                 audioSource.Play();
             }
@@ -210,6 +211,7 @@ public class Weapon : MonoBehaviour
             if (_triggerReleased)
             {
                 audioSource.Stop();
+                audioSource.volume = 1;
                 audioSource.clip = triggerReleased;
                 audioSource.Play();
                 _triggerReleased = false;
@@ -260,6 +262,7 @@ public class Weapon : MonoBehaviour
 
     public void Shoot()
     {
+        audioSource.volume = 0.5f;
         if (audioSource.clip == gunShotEffect) audioSource.Play();
         if(!audioSource.isPlaying) audioSource.Play();
         weapon.SetCurrentAmmo(weapon.GetCurrentAmmo()-1);
