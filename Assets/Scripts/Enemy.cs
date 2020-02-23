@@ -17,8 +17,8 @@ public class Enemy : MonoBehaviour
     private float _attackSpeed = 1f;
     [SerializeField]
     private float _attackCooldownStart = 1f;
-    [SerializeField]
-    //private Vector2 _attackDamege = new Vector2(2, 5);
+    public int minDamage = 2;
+    public int maxDamage = 5;
 
     [Header("Definiowane dynamicznie")]
     public GameObject player;
@@ -96,7 +96,7 @@ public class Enemy : MonoBehaviour
 
             if (_hitObject != null && _attackCooldown <= 0f)
             {
-                int _takeDamage = Random.Range(2, 5);
+                int _takeDamage = Random.Range(minDamage, maxDamage);
                 audioSource.Play();
                 switch (_hitObject.tag)
                 {
@@ -152,8 +152,9 @@ public class Enemy : MonoBehaviour
         _attackSpeed = attackSpeed;
     }
 
-    public void SetDamageOnHit(Vector2 damage)
+    public void SetDamageOnHit(int minDamage, int maxDamage)
     {
-
+        this.minDamage = minDamage;
+        this.maxDamage = maxDamage;
     }
 }
