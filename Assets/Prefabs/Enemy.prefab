@@ -1037,7 +1037,7 @@ MonoBehaviour:
     m_Bits: 4
   _health: 25
   _attackSpeed: 1
-  _attackCooldownStart: 0
+  _attackCooldownStart: 0.6
   minDamage: 2
   maxDamage: 5
   player: {fileID: 0}
@@ -1081,9 +1081,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 820f48ef2919f854bb6de3328aaaf48c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 34468f4c90a89664491ea32f7d3f7cb6, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.1
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -47,7 +47,7 @@ public class Weapon : MonoBehaviour
         public float GetReloadSpeed() { return reloadSpeed; }
         public float GetDamage() { return damage; }
         public string GetName() { return name; }
-        public WeaponType GetType() { return type; }
+        public new WeaponType GetType() { return type; }
         
         public void SetFireRate(int a) { fireRate = a; }
         public void SetCurrentAmmo(int a) { currentAmmo = a; }
@@ -172,43 +172,45 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1") && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
+        if (PauseMenu.S.GetIsPaused() && isReloading) audioSource.Pause();
+        else if (!PauseMenu.S.GetIsPaused() && isReloading) audioSource.UnPause();
+
+        if (!PauseMenu.S.GetIsPaused())
         {
-            if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunShotEffect;
-            if (weapon.GetType() == WeaponType.eSemiAutomatic) audioSource.clip = semiShotEffect;
-            if (weapon.GetType() == WeaponType.eAutomatic) audioSource.clip = autoShotEffect;
-
-            Shoot();
-            if(weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
-            _nextShot = 8;
-        }
-
-        if (Input.GetButtonUp("Fire1") && Main.S.isEnableToShoot)
-        {
-            weapon.SetFireRate(weapon.GetMaxFireRate());
-
-            if (weapon.GetType() != WeaponType.ePistol)
+            if (Input.GetButton("Fire1") && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
             {
-                _triggerReleased = true;
-                audioSource.Stop();
-                audioSource.volume = 1;
-                audioSource.clip = triggerReleased;
-                audioSource.Play();
+                if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunShotEffect;
+                if (weapon.GetType() == WeaponType.eSemiAutomatic) audioSource.clip = semiShotEffect;
+                if (weapon.GetType() == WeaponType.eAutomatic) audioSource.clip = autoShotEffect;
+
+                Shoot();
+                if (weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
+                _nextShot = 8;
             }
-        }
 
-        if (Input.GetButtonDown("R") && !isReloading && weapon.GetAmmo() != 0 && weapon.GetCurrentAmmo() != weapon.GetCapacity())
-        {
-            if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunReloadEffect;
-            else audioSource.clip = semiReloadEffect;
-            audioSource.Play();
-            StartCoroutine("Reload");
-            isReloading = true;
-        }
+            if (Input.GetButtonUp("Fire1") && Main.S.isEnableToShoot)
+            {
+                weapon.SetFireRate(weapon.GetMaxFireRate());
 
-        if(!Main.S.isEnableToShoot || (weapon.GetCurrentAmmo() <= 0 && !isReloading && weapon.GetType() != WeaponType.ePistol))
-        {
-            if (_triggerReleased)
+                if (weapon.GetType() != WeaponType.ePistol)
+                {
+                    _triggerReleased = true;
+                    audioSource.Stop();
+                    audioSource.clip = triggerReleased;
+                    audioSource.Play();
+                }
+            }
+
+            if (Input.GetButtonDown("R") && !isReloading && weapon.GetAmmo() != 0 && weapon.GetCurrentAmmo() != weapon.GetCapacity())
+            {
+                if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunReloadEffect;
+                else audioSource.clip = semiReloadEffect;
+                audioSource.Play();
+                StartCoroutine("Reload");
+                isReloading = true;
+            }
+
+            if (!Main.S.isEnableToShoot || (weapon.GetCurrentAmmo() <= 0 && !isReloading && weapon.GetType() != WeaponType.ePistol))
             {
                 audioSource.Stop();
                 audioSource.volume = 1;
@@ -216,13 +218,13 @@ public class Weapon : MonoBehaviour
                 audioSource.Play();
                 _triggerReleased = false;
             }
-        }
-        
-        if (Input.GetButtonDown("E") && !isReloading)
-            SwapWeapons(1);
 
-        if (Input.GetButtonDown("Q") && !isReloading)
-            SwapWeapons(-1);
+            if (Input.GetButtonDown("E") && !isReloading)
+                SwapWeapons(1);
+
+            if (Input.GetButtonDown("Q") && !isReloading)
+                SwapWeapons(-1);
+        }
     }
 
     public WeaponDefinition GetWeapon()
