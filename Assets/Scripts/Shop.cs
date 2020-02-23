@@ -44,6 +44,7 @@ public class Shop : MonoBehaviour
 
     private void MovingDefensiveObjects(int objectNumber)
     {
+        PauseMenu.S.enabled = false;
         _isisMovingDefensiveObjects = true;
         Main.S.isEnableToShoot = false;
 
@@ -67,6 +68,7 @@ public class Shop : MonoBehaviour
         Destroy(_defensiveObjectGhost);
         _defensiveObjectGhost = null;
         _defensiveObject = null;
+        PauseMenu.S.enabled = true;
         _isisMovingDefensiveObjects = false;
         if (!isActive)
         {
@@ -85,12 +87,12 @@ public class Shop : MonoBehaviour
     {
         //_______________DefensiveObject______________________
 
-        if (Input.GetKeyDown(KeyCode.Alpha1) && Main.S.gold >= DefensiveObjectsArray[0].price && !_isisMovingDefensiveObjects)
+        if (!PauseMenu.S.GetIsPaused() && Input.GetKeyDown(KeyCode.Alpha1) && Main.S.gold >= DefensiveObjectsArray[0].price && !_isisMovingDefensiveObjects)
         {
             _defensiveObjectsNumber = 0;
             MovingDefensiveObjects(_defensiveObjectsNumber);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && Main.S.gold >= DefensiveObjectsArray[1].price && !_isisMovingDefensiveObjects)
+        else if (!PauseMenu.S.GetIsPaused() && Input.GetKeyDown(KeyCode.Alpha2) && Main.S.gold >= DefensiveObjectsArray[1].price && !_isisMovingDefensiveObjects)
         {
             _defensiveObjectsNumber = 1;
             MovingDefensiveObjects(_defensiveObjectsNumber);

@@ -44,7 +44,7 @@ public class Weapon : MonoBehaviour
         public float GetReloadSpeed() { return reloadSpeed; }
         public float GetDamage() { return damage; }
         public string GetName() { return name; }
-        public WeaponType GetType() { return type; }
+        public new WeaponType GetType() { return type; }
         
         public void SetFireRate(int a) { fireRate = a; }
         public void SetCurrentAmmo(int a) { currentAmmo = a; }
@@ -181,28 +181,35 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1") && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
-        {
-            Shoot();
-            if(weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
-            _nextShot = 8;
-        }
 
-        if (Input.GetButtonUp("Fire1")) weapon.SetFireRate(weapon.GetMaxFireRate());
+        if (PauseMenu.S.GetIsPaused() && isReloading) audioSource.Pause();
+        else if (!PauseMenu.S.GetIsPaused() && isReloading) audioSource.UnPause();
 
-        if (Input.GetButtonDown("R") && !isReloading && weapon.GetAmmo() != 0 && weapon.GetCurrentAmmo() != weapon.GetCapacity())
-        {
-            audioSource.clip = gunReloadEffect;
-            audioSource.Play();
-            StartCoroutine("Reload");
-            isReloading = true;
-        }
-        
-        if (Input.GetButtonDown("E") && !isReloading)
-            SwapWeapons(1);
+        if (!PauseMenu.S.GetIsPaused())
+            {
+                if (Input.GetButton("Fire1") && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
+                {
+                    Shoot();
+                    if (weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
+                    _nextShot = 8;
+                }
 
-        if (Input.GetButtonDown("Q") && !isReloading)
-            SwapWeapons(-1);
+                if (Input.GetButtonUp("Fire1")) weapon.SetFireRate(weapon.GetMaxFireRate());
+
+                if (Input.GetButtonDown("R") && !isReloading && weapon.GetAmmo() != 0 && weapon.GetCurrentAmmo() != weapon.GetCapacity())
+                {
+                    audioSource.clip = gunReloadEffect;
+                    audioSource.Play();
+                    StartCoroutine("Reload");
+                    isReloading = true;
+                }
+
+                if (Input.GetButtonDown("E") && !isReloading)
+                    SwapWeapons(1);
+
+                if (Input.GetButtonDown("Q") && !isReloading)
+                    SwapWeapons(-1);
+            }
     }
 
     public WeaponDefinition GetWeapon()
