@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public int healthUpragdeCost = 25;
 
     Vector3 shootingDirection;
-    private int _maxHP, _hp, _hpLevel = 0, _cost = 10;
+    private int _maxHP, _hp;
     
 
     public void Awake()
@@ -36,10 +36,9 @@ public class Player : MonoBehaviour
 
     public void UpgradeHP()
     {
-        Main.S.gold -= _cost;
-        _hpLevel++;
-        _cost += _hpLevel * 2;
-        _maxHP += 10;
+        Main.S.gold -= healthUpragdeCost;
+        healthLevel++;
+        _maxHP += 20;
     }
 
     public void TakeDamage(int amount)
@@ -72,9 +71,9 @@ public class Player : MonoBehaviour
         return _hp;
     }
 
-    public int GetCost()
+    public int GetHealthUpgradeCost()
     {
-        return _cost;
+        return healthUpragdeCost;
     }
     public int maxHP
     {

@@ -215,7 +215,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).Upgrade();
+            weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).Upgrade();
         }
     }
 
