@@ -20,6 +20,7 @@ public class Main : MonoBehaviour
     public int gold = 5;
     public Level[] levelArray;
     public GameObject shopPanel;
+    public Texture2D cursorCrosshairs;
 
     [Header("Definiowane dynamicznie")]
     public bool isEnableToShoot = true;
@@ -32,6 +33,8 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        
+
         if (S != null)
             Debug.LogError("Sigleton Main juz istnieje");
         S = this;
@@ -49,7 +52,10 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(countEnemy <= 0 && !isWaitingForNextWave)
+        if (isEnableToShoot && !PauseMenu.S.GetIsPaused()) Cursor.SetCursor(cursorCrosshairs, new Vector2(cursorCrosshairs.width / 2, cursorCrosshairs.height / 2), CursorMode.ForceSoftware);
+        else Cursor.SetCursor(null, Vector2.zero.normalized, CursorMode.ForceSoftware);
+
+        if (countEnemy <= 0 && !isWaitingForNextWave)
         {
             isWaitingForNextWave = true;
             StartCoroutine(AreThereItems());
