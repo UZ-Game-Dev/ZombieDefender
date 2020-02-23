@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class DefensiveObjects
@@ -19,8 +20,8 @@ public class Shop : MonoBehaviour
     public TextMeshProUGUI timerToNextWave;
     public int maxGoldForSkip = 20;
     public DefensiveObjects[] DefensiveObjectsArray;
-    public int amunationPrice = 10;
-    public int amunationPiecesToBuy = 5;
+    public int amunationPrice = 5;
+    public int amunationPiecesToBuy = 50;
 
     [Header("Definiowane dynamicznie")]
     public bool isActive = false;
@@ -30,17 +31,20 @@ public class Shop : MonoBehaviour
     private GameObject _defensiveObjectGhost;
     private GameObject _defensiveObject;
     private int _defensiveObjectsNumber;
+    private Button[] shopButtonsArray;
 
     private void Start()
     {
-        GameObject wpn = GameObject.FindGameObjectWithTag("Weapon");
-        weapon = wpn.GetComponentInChildren<Weapon>();
+        FindWeaponObject();
+        shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
+        UpdatePrice();
     }
 
     //_______________DefensiveObject______________________
 
     private void MovingDefensiveObjects(int objectNumber)
     {
+        PauseMenu.S.enabled = false;
         _isisMovingDefensiveObjects = true;
         Main.S.isEnableToShoot = false;
 
@@ -53,7 +57,7 @@ public class Shop : MonoBehaviour
 
         Vector3 transformPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-        _defensiveObjectGhost = Instantiate(DefensiveObjectsArray[objectNumber].prefabsGhost, new Vector3(Mathf.Clamp(transformPosition.x, -2.25f, 6), DefensiveObjectsArray[objectNumber].startingPosition.y, DefensiveObjectsArray[objectNumber].startingPosition.z), DefensiveObjectsArray[objectNumber].prefabsGhost.transform.rotation);
+        _defensiveObjectGhost = Instantiate(DefensiveObjectsArray[objectNumber].prefabsGhost, new Vector3(Mathf.Clamp(transformPosition.x, -2.25f, 5), DefensiveObjectsArray[objectNumber].startingPosition.y, DefensiveObjectsArray[objectNumber].startingPosition.z), DefensiveObjectsArray[objectNumber].prefabsGhost.transform.rotation);
         _defensiveObjectGhost.GetComponent<DefensiveObjectGhost>().SetActualDistance(actualDistance);
 
         _defensiveObject = DefensiveObjectsArray[objectNumber].prefabs;
@@ -64,6 +68,7 @@ public class Shop : MonoBehaviour
         Destroy(_defensiveObjectGhost);
         _defensiveObjectGhost = null;
         _defensiveObject = null;
+        PauseMenu.S.enabled = true;
         _isisMovingDefensiveObjects = false;
         if (!isActive)
         {
@@ -82,18 +87,15 @@ public class Shop : MonoBehaviour
     {
         //_______________DefensiveObject______________________
 
-        if (!_isisMovingDefensiveObjects)
+        if (!PauseMenu.S.GetIsPaused() && Input.GetKeyDown(KeyCode.Alpha1) && Main.S.gold >= DefensiveObjectsArray[0].price && !_isisMovingDefensiveObjects)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && Main.S.gold >= DefensiveObjectsArray[0].price)
-            {
-                _defensiveObjectsNumber = 0;
-                MovingDefensiveObjects(_defensiveObjectsNumber);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2) && Main.S.gold >= DefensiveObjectsArray[1].price)
-            {
-                _defensiveObjectsNumber = 1;
-                MovingDefensiveObjects(_defensiveObjectsNumber);
-            }
+            _defensiveObjectsNumber = 0;
+            MovingDefensiveObjects(_defensiveObjectsNumber);
+        }
+        else if (!PauseMenu.S.GetIsPaused() && Input.GetKeyDown(KeyCode.Alpha2) && Main.S.gold >= DefensiveObjectsArray[1].price && !_isisMovingDefensiveObjects)
+        {
+            _defensiveObjectsNumber = 1;
+            MovingDefensiveObjects(_defensiveObjectsNumber);
         }
 
         if (Input.GetButtonUp("Fire1") && !isActive && _isisMovingDefensiveObjects && !DefensiveObjectGhost.S.GetCollision())
@@ -132,6 +134,49 @@ public class Shop : MonoBehaviour
         timerToNextWave.text = seconds.ToString("00") + ":" + miliseconds.ToString("00");
     }
 
+    //____________SHP_PRICE_DISPLEY____________________
+    public void FixedUpdate()
+    {
+        if (isActive)
+        {
+            UpdatePrice();
+        }
+    }
+    public void UpdatePrice()
+    {
+        foreach (Button button in shopButtonsArray)
+        {
+            if (button.name == "NextWaveButton") continue;
+            TextMeshProUGUI buttonTxt = button.GetComponentInChildren<TextMeshProUGUI>();
+            string buttonName = button.name;
+            string text = "";
+
+            switch (buttonName)
+            {
+                case "BuyAmmo":
+                    text = "+" + amunationPiecesToBuy + " / $" + amunationPrice + "\nBUY";
+                    if (weapon.GetWeapon().GetType() == Weapon.WeaponType.ePistol)
+                    {
+                        button.interactable = false;
+                        text += "\nYou can not buy ammunation for " + weapon.GetWeapon().GetName();
+                    }
+                    else
+                    {
+                        button.interactable = true;
+                        text += "\n \n ";
+                    }
+                        
+                    
+                    break;
+                case "BuyHealth":
+                    text = "Health level: " + Player.S.GetHpLevel() + "\n" +
+                        Player.S.GetMaxHP() + " -> " + (Player.S.GetMaxHP() + Player.S.GetHpBonusPerLevel()) +
+                        "\nCost: " + Player.S.GetHpUpgradeCost() + "$\nBUY";
+                    break;
+            }
+            if (!text.Equals("")) buttonTxt.text = text;
+        }
+    } 
     //_______________SHOP_BUTTONS______________________
 
     public void NextWave()
@@ -160,17 +205,10 @@ public class Shop : MonoBehaviour
 
     public void BuyHealth()
     {
-        if(Main.S.gold >= Player.S.healthUpragdeCost)
+        if(Main.S.gold >= Player.S.GetHpUpgradeCost())
         {
             Debug.Log("Kupuję Zdrowię");
-            Main.S.gold -= Player.S.healthUpragdeCost;
-            if(Player.S.healthLevel < Player.S.maxHealthLevel)
-            {
-                Player.S.healthLevel++;
-                Player.S.maxHP += 20;
-            }
-            if (Player.S.GetHP() < Player.S.maxHP)
-                Player.S.Heal(Player.S.maxHP);
+            Player.S.UpgradeHP();
         }
         
     }
@@ -182,7 +220,6 @@ public class Shop : MonoBehaviour
 
     public void BuySemiAutomaticGun()
     {
-        Debug.Log("Kupuję karabin półautomatyczny");
         Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic) weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
 
         if (semi == null)

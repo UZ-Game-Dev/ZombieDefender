@@ -40,7 +40,7 @@ public class Spawner : MonoBehaviour
     {
         for (int i = 0; i < sum; i++)
         {
-            Spawn(0);
+            Spawn(Random.Range(0, enemyPrefabs.Length));
             float range = Random.Range(Main.S.levelArray[Main.S.currentLevel].minMaxSpawnDelay.x, Main.S.levelArray[Main.S.currentLevel].minMaxSpawnDelay.y);
             yield return new WaitForSeconds(range);
         }
@@ -56,8 +56,22 @@ public class Spawner : MonoBehaviour
         objTransform.position = spawnerPoints[randomPosition].GetComponent<Transform>().position;
 
         Enemy enemy = obj.GetComponent<Enemy>();
-        enemy.SetMaxHP(Main.S.levelArray[Main.S.currentLevel].hpZombie);
+        
+        float SpeedRange = Random.Range(Main.S.levelArray[Main.S.currentLevel].minMaxZombieSpeed.x, Main.S.levelArray[Main.S.currentLevel].minMaxZombieSpeed.y);
+        enemy.SetSpeed(SpeedRange);
 
+        if (SpeedRange <= 2)
+        {
+            enemy.SetMaxHP(Main.S.levelArray[Main.S.currentLevel].hpZombie + Mathf.RoundToInt(SpeedRange) * 10);
+            enemy.SetAttackSpeed(1);
+            enemy.SetDamageOnHit(7, 12);
+        }
+        else
+        {
+            enemy.SetMaxHP(Main.S.levelArray[Main.S.currentLevel].hpZombie);
+            enemy.SetAttackSpeed(2);
+            enemy.SetDamageOnHit(2, 6);
+        }
         //Main.S.countEnemy++; //Nie potrzebne 
     }
 

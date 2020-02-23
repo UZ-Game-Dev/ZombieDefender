@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
     private float _attackSpeed = 1f;
     [SerializeField]
     private float _attackCooldownStart = 1f;
+    public int minDamage = 2;
+    public int maxDamage = 5;
 
     [Header("Definiowane dynamicznie")]
     public GameObject player;
@@ -28,15 +30,24 @@ public class Enemy : MonoBehaviour
     private HealthUI _healthUI;
     private float _maxHP;
 
+    [Header("Sounds")]
+    //public GameObject audioSourceObject;
+    public AudioSource audioSource;
+
     private GameObject _hitObject;
+    private Animator _animator;
 
     private void Awake()
     {
+        _animator = GetComponentInChildren<Animator>();
+
         _healthUI = GetComponent<HealthUI>();
         _maxHP = _health;
 
         player = GameObject.FindGameObjectWithTag("Player");
         _agent = GetComponent<NavMeshAgent>();
+
+        //audioSource = audioSourceObject.GetComponent<AudioSource>();
     }
 
     public void GoToPlayer()
@@ -52,6 +63,9 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        float speedPercent = _agent.velocity.magnitude / _agent.speed;
+        _animator.SetFloat("speedPercent", speedPercent, 0.1f, Time.deltaTime);
+
         if (!_attack)
         {
             GoToPlayer();
@@ -63,6 +77,7 @@ public class Enemy : MonoBehaviour
         if (!_attack && (other.tag.Equals("Player") || other.tag.Equals("DefensiveObject")))
         {
             _hitObject = other.transform.gameObject;
+            _animator.SetBool("isAttacking",true);
             _attack = true;
             _agent.isStopped = true;
             StartCoroutine(Attack());
@@ -73,6 +88,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag.Equals("Player") || other.tag.Equals("DefensiveObject"))
         {
+            _animator.SetBool("isAttacking", false);
             _attack = false;
             _hitObject = null;
         }
@@ -88,8 +104,8 @@ public class Enemy : MonoBehaviour
 
             if (_hitObject != null && _attackCooldown <= 0f)
             {
-                int _takeDamage = Random.Range(2, 5);
-
+                int _takeDamage = Random.Range(minDamage, maxDamage);
+                audioSource.Play();
                 switch (_hitObject.tag)
                 {
                     case "DefensiveObject":
@@ -105,6 +121,7 @@ public class Enemy : MonoBehaviour
             }
             yield return null;
         }
+        _animator.SetBool("isAttacking", false);
         _attack = false;
     }
 
@@ -123,6 +140,7 @@ public class Enemy : MonoBehaviour
     public void Death()
     {
         Main.S.countEnemy--;
+        SoundsMenager.S.PlayZombieDeathSound();
         Destroy(gameObject);
     }
 
@@ -130,5 +148,22 @@ public class Enemy : MonoBehaviour
     {
         _maxHP = hp;
         _health = hp;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        NavMeshAgent navMeshAgent = this.gameObject.GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = speed;
+    }
+
+    public void SetAttackSpeed(float attackSpeed)
+    {
+        _attackSpeed = attackSpeed;
+    }
+
+    public void SetDamageOnHit(int minDamage, int maxDamage)
+    {
+        this.minDamage = minDamage;
+        this.maxDamage = maxDamage;
     }
 }

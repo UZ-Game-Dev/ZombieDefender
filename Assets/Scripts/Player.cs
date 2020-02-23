@@ -8,12 +8,9 @@ public class Player : MonoBehaviour
     public static Player S;
     public GameObject player;
     public Camera mainCamera;
-    public int healthLevel = 0;
-    public int maxHealthLevel = 10;
-    public int healthUpragdeCost = 25;
 
     Vector3 shootingDirection;
-    private int _maxHP, _hp;
+    private int _maxHP, _hp, _hpLevel = 0, _hpBonusPerLevel = 10, _cost = 10;
     
 
     public void Awake()
@@ -36,9 +33,10 @@ public class Player : MonoBehaviour
 
     public void UpgradeHP()
     {
-        Main.S.gold -= healthUpragdeCost;
-        healthLevel++;
-        _maxHP += 20;
+        Main.S.gold -= _cost;
+        _hpLevel++;
+        _cost += _hpLevel * 2;
+        _maxHP += _hpBonusPerLevel;
     }
 
     public void TakeDamage(int amount)
@@ -46,6 +44,12 @@ public class Player : MonoBehaviour
         _hp -= amount;
         if (_hp <= 0)
         {
+            int wave = Main.S.currentLevel + 1;
+            int bestWave = PlayerPrefs.GetInt("bestWave");
+            PlayerPrefs.SetInt("wave", Main.S.currentLevel + 1);
+            if (bestWave < wave) 
+                PlayerPrefs.SetInt("bestWave", wave);
+
             _hp = 0;
             SceneManager.LoadScene("DeathScene");
         }
@@ -53,9 +57,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Vector2 mouse = Input.mousePosition - mainCamera.WorldToScreenPoint(player.transform.position);
-        shootingDirection = mouse;
-        Rotate();
+        if (!PauseMenu.S.GetIsPaused())
+        {
+            Vector2 mouse = Input.mousePosition - mainCamera.WorldToScreenPoint(player.transform.position);
+            shootingDirection = mouse;
+            Rotate();
+        }
     }
 
     private void Rotate()
@@ -71,13 +78,23 @@ public class Player : MonoBehaviour
         return _hp;
     }
 
-    public int GetHealthUpgradeCost()
+    public int GetMaxHP()
     {
-        return healthUpragdeCost;
+        return _maxHP;
     }
-    public int maxHP
+
+    public int GetHpUpgradeCost()
     {
-        get { return _maxHP; }
-        set { _maxHP = value; }
+        return _cost;
+    }
+
+    public int GetHpBonusPerLevel()
+    {
+        return _hpBonusPerLevel;
+    }
+
+    public int GetHpLevel()
+    {
+        return _hpLevel;
     }
 }

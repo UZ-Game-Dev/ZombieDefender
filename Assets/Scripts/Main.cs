@@ -8,6 +8,7 @@ public class Level
     public int maxEnemyCountOnLevel;
     public float waveDelay = 2f;
     public Vector2 minMaxSpawnDelay = new Vector2(1,5);
+    public Vector2 minMaxZombieSpeed = new Vector2(1, 3);
     public int hpZombie = 5;
 }
 
@@ -19,6 +20,7 @@ public class Main : MonoBehaviour
     public int gold = 5;
     public Level[] levelArray;
     public GameObject shopPanel;
+    public Texture2D cursorCrosshairs;
 
     [Header("Definiowane dynamicznie")]
     public bool isEnableToShoot = true;
@@ -31,6 +33,8 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        
+
         if (S != null)
             Debug.LogError("Sigleton Main juz istnieje");
         S = this;
@@ -48,12 +52,34 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(countEnemy <= 0 && !isWaitingForNextWave)
+        if (isEnableToShoot && !PauseMenu.S.GetIsPaused()) Cursor.SetCursor(cursorCrosshairs, new Vector2(cursorCrosshairs.width / 2, cursorCrosshairs.height / 2), CursorMode.ForceSoftware);
+        else Cursor.SetCursor(null, Vector2.zero.normalized, CursorMode.ForceSoftware);
+
+        if (countEnemy <= 0 && !isWaitingForNextWave)
         {
-            StartCoroutine(shopCoroutine);
+            isWaitingForNextWave = true;
+            StartCoroutine(AreThereItems());
         }
 
         //Debug.Log("MAIN: LVL:" + currentLevel + "   ENEMY LEFT: " + countEnemy + "    COIN: " + gold + "   HP: " + _player.GetHP());
+    }
+
+    private IEnumerator AreThereItems()
+    {
+        while (true)
+        {
+            Items[] _gos = FindObjectsOfType(typeof(Items)) as Items[];
+
+            if (_gos.Length == 0)
+            {
+                StartCoroutine(shopCoroutine);
+                break;
+            }
+            else
+            {
+                yield return new WaitForSecondsRealtime(0.1f);
+            }
+        }
     }
 
     public void StopWaveCoroutine()

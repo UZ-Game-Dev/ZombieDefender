@@ -48,6 +48,7 @@ public class Items : MonoBehaviour
             {
                 _progressbarItems.enabled = false;
                 Debug.Log("Zebrałem: " + type);
+                SoundsMenager.S.PlayItemPickedup();
                 Main.S.PickUpItem(type);
                 Destroy(this.gameObject);
             }
@@ -56,6 +57,7 @@ public class Items : MonoBehaviour
         if (time >= lifeTime)
         {
             if(_onMouseDownOn) _progressbarItems.enabled = false;
+            this.gameObject.transform.GetChild(0).GetComponent<Outline>().enabled = false;
             this.GetComponent<MeshCollider>().isTrigger = true;
             Destroy(this.gameObject,0.2f);
         }
