@@ -40,7 +40,7 @@ public class Spawner : MonoBehaviour
     {
         for (int i = 0; i < sum; i++)
         {
-            Spawn(0);
+            Spawn(Random.Range(0, enemyPrefabs.Length));
             float range = Random.Range(Main.S.levelArray[Main.S.currentLevel].minMaxSpawnDelay.x, Main.S.levelArray[Main.S.currentLevel].minMaxSpawnDelay.y);
             yield return new WaitForSeconds(range);
         }

@@ -34,9 +34,12 @@ public class Enemy : MonoBehaviour
     public AudioClip dying;
 
     private GameObject _hitObject;
+    private Animator _animator;
 
     private void Awake()
     {
+        _animator = GetComponentInChildren<Animator>();
+
         _healthUI = GetComponent<HealthUI>();
         _maxHP = _health;
 
@@ -59,6 +62,9 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        float speedPercent = _agent.velocity.magnitude / _agent.speed;
+        _animator.SetFloat("speedPercent", speedPercent, 0.1f, Time.deltaTime);
+
         if (!_attack)
         {
             GoToPlayer();
@@ -70,6 +76,7 @@ public class Enemy : MonoBehaviour
         if (!_attack && (other.tag.Equals("Player") || other.tag.Equals("DefensiveObject")))
         {
             _hitObject = other.transform.gameObject;
+            _animator.SetBool("isAttacking",true);
             _attack = true;
             _agent.isStopped = true;
             StartCoroutine(Attack());
@@ -80,6 +87,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag.Equals("Player") || other.tag.Equals("DefensiveObject"))
         {
+            _animator.SetBool("isAttacking", false);
             _attack = false;
             _hitObject = null;
         }
@@ -112,6 +120,7 @@ public class Enemy : MonoBehaviour
             }
             yield return null;
         }
+        _animator.SetBool("isAttacking", false);
         _attack = false;
     }
 
