@@ -37,7 +37,7 @@ public class Shop : MonoBehaviour
     {
         FindWeaponObject();
         shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
-        UpdatePrice();
+        //UpdatePrice();
     }
 
     //_______________DefensiveObject______________________
@@ -133,50 +133,7 @@ public class Shop : MonoBehaviour
         float miliseconds = (_timer - seconds) * 100;
         timerToNextWave.text = seconds.ToString("00") + ":" + miliseconds.ToString("00");
     }
-
-    //____________SHP_PRICE_DISPLEY____________________
-    public void FixedUpdate()
-    {
-        if (isActive)
-        {
-            UpdatePrice();
-        }
-    }
-    public void UpdatePrice()
-    {
-        foreach (Button button in shopButtonsArray)
-        {
-            if (button.name == "NextWaveButton") continue;
-            TextMeshProUGUI buttonTxt = button.GetComponentInChildren<TextMeshProUGUI>();
-            string buttonName = button.name;
-            string text = "";
-
-            switch (buttonName)
-            {
-                case "BuyAmmo":
-                    text = "+" + amunationPiecesToBuy + " / $" + amunationPrice + "\nBUY";
-                    if (weapon.GetWeapon().GetType() == Weapon.WeaponType.ePistol)
-                    {
-                        button.interactable = false;
-                        text += "\nYou can not buy ammunation for " + weapon.GetWeapon().GetName();
-                    }
-                    else
-                    {
-                        button.interactable = true;
-                        text += "\n \n ";
-                    }
-                        
-                    
-                    break;
-                case "BuyHealth":
-                    text = "Health level: " + Player.S.GetHpLevel() + "\n" +
-                        Player.S.GetMaxHP() + " -> " + (Player.S.GetMaxHP() + Player.S.GetHpBonusPerLevel()) +
-                        "\nCost: " + Player.S.GetHpUpgradeCost() + "$\nBUY";
-                    break;
-            }
-            if (!text.Equals("")) buttonTxt.text = text;
-        }
-    } 
+    
     //_______________SHOP_BUTTONS______________________
 
     public void NextWave()

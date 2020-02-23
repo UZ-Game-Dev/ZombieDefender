@@ -39,7 +39,7 @@ public class UI : MonoBehaviour
         weaponName.text = _weapon.GetWeapon().GetName();
         gold.text = "Gold: " + Main.S.gold;
         wave.text = "Wave: " + (int)(Main.S.currentLevel+1);
-        float hpPercent = (float)_player.GetHP() / (float)_player.maxHP * 100;
+        float hpPercent = (float)_player.GetHP() / (float)_player.GetMaxHP() * 100;
         hpPercentage.text = (int)hpPercent + "%";
 
         if(!Main.S.isEnableToShoot)
@@ -62,7 +62,7 @@ public class UI : MonoBehaviour
             }
             else autoUpgrade.text = _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$\nUPGRADE";
 
-            if (_player.healthLevel == _player.maxHealthLevel) hpUpgrade.text = "25$\nHEAL";
+            if (_player.GetHpLevel() == _player.GetMaxHpLevel()) hpUpgrade.text = "25$\nHEAL";
             else hpUpgrade.text = "+20 / 25$\nBUY";
 
             gunReloadTime.text = "Reload Spd.: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetReloadSpeed() + " -> " + (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetReloadSpeed() - 0.05f);
@@ -99,7 +99,7 @@ public class UI : MonoBehaviour
     private void setHP()
     {
         hp.value = _player.GetHP();
-        hp.maxValue = _player.maxHP;
+        hp.maxValue = _player.GetMaxHP();
     }
 
     public void ShowReloadingBar()

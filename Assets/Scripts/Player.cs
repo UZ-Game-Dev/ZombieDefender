@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public Camera mainCamera;
 
     Vector3 shootingDirection;
-    private int _maxHP, _hp, _hpLevel = 0, _hpBonusPerLevel = 10, _cost = 10;
+    private int _maxHP, _hp, _hpLevel = 0, _maxHpLevel = 10, _hpBonusPerLevel = 20, _cost = 25;
     
 
     public void Awake()
@@ -35,8 +35,8 @@ public class Player : MonoBehaviour
     {
         Main.S.gold -= _cost;
         _hpLevel++;
-        _cost += _hpLevel * 2;
         _maxHP += _hpBonusPerLevel;
+        _hp = _maxHP;
     }
 
     public void TakeDamage(int amount)
@@ -96,5 +96,10 @@ public class Player : MonoBehaviour
     public int GetHpLevel()
     {
         return _hpLevel;
+    }
+
+    public int GetMaxHpLevel()
+    {
+        return _maxHpLevel;
     }
 }
