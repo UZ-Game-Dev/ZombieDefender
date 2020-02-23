@@ -28,6 +28,11 @@ public class Enemy : MonoBehaviour
     private HealthUI _healthUI;
     private float _maxHP;
 
+    [Header("Sounds")]
+    //public GameObject audioSourceObject;
+    public AudioSource audioSource;
+    public AudioClip dying;
+
     private GameObject _hitObject;
 
     private void Awake()
@@ -37,6 +42,8 @@ public class Enemy : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player");
         _agent = GetComponent<NavMeshAgent>();
+
+        //audioSource = audioSourceObject.GetComponent<AudioSource>();
     }
 
     public void GoToPlayer()
@@ -89,7 +96,7 @@ public class Enemy : MonoBehaviour
             if (_hitObject != null && _attackCooldown <= 0f)
             {
                 int _takeDamage = Random.Range(2, 5);
-
+                audioSource.Play();
                 switch (_hitObject.tag)
                 {
                     case "DefensiveObject":
@@ -123,6 +130,7 @@ public class Enemy : MonoBehaviour
     public void Death()
     {
         Main.S.countEnemy--;
+        SoundsMenager.S.PlayZombieDeathSound();
         Destroy(gameObject);
     }
 
@@ -130,5 +138,11 @@ public class Enemy : MonoBehaviour
     {
         _maxHP = hp;
         _health = hp;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        NavMeshAgent navMeshAgent = this.gameObject.GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = speed;
     }
 }

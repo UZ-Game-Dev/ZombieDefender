@@ -8,6 +8,7 @@ public class Level
     public int maxEnemyCountOnLevel;
     public float waveDelay = 2f;
     public Vector2 minMaxSpawnDelay = new Vector2(1,5);
+    public Vector2 minMaxZombieSpeed = new Vector2(1, 3);
     public int hpZombie = 5;
 }
 

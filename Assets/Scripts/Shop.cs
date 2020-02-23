@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class DefensiveObjects
@@ -19,8 +20,8 @@ public class Shop : MonoBehaviour
     public TextMeshProUGUI timerToNextWave;
     public int maxGoldForSkip = 20;
     public DefensiveObjects[] DefensiveObjectsArray;
-    public int amunationPrice = 10;
-    public int amunationPiecesToBuy = 5;
+    public int amunationPrice = 5;
+    public int amunationPiecesToBuy = 50;
 
     [Header("Definiowane dynamicznie")]
     public bool isActive = false;
@@ -30,11 +31,13 @@ public class Shop : MonoBehaviour
     private GameObject _defensiveObjectGhost;
     private GameObject _defensiveObject;
     private int _defensiveObjectsNumber;
+    private Button[] shopButtonsArray;
 
     private void Start()
     {
-        GameObject wpn = GameObject.FindGameObjectWithTag("Weapon");
-        weapon = wpn.GetComponentInChildren<Weapon>();
+        FindWeaponObject();
+        shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
+        UpdatePrice();
     }
 
     //_______________DefensiveObject______________________
@@ -131,6 +134,35 @@ public class Shop : MonoBehaviour
         timerToNextWave.text = seconds.ToString("00") + ":" + miliseconds.ToString("00");
     }
 
+    //____________SHP_PRICE_DISPLEY____________________
+    public void FixedUpdate()
+    {
+        if(isActive)
+        {
+            UpdatePrice();
+        }
+    }
+    public void UpdatePrice()
+    {
+        foreach (Button button in shopButtonsArray)
+        {
+            if (button.name == "NextWaveButton") continue;
+            TextMeshProUGUI buttonTxt = button.GetComponentInChildren<TextMeshProUGUI>();
+            string buttonName = button.name;
+            string text = "";
+
+            switch (buttonName)
+            {
+                case "BuyAmmo":
+                    text = "+" + amunationPiecesToBuy + " / $" + amunationPrice + "\nBUY";
+                    break;
+                case "BuyHealth":
+                    text = "+" + Player.S.GetHpBonusPerLevel() + "hp / $" + Player.S.GetHpUpgradeCost() + "\nBUY";
+                    break;
+            }
+            if (!text.Equals("")) buttonTxt.text = text;
+        }
+    } 
     //_______________SHOP_BUTTONS______________________
 
     public void NextWave()
@@ -159,17 +191,10 @@ public class Shop : MonoBehaviour
 
     public void BuyHealth()
     {
-        if(Main.S.gold >= Player.S.healthUpragdeCost)
+        if(Main.S.gold >= Player.S.GetHpUpgradeCost())
         {
             Debug.Log("Kupuję Zdrowię");
-            Main.S.gold -= Player.S.healthUpragdeCost;
-            if(Player.S.healthLevel < Player.S.maxHealthLevel)
-            {
-                Player.S.healthLevel++;
-                Player.S.maxHP += 20;
-            }
-            if (Player.S.GetHP() < Player.S.maxHP)
-                Player.S.Heal(Player.S.maxHP);
+            Player.S.UpgradeHP();
         }
         
     }
@@ -181,7 +206,6 @@ public class Shop : MonoBehaviour
 
     public void BuySemiAutomaticGun()
     {
-        Debug.Log("Kupuję karabin półautomatyczny");
         Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic) weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
 
         if (semi == null)
