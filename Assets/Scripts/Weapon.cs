@@ -196,6 +196,7 @@ public class Weapon : MonoBehaviour
                 {
                     _triggerReleased = true;
                     audioSource.Stop();
+                    audioSource.volume = 1;
                     audioSource.clip = triggerReleased;
                     audioSource.Play();
                 }
@@ -216,6 +217,7 @@ public class Weapon : MonoBehaviour
                 audioSource.volume = 1;
                 audioSource.clip = triggerReleased;
                 audioSource.Play();
+                audioSource.volume = 0.5f;
                 _triggerReleased = false;
             }
 
