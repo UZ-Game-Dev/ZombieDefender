@@ -135,7 +135,7 @@ public class Shop : MonoBehaviour
     //____________SHP_PRICE_DISPLEY____________________
     public void FixedUpdate()
     {
-        if(isActive)
+        if (isActive)
         {
             UpdatePrice();
         }
@@ -153,9 +153,23 @@ public class Shop : MonoBehaviour
             {
                 case "BuyAmmo":
                     text = "+" + amunationPiecesToBuy + " / $" + amunationPrice + "\nBUY";
+                    if (weapon.GetWeapon().GetType() == Weapon.WeaponType.ePistol)
+                    {
+                        button.interactable = false;
+                        text += "\nYou can not buy ammunation for " + weapon.GetWeapon().GetName();
+                    }
+                    else
+                    {
+                        button.interactable = true;
+                        text += "\n \n ";
+                    }
+                        
+                    
                     break;
                 case "BuyHealth":
-                    text = "+" + Player.S.GetHpBonusPerLevel() + "hp / $" + Player.S.GetHpUpgradeCost() + "\nBUY";
+                    text = "Health level: " + Player.S.GetHpLevel() + "\n" +
+                        Player.S.GetMaxHP() + " -> " + (Player.S.GetMaxHP() + Player.S.GetHpBonusPerLevel()) +
+                        "\nCost: " + Player.S.GetHpUpgradeCost() + "$\nBUY";
                     break;
             }
             if (!text.Equals("")) buttonTxt.text = text;

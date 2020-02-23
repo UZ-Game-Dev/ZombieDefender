@@ -7,9 +7,9 @@ public class SoundsMenager : MonoBehaviour
     public static SoundsMenager S;
     public AudioClip clickButton;
     public AudioClip zombieDeath;
+    public AudioClip itemPickedup;
 
     AudioSource audioSource;
-    bool isPlaying = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,14 +29,27 @@ public class SoundsMenager : MonoBehaviour
 
     public void PlayButtonSound()
     {
+        audioSource.volume = 1f;
         audioSource.clip = clickButton;
-        if(!audioSource.isPlaying)
-            audioSource.Play();
+        Play();
     }
 
     public void PlayZombieDeathSound()
     {
+        audioSource.volume = 0.2f;
         audioSource.clip = zombieDeath;
+        Play();
+    }
+
+    public void PlayItemPickedup()
+    {
+        audioSource.volume = 1f;
+        audioSource.clip = itemPickedup;
+        Play();
+    }
+
+    private void Play()
+    {
         if (!audioSource.isPlaying)
             audioSource.Play();
     }

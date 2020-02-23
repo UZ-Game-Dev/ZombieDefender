@@ -44,6 +44,12 @@ public class Player : MonoBehaviour
         _hp -= amount;
         if (_hp <= 0)
         {
+            int wave = Main.S.currentLevel + 1;
+            int bestWave = PlayerPrefs.GetInt("bestWave");
+            PlayerPrefs.SetInt("wave", Main.S.currentLevel + 1);
+            if (bestWave < wave) 
+                PlayerPrefs.SetInt("bestWave", wave);
+
             _hp = 0;
             SceneManager.LoadScene("DeathScene");
         }
@@ -69,6 +75,11 @@ public class Player : MonoBehaviour
         return _hp;
     }
 
+    public int GetMaxHP()
+    {
+        return _maxHP;
+    }
+
     public int GetHpUpgradeCost()
     {
         return _cost;
@@ -77,5 +88,10 @@ public class Player : MonoBehaviour
     public int GetHpBonusPerLevel()
     {
         return _hpBonusPerLevel;
+    }
+
+    public int GetHpLevel()
+    {
+        return _hpLevel;
     }
 }

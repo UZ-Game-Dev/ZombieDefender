@@ -8828,7 +8828,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 15.4}
+  m_AnchoredPosition: {x: 103.4, y: 44.8}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &600639061
@@ -8897,7 +8897,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 0
+  m_firstOverflowCharacterIndex: 9
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -8918,7 +8918,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -204.79753, y: 49.136795, z: 0, w: -73.290245}
   m_textInfo:
     textComponent: {fileID: 600639061}
     characterCount: 12
@@ -9768,7 +9768,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -35, y: -255.99994}
+  m_AnchoredPosition: {x: -35, y: -181}
   m_SizeDelta: {x: 1867.1, y: 235.29999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &720319631
@@ -9895,7 +9895,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 6, y: -235}
+  m_AnchoredPosition: {x: 6, y: -188}
   m_SizeDelta: {x: 1535.8, y: 217.96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &733543440
@@ -10935,7 +10935,7 @@ MonoBehaviour:
     waveDelay: 10
     minMaxSpawnDelay: {x: 2, y: 3}
     minMaxZombieSpeed: {x: 3, y: 4}
-    hpZombie: 25
+    hpZombie: 35
   - maxEnemyCountOnLevel: 15
     waveDelay: 10
     minMaxSpawnDelay: {x: 2, y: 3}
@@ -11276,7 +11276,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 15.4}
+  m_AnchoredPosition: {x: -1.0999985, y: 49}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &993309143
@@ -11366,7 +11366,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -83.609085, y: 0, z: -92.51875, w: 0}
   m_textInfo:
     textComponent: {fileID: 993309143}
     characterCount: 12
@@ -14213,7 +14213,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -195}
+  m_AnchoredPosition: {x: 0, y: -83}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1462171860
@@ -14555,6 +14555,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickButton: {fileID: 8300000, guid: ba8760e57ef75104f88f75654cdfe4ef, type: 3}
   zombieDeath: {fileID: 8300000, guid: bca85b451d53bd74f8a6bb8ac8af3ca1, type: 3}
+  itemPickedup: {fileID: 8300000, guid: 34468f4c90a89664491ea32f7d3f7cb6, type: 3}
 --- !u!1001 &1510189806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24304,7 +24305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -31.675049, y: -195}
+  m_AnchoredPosition: {x: -31.675049, y: -348}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2124525980
@@ -24429,7 +24430,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 266.80566
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

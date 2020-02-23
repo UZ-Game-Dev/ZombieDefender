@@ -48,6 +48,7 @@ public class Items : MonoBehaviour
             {
                 _progressbarItems.enabled = false;
                 Debug.Log("Zebrałem: " + type);
+                SoundsMenager.S.PlayItemPickedup();
                 Main.S.PickUpItem(type);
                 Destroy(this.gameObject);
             }

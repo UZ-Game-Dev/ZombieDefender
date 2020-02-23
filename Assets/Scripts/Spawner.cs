@@ -56,9 +56,14 @@ public class Spawner : MonoBehaviour
         objTransform.position = spawnerPoints[randomPosition].GetComponent<Transform>().position;
 
         Enemy enemy = obj.GetComponent<Enemy>();
-        enemy.SetMaxHP(Main.S.levelArray[Main.S.currentLevel].hpZombie);
-        float range = Random.Range(Main.S.levelArray[Main.S.currentLevel].minMaxZombieSpeed.x, Main.S.levelArray[Main.S.currentLevel].minMaxZombieSpeed.y);
-        enemy.SetSpeed(range);
+        
+        float SpeedRange = Random.Range(Main.S.levelArray[Main.S.currentLevel].minMaxZombieSpeed.x, Main.S.levelArray[Main.S.currentLevel].minMaxZombieSpeed.y);
+        enemy.SetSpeed(SpeedRange);
+
+        if(SpeedRange <= 2)
+            enemy.SetMaxHP(Main.S.levelArray[Main.S.currentLevel].hpZombie + Mathf.RoundToInt(SpeedRange) * 10);
+        else
+            enemy.SetMaxHP(Main.S.levelArray[Main.S.currentLevel].hpZombie);
 
         //Main.S.countEnemy++; //Nie potrzebne 
     }

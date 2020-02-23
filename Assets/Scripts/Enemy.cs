@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
     private float _attackSpeed = 1f;
     [SerializeField]
     private float _attackCooldownStart = 1f;
+    [SerializeField]
+    //private Vector2 _attackDamege = new Vector2(2, 5);
 
     [Header("Definiowane dynamicznie")]
     public GameObject player;
@@ -31,7 +33,6 @@ public class Enemy : MonoBehaviour
     [Header("Sounds")]
     //public GameObject audioSourceObject;
     public AudioSource audioSource;
-    public AudioClip dying;
 
     private GameObject _hitObject;
 
@@ -144,5 +145,15 @@ public class Enemy : MonoBehaviour
     {
         NavMeshAgent navMeshAgent = this.gameObject.GetComponent<NavMeshAgent>();
         navMeshAgent.speed = speed;
+    }
+
+    public void SetAttackSpeed(float attackSpeed)
+    {
+        _attackSpeed = attackSpeed;
+    }
+
+    public void SetDamageOnHit(Vector2 damage)
+    {
+
     }
 }
