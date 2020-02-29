@@ -18,12 +18,7 @@ public class Weapon : MonoBehaviour
     private LineRenderer tracer;
     private UI _ui;
     private int _nextShot = 8;
-    public AudioClip gunShotEffect;
-    public AudioClip gunReloadEffect;
-    public AudioClip semiShotEffect;
-    public AudioClip autoShotEffect;
-    public AudioClip semiReloadEffect;
-    public AudioClip triggerReleased;
+    public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased;
     public AudioSource audioSource;
 
 
@@ -32,7 +27,7 @@ public class Weapon : MonoBehaviour
     public abstract class WeaponDefinition
     {
         protected int currentAmmo, ammo, capacity, level, maxFireRate, fireRate, moneyForUpgrade, buyingPrice;
-        protected float reloadSpeed, damage;
+        protected float reloadSpeed, damage, maxReloadSpeed;
         protected string name;
         protected WeaponType type;
 
@@ -58,16 +53,18 @@ public class Weapon : MonoBehaviour
     {
         public Pistol()
         {
+            level = 1;
             capacity = 15;
             currentAmmo = capacity;
             ammo = 15;
-            reloadSpeed = 1.4f;
-            damage = 5f;
+            reloadSpeed = 1.40f;
+            maxReloadSpeed = 1.00f;
+            damage = 4.0f;
             name = "Beretta";
             type = WeaponType.ePistol;
             maxFireRate = 1;
             fireRate = maxFireRate;
-            moneyForUpgrade = 10;
+            moneyForUpgrade = 14;
         }
 
         public override void Upgrade()
@@ -75,10 +72,16 @@ public class Weapon : MonoBehaviour
             if (Main.S.gold >= moneyForUpgrade)
             {
                 Main.S.gold -= moneyForUpgrade;
+                UI.S.gold.text = "Gold: " + Main.S.gold;
+                damage = (float)Math.Round(damage + 0.5f, 2);
+                if(reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.02f ,2);
+                moneyForUpgrade += 2 + level;
                 level++;
-                damage += 1f;
-                reloadSpeed -= 0.05f;
-                moneyForUpgrade += 2;
+
+                UI.S.pistolUpgrade.text = "Cost: " + moneyForUpgrade + "$";
+                if (reloadSpeed > maxReloadSpeed) UI.S.gunReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.02f, 2);
+                else UI.S.gunReloadTime.text = "Max Reload Speed";
+                UI.S.gunDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 0.5f, 2);
             }
         }
     }
@@ -87,11 +90,13 @@ public class Weapon : MonoBehaviour
     {
         public SemiAutomatic()
         {
+            level = 1;
             capacity = 24;
             currentAmmo = capacity;
             ammo = capacity * 2;
-            reloadSpeed = 1.7f;
-            damage = 7f;
+            reloadSpeed = 1.70f;
+            maxReloadSpeed = 1.0f;
+            damage = 7.0f;
             name = "Semi M.G.";
             type = WeaponType.eSemiAutomatic;
             maxFireRate = 4;
@@ -105,10 +110,16 @@ public class Weapon : MonoBehaviour
             if(Main.S.gold >= moneyForUpgrade)
             {
                 Main.S.gold -= moneyForUpgrade;
+                UI.S.gold.text = "Gold: " + Main.S.gold;
+                damage = (float)Math.Round(damage + 1.5f, 2);
+                if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.05f, 2);
+                moneyForUpgrade += 4 + level;
                 level++;
-                damage += 1.5f;
-                reloadSpeed -= 0.05f;
-                moneyForUpgrade += 4;
+
+                UI.S.semiUpgrade.text = "Cost: " + moneyForUpgrade + "$";
+                if (reloadSpeed > maxReloadSpeed) UI.S.semiReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.05f, 2);
+                else UI.S.semiReloadTime.text = "Max Reload Speed";
+                UI.S.semiDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 1.5f, 2);
             }
         }
     }
@@ -117,10 +128,12 @@ public class Weapon : MonoBehaviour
     {
         public Automatic()
         {
+            level = 1;
             capacity = 30;
             currentAmmo = capacity;
             ammo = capacity * 2;
-            reloadSpeed = 2f;
+            reloadSpeed = 2.00f;
+            maxReloadSpeed = 1.0f;
             damage = 10f;
             name = "AK-47";
             type = WeaponType.eAutomatic;
@@ -135,13 +148,17 @@ public class Weapon : MonoBehaviour
             if (Main.S.gold >= moneyForUpgrade)
             {
                 Main.S.gold -= moneyForUpgrade;
+                UI.S.gold.text = "Gold: " + Main.S.gold;
+                damage = (float)Math.Round(damage + 2f, 2);
+                if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.05f, 2);
+                moneyForUpgrade += 6 + level;
                 level++;
-                damage += 2f;
-                reloadSpeed -= 0.05f;
-                moneyForUpgrade += 6;
-                Debug.Log("ULEPSZONO KARABIN AUTOMATYCZNY");
+
+                UI.S.autoUpgrade.text = "Cost: " + moneyForUpgrade + "$";
+                if (reloadSpeed > maxReloadSpeed) UI.S.autoReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.05f, 2);
+                else UI.S.autoReloadTime.text = "Max Reload Speed";
+                UI.S.autoDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 2f, 2);
             }
-            else Debug.Log("NIE STAĆ MNIE");
         }
     }
 
@@ -196,6 +213,7 @@ public class Weapon : MonoBehaviour
                 {
                     _triggerReleased = true;
                     audioSource.Stop();
+                    audioSource.volume = 1;
                     audioSource.clip = triggerReleased;
                     audioSource.Play();
                 }
@@ -212,13 +230,12 @@ public class Weapon : MonoBehaviour
 
             if (!Main.S.isEnableToShoot || (weapon.GetCurrentAmmo() <= 0 && !isReloading && weapon.GetType() != WeaponType.ePistol))
             {
-                if (_triggerReleased)
-                {
-                    audioSource.Stop();
-                    audioSource.clip = triggerReleased;
-                    audioSource.Play();
-                    _triggerReleased = false;
-                }
+                audioSource.Stop();
+                audioSource.volume = 1;
+                audioSource.clip = triggerReleased;
+                audioSource.Play();
+                audioSource.volume = 0.5f;
+                _triggerReleased = false;
             }
 
             if (Input.GetButtonDown("E") && !isReloading)
@@ -245,6 +262,12 @@ public class Weapon : MonoBehaviour
             weapon = weapons[0];
 
         else weapon = weapons[index + dir];
+
+        UI.S.weaponName.text = weapon.GetName();
+        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + weapon.GetAmmo() + "]";
+        else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
+
+        if (!Main.S.isEnableToShoot) UI.S.SetAmmoTexts();
     }
 
     IEnumerator Reload()
@@ -262,10 +285,14 @@ public class Weapon : MonoBehaviour
             weapon.SetAmmo(0);
         }
         audioSource.clip = gunShotEffect;
+
+        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + weapon.GetAmmo() + "]";
+        else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
     }
 
     public void Shoot()
     {
+        audioSource.volume = 0.5f;
         if (audioSource.clip == gunShotEffect) audioSource.Play();
         if(!audioSource.isPlaying) audioSource.Play();
         weapon.SetCurrentAmmo(weapon.GetCurrentAmmo()-1);
@@ -290,5 +317,8 @@ public class Weapon : MonoBehaviour
 
         Transform sladBox = Instantiate(slad, weaponModel.transform.position, weaponModel.transform.rotation);
         sladBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
+
+        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + weapon.GetAmmo() + "]";
+        else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
     }
 }

@@ -37,7 +37,6 @@ public class Shop : MonoBehaviour
     {
         FindWeaponObject();
         shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
-        //UpdatePrice();
     }
 
     //_______________DefensiveObject______________________
@@ -102,6 +101,7 @@ public class Shop : MonoBehaviour
         {
             Debug.Log("KUMIONO OBIEKT");
             Main.S.gold -= DefensiveObjectsArray[_defensiveObjectsNumber].price;
+            UI.S.gold.text = "Gold: " + Main.S.gold;
             Instantiate(_defensiveObject, _defensiveObjectGhost.transform.position, _defensiveObjectGhost.transform.rotation);
             _defensiveObject.SetActive(true);
             ResetInfoDefensiveObject();
@@ -146,6 +146,7 @@ public class Shop : MonoBehaviour
             bonusGold = maxGoldForSkip;
 
         Main.S.gold += (int)_timer;
+        UI.S.gold.text = "Gold: " + Main.S.gold;
         Main.S.StopWaveCoroutine();
     }
 
@@ -155,8 +156,10 @@ public class Shop : MonoBehaviour
         {
             Debug.Log("KUPUJE AMMO");
             Main.S.gold -= amunationPrice;
+            UI.S.gold.text = "Gold: " + Main.S.gold;
             if (weapon == null) FindWeaponObject();
             weapon.GetWeapon().SetAmmo(weapon.GetWeapon().GetAmmo() + amunationPiecesToBuy);
+            UI.S.ammo.text = weapon.GetWeapon().GetCurrentAmmo() + "/" + weapon.GetWeapon().GetCapacity() + "  [" + weapon.GetWeapon().GetAmmo() + "]";
         }
     }
 
@@ -166,8 +169,18 @@ public class Shop : MonoBehaviour
         {
             Debug.Log("Kupuję Zdrowię");
             Player.S.UpgradeHP();
+            UI.S.gold.text = "Gold: " + Main.S.gold;
+
+            if (Player.S.GetHpLevel() == Player.S.GetMaxHpLevel())
+            {
+                UI.S.hpUpgrade.text = "Health level: " + Player.S.GetHpLevel() + " / " + Player.S.GetMaxHpLevel() + "\n" + "\nCost: " + Player.S.GetHpUpgradeCost() + "$\n ";
+            }
+            else
+            {
+                UI.S.hpUpgrade.text = "Health level: " + Player.S.GetHpLevel() + " / " + Player.S.GetMaxHpLevel() + "\n" + Player.S.GetMaxHP() + " -> " +
+                   (Player.S.GetMaxHP() + Player.S.GetHpBonusPerLevel()) + "\nCost: " + Player.S.GetHpUpgradeCost() + "$\n ";
+            }
         }
-        
     }
 
     public void BuyPistol()
@@ -185,6 +198,10 @@ public class Shop : MonoBehaviour
             if (Main.S.gold >= semi.GetBuyingPrice())
             {
                 Main.S.gold -= semi.GetBuyingPrice();
+                UI.S.gold.text = "Gold: " + Main.S.gold;
+                UI.S.semiUpgrade.text = "Cost: " + semi.GetMoneyForUpgrade() + "$";
+                UI.S.semiReloadTime.text = "Reload Spd.: " + semi.GetReloadSpeed() + " -> " + (semi.GetReloadSpeed() - 0.05f);
+                UI.S.semiDamage.text = "Damage: " + semi.GetDamage() + " -> " + (semi.GetDamage() + 1.5f);
                 weapon.weapons.Add(semi);
             }
         }
@@ -204,6 +221,10 @@ public class Shop : MonoBehaviour
             if (Main.S.gold >= auto.GetBuyingPrice())
             {
                 Main.S.gold -= auto.GetBuyingPrice();
+                UI.S.gold.text = "Gold: " + Main.S.gold;
+                UI.S.autoUpgrade.text = "Cost: " + auto.GetMoneyForUpgrade() + "$";
+                UI.S.autoReloadTime.text = "Reload Spd.: " + auto.GetReloadSpeed() + " -> " + (auto.GetReloadSpeed() - 0.05);
+                UI.S.autoDamage.text = "Damage: " + auto.GetDamage() + " -> " + (auto.GetDamage() + 2f);
                 weapon.weapons.Add(auto);
             }
         }
