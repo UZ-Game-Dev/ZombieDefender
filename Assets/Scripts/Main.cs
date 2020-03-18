@@ -113,13 +113,16 @@ public class Main : MonoBehaviour
         switch(type)
         {
             case eIteamsType.eCoin:
-                if (currentLevel < 5)
-                    gold += 3;
-                else
-                    gold += 5;
-                UI.S.gold.text = "Gold: " + Main.S.gold;
-                break;
-
+                {
+                    if (currentLevel < 5)
+                        gold += 3;
+                    else
+                    {
+                        gold += 5;
+                        UI.S.gold.text = "Gold: " + Main.S.gold;
+                        break;
+                    }
+                }
             case eIteamsType.eGoldBar:
                 gold += 8;
                 break;

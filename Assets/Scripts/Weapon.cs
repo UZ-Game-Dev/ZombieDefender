@@ -239,7 +239,6 @@ public class Weapon : MonoBehaviour
             if (Input.GetButtonUp("Fire1") && Main.S.isEnableToShoot)
             {
                 weapon.SetFireRate(weapon.GetMaxFireRate());
-
                 if (weapon.GetType() != WeaponType.ePistol && !_playedEcho) StartCoroutine("PlayShotEcho");
                 _playedEcho = false;
             }
