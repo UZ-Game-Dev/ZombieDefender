@@ -357,7 +357,7 @@ public class Weapon : MonoBehaviour
             _TraceBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * 20;
         }
 
-        Transform sladBox = Instantiate(slad, weaponModel.transform.position, weaponModel.transform.rotation);
+        Transform sladBox = Instantiate(DrawTrace, weaponModel.transform.position, weaponModel.transform.rotation);
         sladBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
 
         if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
