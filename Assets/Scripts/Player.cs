@@ -44,9 +44,9 @@ public class Player : MonoBehaviour
         _hp -= amount;
         if (_hp <= 0)
         {
-            int wave = Main.S.currentLevel + 1;
+            int wave = Main.S.waveCounter ;
             int bestWave = PlayerPrefs.GetInt("bestWave");
-            PlayerPrefs.SetInt("wave", Main.S.currentLevel + 1);
+            PlayerPrefs.SetInt("wave", wave);
             if (bestWave < wave) 
                 PlayerPrefs.SetInt("bestWave", wave);
 

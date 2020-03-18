@@ -43,29 +43,29 @@ public class UI : MonoBehaviour
         else ammo.text = _weapon.GetWeapon().GetCurrentAmmo() + "/" + _weapon.GetWeapon().GetCapacity();
         weaponName.text = _weapon.GetWeapon().GetName();
         gold.text = "Gold: " + Main.S.gold;
-        wave.text = "Wave: " + (int)(Main.S.currentLevel+1);
+        wave.text = "Wave: " + (int)(Main.S.waveCounter);
         float hpPercent = (float)_player.GetHP() / (float)_player.GetMaxHP() * 100;
         hpPercentage.text = (int)hpPercent + "%";
 
         if(!Main.S.isEnableToShoot)
         {
-            pistolUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetMoneyForUpgrade()+"$";
+            pistolUpgrade.text = "Upgrade \nCost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetMoneyForUpgrade()+"$";
 
             Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
             if (semi == null)
             {
                 semi = new Weapon.SemiAutomatic();
-                semiUpgrade.text = "Cost: " + semi.GetBuyingPrice() + "$\n \n ";
+                semiUpgrade.text = "BUY \nCost: " + semi.GetBuyingPrice() + "$";
             }
-            else semiUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).GetMoneyForUpgrade() + "$";
+            else semiUpgrade.text = "Upgrade \nCost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).GetMoneyForUpgrade() + "$";
 
             Weapon.Automatic auto = (Weapon.Automatic)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eAutomatic);
             if (auto == null)
             {
                 auto = new Weapon.Automatic();
-                autoUpgrade.text = "Cost: " + auto.GetBuyingPrice() + "$\n \n ";
+                autoUpgrade.text = "BUY \nCost: " + auto.GetBuyingPrice() + "$";
             }
-            else autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
+            else autoUpgrade.text = "Upgrade \nCost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
 
             //Sklep - Panel HP
             if (_player.GetHpLevel() == _player.GetMaxHpLevel())

@@ -19,7 +19,7 @@ public class Shop : MonoBehaviour
     public GameObject shopPanel;
     public TextMeshProUGUI timerToNextWave;
     public int maxGoldForSkip = 20;
-    public DefensiveObjects[] DefensiveObjectsArray;
+    public DefensiveObjects[] DefensiveObjectsArray; // [0] -> KOLCE   [1] -> PŁOT
     public int amunationPrice = 5;
     public int amunationPiecesToBuy = 50;
 
@@ -35,6 +35,8 @@ public class Shop : MonoBehaviour
 
     private void Start()
     {
+        DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().Initialize();
+        DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().Initialize();
         FindWeaponObject();
         shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
         //UpdatePrice();
@@ -214,12 +216,15 @@ public class Shop : MonoBehaviour
 
     public void BuyStealFency()
     {
+        DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().Upgrade();
         Debug.Log("Kupuję kubuje płot stalowy");
+
     }
 
     public void BuySpikes()
     {
         Debug.Log("Kupuję kupuje kolce");
+        DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().Upgrade();
     }
 
     private void FindWeaponObject()

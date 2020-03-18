@@ -29,6 +29,7 @@ public class Main : MonoBehaviour
     public bool isWaitingForNextWave = false;
     private Player _player;
     public IEnumerator shopCoroutine;
+    public int waveCounter;
 
     // Start is called before the first frame update
     void Awake()
@@ -45,6 +46,7 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
+        waveCounter = currentLevel + 1;
         shopCoroutine = EnableShop();
         LoadLevel();
     }
@@ -90,6 +92,7 @@ public class Main : MonoBehaviour
         isEnableToShoot = true;
         isWaitingForNextWave = false;
         currentLevel++;
+        waveCounter++;
         LoadLevel();
     }
 
