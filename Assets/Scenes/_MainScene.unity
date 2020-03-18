@@ -13460,7 +13460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56711cd09389d9f4284ed7402425eb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 1000
+  gold: 10000
   levelArray:
   - maxEnemyCountOnLevel: 4
     waveDelay: 15
@@ -15011,7 +15011,8 @@ MonoBehaviour:
   weaponModel: {fileID: 1153468966}
   DrawTrace: {fileID: 7556537311830427398, guid: 2d58720a050061346831052b0882c4fd,
     type: 3}
-  tracerBox: {fileID: 0}
+  tracerBox: {fileID: 7556537311830427397, guid: 2d58720a050061346831052b0882c4fd,
+    type: 3}
   gunShotEffect: {fileID: 8300000, guid: 70f64d59c88aa544399dec9ba5839208, type: 3}
   gunReloadEffect: {fileID: 8300000, guid: e9830e4a7fd420e40874dbeafd33636a, type: 3}
   semiShotEffect: {fileID: 8300000, guid: 2b39167883fe6c849bd2179dd590a319, type: 3}

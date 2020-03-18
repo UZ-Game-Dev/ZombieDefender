@@ -165,7 +165,7 @@ public class Shop : MonoBehaviour
 
     public void BuyHealth()
     {
-        if(Main.S.gold >= Player.S.GetHpUpgradeCost())
+        if(Main.S.gold >= Player.S.GetHpUpgradeCost() && Player.S.GetHpLevel() < Player.S.GetMaxHpLevel())
         {
             Debug.Log("Kupuję Zdrowię");
             Player.S.UpgradeHP();
