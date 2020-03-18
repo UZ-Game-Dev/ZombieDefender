@@ -8,19 +8,17 @@ public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic }
 public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
-    public Transform slad;
-    
+    public Transform DrawTrace;
+
     public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}
     public List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public GameObject tracerBox;
     private bool isReloading = false, _playedEcho = false;
     private WeaponDefinition weapon;
-    private LineRenderer tracer;
     private UI _ui;
     private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0;
     public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased;
     public AudioSource audioSource;
-
 
     //--------------------------------------------------
 
@@ -196,8 +194,7 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
-        tracer = tracerBox.GetComponent<LineRenderer>();
-        Pistol pistol=new Pistol();
+        Pistol pistol =new Pistol();
         weapon = pistol;
         weapons.Add(pistol);
         GameObject ui = GameObject.FindGameObjectWithTag("UI");
@@ -341,6 +338,8 @@ public class Weapon : MonoBehaviour
 
         float shotDistance = 13f;
 
+        Transform _TraceBox = Instantiate(DrawTrace, weaponModel.transform.position, weaponModel.transform.rotation);
+
         if (Physics.Raycast(ray, out hit, shotDistance))
         {
             Debug.Log("Trafiłem w: " + hit.transform.name);
@@ -351,9 +350,12 @@ public class Weapon : MonoBehaviour
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
                 enemy.TakeDamage(weapon.GetDamage());
             }
+            _TraceBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
         }
-
-        //Debug.DrawLine(weaponModel.transform.position, weaponModel.transform.position + ray.direction * shotDistance);
+        else
+        {
+            _TraceBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * 20;
+        }
 
         Transform sladBox = Instantiate(slad, weaponModel.transform.position, weaponModel.transform.rotation);
         sladBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
