@@ -14551,8 +14551,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponModel: {fileID: 1153468966}
-  slad: {fileID: 7556537311830427398, guid: 2d58720a050061346831052b0882c4fd, type: 3}
-  tracerBox: {fileID: 342781968}
+  DrawTrace: {fileID: 7556537311830427398, guid: 2d58720a050061346831052b0882c4fd,
+    type: 3}
   gunShotEffect: {fileID: 8300000, guid: 70f64d59c88aa544399dec9ba5839208, type: 3}
   gunReloadEffect: {fileID: 8300000, guid: e9830e4a7fd420e40874dbeafd33636a, type: 3}
   semiShotEffect: {fileID: 8300000, guid: 2b39167883fe6c849bd2179dd590a319, type: 3}
