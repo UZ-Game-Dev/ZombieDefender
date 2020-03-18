@@ -120,8 +120,8 @@ public class Main : MonoBehaviour
                     {
                         gold += 5;
                         UI.S.gold.text = "Gold: " + Main.S.gold;
-                        break;
                     }
+                    break;
                 }
             case eIteamsType.eGoldBar:
                 gold += 8;
