@@ -13,11 +13,11 @@ public class Weapon : MonoBehaviour
     public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}
     public List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public GameObject tracerBox;
-    private bool isReloading = false, _triggerReleased = false;
+    private bool isReloading = false, _playedEcho = false;
     private WeaponDefinition weapon;
     private LineRenderer tracer;
     private UI _ui;
-    private int _nextShot = 8;
+    private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0;
     public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased;
     public AudioSource audioSource;
 
@@ -26,7 +26,7 @@ public class Weapon : MonoBehaviour
 
     public abstract class WeaponDefinition
     {
-        protected int currentAmmo, ammo, capacity, level, maxFireRate, fireRate, moneyForUpgrade, buyingPrice;
+        protected int currentAmmo, ammo, capacity, level, maxLevel, maxFireRate, fireRate, moneyForUpgrade, buyingPrice;
         protected float reloadSpeed, damage, maxReloadSpeed;
         protected string name;
         protected WeaponType type;
@@ -54,6 +54,7 @@ public class Weapon : MonoBehaviour
         public Pistol()
         {
             level = 1;
+            maxLevel = 10;
             capacity = 15;
             currentAmmo = capacity;
             ammo = 15;
@@ -69,7 +70,7 @@ public class Weapon : MonoBehaviour
 
         public override void Upgrade()
         {
-            if (Main.S.gold >= moneyForUpgrade)
+            if (Main.S.gold >= moneyForUpgrade && level < maxLevel)
             {
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
@@ -78,10 +79,18 @@ public class Weapon : MonoBehaviour
                 moneyForUpgrade += 2 + level;
                 level++;
 
-                UI.S.pistolUpgrade.text = "Cost: " + moneyForUpgrade + "$";
-                if (reloadSpeed > maxReloadSpeed) UI.S.gunReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.02f, 2);
-                else UI.S.gunReloadTime.text = "Max Reload Speed";
-                UI.S.gunDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 0.5f, 2);
+                if (level == maxLevel)
+                {
+                    UI.S.pistolUpgrade.text = "MAX LEVEL REACHED";
+                    UI.S.gunReloadTime.text = "";
+                    UI.S.gunDamage.text = "";
+                }
+                else
+                {
+                    UI.S.pistolUpgrade.text = "Cost: " + moneyForUpgrade + "$";
+                    UI.S.gunReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.02f, 2);
+                    UI.S.gunDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 0.5f, 2);
+                }
             }
         }
     }
@@ -91,9 +100,9 @@ public class Weapon : MonoBehaviour
         public SemiAutomatic()
         {
             level = 1;
+            maxLevel = 10;
             capacity = 24;
             currentAmmo = capacity;
-            ammo = capacity * 2;
             reloadSpeed = 1.70f;
             maxReloadSpeed = 1.0f;
             damage = 7.0f;
@@ -107,7 +116,7 @@ public class Weapon : MonoBehaviour
 
         public override void Upgrade()
         {
-            if(Main.S.gold >= moneyForUpgrade)
+            if(Main.S.gold >= moneyForUpgrade && level < maxLevel)
             {
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
@@ -116,10 +125,18 @@ public class Weapon : MonoBehaviour
                 moneyForUpgrade += 4 + level;
                 level++;
 
-                UI.S.semiUpgrade.text = "Cost: " + moneyForUpgrade + "$";
-                if (reloadSpeed > maxReloadSpeed) UI.S.semiReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.05f, 2);
-                else UI.S.semiReloadTime.text = "Max Reload Speed";
-                UI.S.semiDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 1.5f, 2);
+                if (level == maxLevel)
+                {
+                    UI.S.semiUpgrade.text = "MAX LEVEL REACHED";
+                    UI.S.semiReloadTime.text = "";
+                    UI.S.semiDamage.text = "";
+                }
+                else
+                {
+                    UI.S.semiUpgrade.text = "Cost: " + moneyForUpgrade + "$";
+                    UI.S.semiReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.05f, 2);
+                    UI.S.semiDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 1.5f, 2);
+                }
             }
         }
     }
@@ -129,9 +146,9 @@ public class Weapon : MonoBehaviour
         public Automatic()
         {
             level = 1;
+            maxLevel = 10;
             capacity = 30;
             currentAmmo = capacity;
-            ammo = capacity * 2;
             reloadSpeed = 2.00f;
             maxReloadSpeed = 1.0f;
             damage = 10f;
@@ -145,7 +162,7 @@ public class Weapon : MonoBehaviour
 
         public override void Upgrade()
         {
-            if (Main.S.gold >= moneyForUpgrade)
+            if (Main.S.gold >= moneyForUpgrade && level < maxLevel)
             {
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
@@ -154,10 +171,18 @@ public class Weapon : MonoBehaviour
                 moneyForUpgrade += 6 + level;
                 level++;
 
-                UI.S.autoUpgrade.text = "Cost: " + moneyForUpgrade + "$";
-                if (reloadSpeed > maxReloadSpeed) UI.S.autoReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.05f, 2);
-                else UI.S.autoReloadTime.text = "Max Reload Speed";
-                UI.S.autoDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 2f, 2);
+                if (level == maxLevel)
+                {
+                    UI.S.autoUpgrade.text = "MAX LEVEL REACHED";
+                    UI.S.autoReloadTime.text = "";
+                    UI.S.autoDamage.text = "";
+                }
+                else
+                {
+                    UI.S.autoUpgrade.text = "Cost: " + moneyForUpgrade + "$";
+                    UI.S.autoReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.05f, 2);
+                    UI.S.autoDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 2f, 2);
+                }
             }
         }
     }
@@ -202,24 +227,24 @@ public class Weapon : MonoBehaviour
 
                 Shoot();
                 if (weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
+                if (weapon.GetType() != WeaponType.ePistol) _lastShot++;
                 _nextShot = 8;
+            }
+            
+            if((Input.GetButton("Fire1") && !_playedEcho && !isReloading && weapon.GetType() != WeaponType.ePistol) && (weapon.GetCurrentAmmo() == 0 || (weapon.GetType() == WeaponType.eSemiAutomatic && weapon.GetFireRate() == 0)))
+            {
+                _playedEcho = true;
             }
 
             if (Input.GetButtonUp("Fire1") && Main.S.isEnableToShoot)
             {
                 weapon.SetFireRate(weapon.GetMaxFireRate());
 
-                if (weapon.GetType() != WeaponType.ePistol)
-                {
-                    _triggerReleased = true;
-                    audioSource.Stop();
-                    audioSource.volume = 1;
-                    audioSource.clip = triggerReleased;
-                    audioSource.Play();
-                }
+                if (weapon.GetType() != WeaponType.ePistol && !_playedEcho) StartCoroutine("PlayShotEcho");
+                _playedEcho = false;
             }
 
-            if (Input.GetButtonDown("R") && !isReloading && weapon.GetAmmo() != 0 && weapon.GetCurrentAmmo() != weapon.GetCapacity())
+            if (Input.GetButtonDown("R") && !isReloading && ((weapon.GetType() != WeaponType.ePistol && _rifleAmmo != 0) || weapon.GetType() == WeaponType.ePistol) && weapon.GetCurrentAmmo() != weapon.GetCapacity())
             {
                 if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunReloadEffect;
                 else audioSource.clip = semiReloadEffect;
@@ -235,7 +260,6 @@ public class Weapon : MonoBehaviour
                 audioSource.clip = triggerReleased;
                 audioSource.Play();
                 audioSource.volume = 0.5f;
-                _triggerReleased = false;
             }
 
             if (Input.GetButtonDown("E") && !isReloading)
@@ -246,10 +270,21 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public WeaponDefinition GetWeapon()
+    private IEnumerator PlayShotEcho()
     {
-        return weapon;
+        if (_lastShot < 10 && weapon.GetType() == WeaponType.eAutomatic) yield return new WaitForSeconds(0.16f);
+        else if (_lastShot < 10 && weapon.GetType() == WeaponType.eSemiAutomatic) yield return new WaitForSeconds(0.10f);
+        _lastShot = 0;
+        
+        audioSource.Stop();
+        audioSource.volume = 1;
+        audioSource.clip = triggerReleased;
+        audioSource.Play();
     }
+
+    public WeaponDefinition GetWeapon() { return weapon; }
+    public int GetRifleAmmo() { return _rifleAmmo; }
+    public void AddRifleAmmo(int a) { _rifleAmmo += a; }
 
     void SwapWeapons(int dir)
     {
@@ -264,29 +299,35 @@ public class Weapon : MonoBehaviour
         else weapon = weapons[index + dir];
 
         UI.S.weaponName.text = weapon.GetName();
-        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + weapon.GetAmmo() + "]";
+        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
 
         if (!Main.S.isEnableToShoot) UI.S.SetAmmoTexts();
     }
 
-    IEnumerator Reload()
+    private IEnumerator Reload()
     {
         yield return new WaitForSeconds(weapon.GetReloadSpeed());
         int amount = weapon.GetCapacity() - weapon.GetCurrentAmmo();
-        if (weapon.GetAmmo() >= amount)
+
+        if (weapon.GetType() != WeaponType.ePistol)
         {
-            weapon.SetCurrentAmmo(weapon.GetCapacity());
-            if(weapon.GetType() != WeaponType.ePistol) weapon.SetAmmo(weapon.GetAmmo()-amount);
+            if (_rifleAmmo >= amount)
+            {
+                weapon.SetCurrentAmmo(weapon.GetCapacity());
+                _rifleAmmo -= amount;
+            }
+            else
+            {
+                weapon.SetCurrentAmmo(weapon.GetCurrentAmmo() + _rifleAmmo);
+                _rifleAmmo = 0;
+            }
         }
-        else
-        {
-            weapon.SetCurrentAmmo(weapon.GetCurrentAmmo()+weapon.GetAmmo());
-            weapon.SetAmmo(0);
-        }
+        else weapon.SetCurrentAmmo(weapon.GetCapacity());
+
         audioSource.clip = gunShotEffect;
 
-        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + weapon.GetAmmo() + "]";
+        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
     }
 
@@ -318,7 +359,7 @@ public class Weapon : MonoBehaviour
         Transform sladBox = Instantiate(slad, weaponModel.transform.position, weaponModel.transform.rotation);
         sladBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
 
-        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + weapon.GetAmmo() + "]";
+        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
     }
 }

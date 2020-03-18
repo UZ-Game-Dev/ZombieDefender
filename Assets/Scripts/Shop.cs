@@ -158,8 +158,8 @@ public class Shop : MonoBehaviour
             Main.S.gold -= amunationPrice;
             UI.S.gold.text = "Gold: " + Main.S.gold;
             if (weapon == null) FindWeaponObject();
-            weapon.GetWeapon().SetAmmo(weapon.GetWeapon().GetAmmo() + amunationPiecesToBuy);
-            UI.S.ammo.text = weapon.GetWeapon().GetCurrentAmmo() + "/" + weapon.GetWeapon().GetCapacity() + "  [" + weapon.GetWeapon().GetAmmo() + "]";
+            weapon.AddRifleAmmo(amunationPiecesToBuy);
+            UI.S.ammo.text = weapon.GetWeapon().GetCurrentAmmo() + "/" + weapon.GetWeapon().GetCapacity() + "  [" + weapon.GetRifleAmmo() + "]";
         }
     }
 
@@ -203,6 +203,7 @@ public class Shop : MonoBehaviour
                 UI.S.semiReloadTime.text = "Reload Spd.: " + semi.GetReloadSpeed() + " -> " + (semi.GetReloadSpeed() - 0.05f);
                 UI.S.semiDamage.text = "Damage: " + semi.GetDamage() + " -> " + (semi.GetDamage() + 1.5f);
                 weapon.weapons.Add(semi);
+                weapon.AddRifleAmmo(24);
             }
         }
         else
@@ -226,6 +227,7 @@ public class Shop : MonoBehaviour
                 UI.S.autoReloadTime.text = "Reload Spd.: " + auto.GetReloadSpeed() + " -> " + (auto.GetReloadSpeed() - 0.05);
                 UI.S.autoDamage.text = "Damage: " + auto.GetDamage() + " -> " + (auto.GetDamage() + 2f);
                 weapon.weapons.Add(auto);
+                weapon.AddRifleAmmo(30);
             }
         }
         else

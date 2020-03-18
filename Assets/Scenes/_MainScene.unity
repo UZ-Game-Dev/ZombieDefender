@@ -13074,7 +13074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56711cd09389d9f4284ed7402425eb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 8
+  gold: 10000
   levelArray:
   - maxEnemyCountOnLevel: 4
     waveDelay: 15
@@ -13671,7 +13671,7 @@ GameObject:
   - component: {fileID: 1097516164}
   - component: {fileID: 1097516163}
   m_Layer: 5
-  m_Name: Fill
+  m_Name: HPSliderFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13709,7 +13709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.11311853, g: 0.5849056, b: 0.18594474, a: 1}
+  m_Color: {r: 0.1137255, g: 0.5843138, b: 0.18594474, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -26105,6 +26105,7 @@ MonoBehaviour:
   autoReloadTime: {fileID: 2121271909}
   autoDamage: {fileID: 1975015580}
   buyAmmoButton: {fileID: 1462171860}
+  hpColor: {fileID: 1097516163}
   buyAmmoText: {fileID: 600639061}
 --- !u!1001 &1909339274
 PrefabInstance:

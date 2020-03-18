@@ -11,6 +11,7 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI gunReloadTime, gunDamage, semiReloadTime, semiDamage, autoReloadTime, autoDamage;
         
     public Button buyAmmoButton;
+    public Image hpColor;
     public TextMeshProUGUI buyAmmoText;
 
     private Player _player;
@@ -147,7 +148,10 @@ public class UI : MonoBehaviour
     {
         hp.value = _player.GetHP();
         hp.maxValue = _player.GetMaxHP();
-    }
+        float hpPercent = (float)_player.GetHP() / (float)_player.GetMaxHP();
+        hpPercent = Mathf.Round(hpPercent * 100)/100;
+        hpColor.color = new Color(0.90f - hpPercent * 0.79f, 0.24f + hpPercent * 0.30f, 0.19f);
+    } 
 
     public void ShowReloadingBar()
     {
