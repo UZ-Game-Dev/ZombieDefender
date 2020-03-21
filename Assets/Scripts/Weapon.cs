@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic } 
+public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic }
 
 public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
     public Transform DrawTrace;
 
-    public enum WeaponType {ePistol, eSemiAutomatic, eAutomatic}
+    public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic }
     public List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public GameObject tracerBox;
     private bool isReloading = false, _playedEcho = false;
@@ -41,13 +41,13 @@ public class Weapon : MonoBehaviour
         public float GetDamage() { return damage; }
         public string GetName() { return name; }
         public new WeaponType GetType() { return type; }
-        
+
         public void SetFireRate(int a) { fireRate = a; }
         public void SetCurrentAmmo(int a) { currentAmmo = a; }
         public void SetAmmo(int a) { ammo = a; }
     }
 
-    public class Pistol: WeaponDefinition
+    public class Pistol : WeaponDefinition
     {
         public Pistol()
         {
@@ -73,7 +73,7 @@ public class Weapon : MonoBehaviour
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
                 damage = (float)Math.Round(damage + 0.5f, 2);
-                if(reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.02f ,2);
+                if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.02f, 2);
                 moneyForUpgrade += 2 + level;
                 level++;
 
@@ -114,7 +114,7 @@ public class Weapon : MonoBehaviour
 
         public override void Upgrade()
         {
-            if(Main.S.gold >= moneyForUpgrade && level < maxLevel)
+            if (Main.S.gold >= moneyForUpgrade && level < maxLevel)
             {
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
@@ -194,7 +194,7 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
-        Pistol pistol =new Pistol();
+        Pistol pistol = new Pistol();
         weapon = pistol;
         weapons.Add(pistol);
         GameObject ui = GameObject.FindGameObjectWithTag("UI");
@@ -227,8 +227,8 @@ public class Weapon : MonoBehaviour
                 if (weapon.GetType() != WeaponType.ePistol) _lastShot++;
                 _nextShot = 8;
             }
-            
-            if((Input.GetButton("Fire1") && !_playedEcho && !isReloading && weapon.GetType() != WeaponType.ePistol) && (weapon.GetCurrentAmmo() == 0 || (weapon.GetType() == WeaponType.eSemiAutomatic && weapon.GetFireRate() == 0)))
+
+            if ((Input.GetButton("Fire1") && !_playedEcho && !isReloading && weapon.GetType() != WeaponType.ePistol) && (weapon.GetCurrentAmmo() == 0 || (weapon.GetType() == WeaponType.eSemiAutomatic && weapon.GetFireRate() == 0)))
             {
                 _playedEcho = true;
             }
@@ -271,7 +271,7 @@ public class Weapon : MonoBehaviour
         if (_lastShot < 10 && weapon.GetType() == WeaponType.eAutomatic) yield return new WaitForSeconds(0.16f);
         else if (_lastShot < 10 && weapon.GetType() == WeaponType.eSemiAutomatic) yield return new WaitForSeconds(0.10f);
         _lastShot = 0;
-        
+
         audioSource.Stop();
         audioSource.volume = 1;
         audioSource.clip = triggerReleased;
@@ -287,9 +287,9 @@ public class Weapon : MonoBehaviour
         int index = weapons.IndexOf(weapon);
 
         if (index + dir < 0)
-            weapon = weapons[weapons.Count-1];
+            weapon = weapons[weapons.Count - 1];
 
-        else if (index + dir > weapons.Count-1)
+        else if (index + dir > weapons.Count - 1)
             weapon = weapons[0];
 
         else weapon = weapons[index + dir];
@@ -331,8 +331,8 @@ public class Weapon : MonoBehaviour
     {
         audioSource.volume = 0.5f;
         if (audioSource.clip == gunShotEffect) audioSource.Play();
-        if(!audioSource.isPlaying) audioSource.Play();
-        weapon.SetCurrentAmmo(weapon.GetCurrentAmmo()-1);
+        if (!audioSource.isPlaying) audioSource.Play();
+        weapon.SetCurrentAmmo(weapon.GetCurrentAmmo() - 1);
         Ray ray = new Ray(weaponModel.transform.position, weaponModel.transform.forward);
         RaycastHit hit;
 
@@ -357,8 +357,8 @@ public class Weapon : MonoBehaviour
             _TraceBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * 20;
         }
 
-        Transform sladBox = Instantiate(DrawTrace, weaponModel.transform.position, weaponModel.transform.rotation);
-        sladBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
+        Transform _traceBox = Instantiate(DrawTrace, weaponModel.transform.position, weaponModel.transform.rotation);
+        _traceBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
 
         if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
