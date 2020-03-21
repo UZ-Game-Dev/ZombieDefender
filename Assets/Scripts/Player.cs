@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     {
         if (_hp + amount > _maxHP) _hp = _maxHP;
         else _hp += amount;
+        UI.S.hpAmount.text = _hp + "";
     }
 
     public void UpgradeHP()
@@ -37,11 +38,13 @@ public class Player : MonoBehaviour
         _hpLevel++;
         _maxHP += _hpBonusPerLevel;
         _hp = _maxHP;
+        UI.S.hpAmount.text = _hp + "";
     }
 
     public void TakeDamage(int amount)
     {
         _hp -= amount;
+
         if (_hp <= 0)
         {
             int wave = Main.S.waveCounter ;
@@ -53,6 +56,7 @@ public class Player : MonoBehaviour
             _hp = 0;
             SceneManager.LoadScene("DeathScene");
         }
+        UI.S.hpAmount.text = _hp + "";
     }
 
     private void Update()

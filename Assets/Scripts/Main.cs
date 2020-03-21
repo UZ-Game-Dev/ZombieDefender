@@ -28,20 +28,21 @@ public class Main : MonoBehaviour
     public int currentLevel = 0;
     public bool isWaitingForNextWave = false;
     private Player _player;
+    private Weapon _weapon;
     public IEnumerator shopCoroutine;
     public int waveCounter;
 
     // Start is called before the first frame update
     void Awake()
     {
-        
-
         if (S != null)
             Debug.LogError("Sigleton Main juz istnieje");
         S = this;
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         _player = player.GetComponentInChildren<Player>();
+        GameObject weapon = GameObject.FindGameObjectWithTag("Weapon");
+        _weapon = weapon.GetComponentInChildren<Weapon>();
     }
 
     private void Start()
@@ -94,15 +95,19 @@ public class Main : MonoBehaviour
         currentLevel++;
         waveCounter++;
         LoadLevel();
+        UI.S.wave.text= "Wave: " + (int)(Main.S.currentLevel + 1);
     }
 
     private IEnumerator EnableShop()
     {
+        UI.S.SetAmmoTexts();
+
         isWaitingForNextWave = true;
         isEnableToShoot = false;
         shopPanel.SetActive(true);
         this.GetComponent<Shop>().SetTimer(levelArray[currentLevel].waveDelay);
         yield return new WaitForSeconds(levelArray[currentLevel].waveDelay);
+        UI.S.gold.text = "Gold: " + Main.S.gold;
         StopWaveCoroutine();
     }
 
@@ -111,12 +116,16 @@ public class Main : MonoBehaviour
         switch(type)
         {
             case eIteamsType.eCoin:
-                if (currentLevel < 5)
-                    gold += 3;
-                else
-                    gold += 5;
-                break;
-
+                {
+                    if (currentLevel < 5)
+                        gold += 3;
+                    else
+                    {
+                        gold += 5;
+                        UI.S.gold.text = "Gold: " + Main.S.gold;
+                    }
+                    break;
+                }
             case eIteamsType.eGoldBar:
                 gold += 8;
                 break;
