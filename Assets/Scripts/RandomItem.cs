@@ -41,14 +41,13 @@ public class RandomItem : MonoBehaviour
 
             for (int j = 0; j < _itemList.Count; j++)
             {
-                // Modyfikacja dotyczy wypadania apteczek
                 if (randomValue <= _itemList[j].dropWeight)
                 {
                     GameObject items;
 
                     if (_itemList[j].item.name.Equals("First-AidItem"))
                     {
-                        if (Player.S.GetHP() > 75)
+                        if ((float)Player.S.GetHP() / (float)Player.S.GetMaxHP() > 0.75f)
                         {
                             items = Instantiate(_itemList[0].item, this.transform.position, UnityEngine.Random.rotation) as GameObject;
                         }
@@ -61,10 +60,8 @@ public class RandomItem : MonoBehaviour
                     {
                         items = Instantiate(_itemList[j].item, this.transform.position, UnityEngine.Random.rotation) as GameObject;
                     }
-                    //
                     items.GetComponent<Rigidbody>().AddForce(-this.transform.right * UnityEngine.Random.Range(25f, 50f) + this.transform.up * UnityEngine.Random.Range(0, 25));
-
-                    //Instantiate(_itemList[j].item, this.transform.position, UnityEngine.Random.rotation); <- linijka do usunięcia
+                    
                     return;
                 }
                 randomValue -= _itemList[j].dropWeight;
