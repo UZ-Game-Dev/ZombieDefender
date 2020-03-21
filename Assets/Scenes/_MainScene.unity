@@ -13460,7 +13460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56711cd09389d9f4284ed7402425eb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 10000
+  gold: 8
   levelArray:
   - maxEnemyCountOnLevel: 4
     waveDelay: 15
@@ -17736,8 +17736,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isPaused: 0
   pauseMenuUI: {fileID: 1577421960}
-  infoExitUI: {fileID: 0}
-  blackBackground: {fileID: 0}
+  infoExitUI: {fileID: 1782484502}
+  blackBackground: {fileID: 57202358}
 --- !u!1001 &1405791818
 PrefabInstance:
   m_ObjectHideFlags: 0
