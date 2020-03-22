@@ -184,13 +184,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialCurrentLevel: 0
-  _Initialhealth: 3
+  initialhealth: 10
   initialUpgradePrice: 15
-  currentLevel: 10
-  upgradePrice: 180
-  _maxHP: 53
-  _maxLevel: 10
-  _bonusHealtOnLevel: 5
+  currentLevel: 0
+  health: 10
+  upgradePrice: 15
+  maxHP: 10
+  maxLevel: 10
+  bonusHealtOnLevel: 5
 --- !u!1001 &207546001424416013
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -207,16 +207,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialCurrentLevel: 0
-  _Initialhealth: 3
-  _InitialdemageEnemy: 10
+  initialhealth: 3
+  initialdemageEnemy: 10
   initialUpgradePrice: 15
-  currentLevel: 10
-  _health: 13
-  _demageEnemy: 20
-  upgradePrice: 65
-  _maxHP: 13
+  currentLevel: 0
+  health: 3
+  damageEnemy: 10
+  upgradePrice: 15
   maxLevel: 10
-  _TakeDamage: 1
+  takeDamage: 1
   damageUpgrade: 1
   healthUpgrade: 1
 --- !u!114 &-7469165820373094828

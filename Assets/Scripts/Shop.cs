@@ -32,13 +32,26 @@ public class Shop : MonoBehaviour
     private GameObject _defensiveObject;
     private int _defensiveObjectsNumber;
     private Button[] shopButtonsArray;
+    private AudioSource audioSourceBuing;
 
     private void Start()
     {
-        DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().Initialize();
-        DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().Initialize();
+        DefensiveSpikes spikesObject = DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>(); //KOLCE
+        spikesObject.Initialize();
+        DefensiveObject baricadeObject = DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>(); //PŁOT
+        baricadeObject.Initialize();
         FindWeaponObject();
         shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
+
+        //BARRICADE
+        UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP + " -> " + (baricadeObject.maxHP + baricadeObject.bonusHealtOnLevel);
+        UI.S.baricadeCost.text = "Upgrade: " + baricadeObject.upgradePrice + "$";
+        //SPIKES 
+        UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + " -> " + (spikesObject.damageEnemy + spikesObject.damageUpgrade) + "\n" +
+                "Endurance: " + spikesObject.health + " -> " + (spikesObject.health + spikesObject.healthUpgrade);
+        UI.S.spikeCost.text = "Upgrade: " + spikesObject.upgradePrice + "$";
+
+        audioSourceBuing = shopPanel.GetComponent<AudioSource>();
     }
 
     //_______________DefensiveObject______________________
@@ -132,8 +145,8 @@ public class Shop : MonoBehaviour
     private void UpdateTimerText()
     {
         int seconds = (int)_timer % 60;
-        float miliseconds = (_timer - seconds) * 100;
-        timerToNextWave.text = seconds.ToString("00") + ":" + miliseconds.ToString("00");
+        //float miliseconds = (_timer - seconds) * 100;
+        timerToNextWave.text = seconds.ToString("00");
     }
     
     //_______________SHOP_BUTTONS______________________
@@ -156,7 +169,9 @@ public class Shop : MonoBehaviour
     {
         if (Main.S.gold >= amunationPrice && weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol)
         {
+            
             Debug.Log("KUPUJE AMMO");
+            audioSourceBuing.Play();
             Main.S.gold -= amunationPrice;
             UI.S.gold.text = "Gold: " + Main.S.gold;
             if (weapon == null) FindWeaponObject();
@@ -170,6 +185,7 @@ public class Shop : MonoBehaviour
         if(Main.S.gold >= Player.S.GetHpUpgradeCost() && Player.S.GetHpLevel() < Player.S.GetMaxHpLevel())
         {
             Debug.Log("Kupuję Zdrowię");
+            audioSourceBuing.Play();
             Player.S.UpgradeHP();
             UI.S.gold.text = "Gold: " + Main.S.gold;
 
@@ -188,6 +204,7 @@ public class Shop : MonoBehaviour
     public void BuyPistol()
     {
         weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.ePistol).Upgrade();
+        audioSourceBuing.Play();
     }
 
     public void BuySemiAutomaticGun()
@@ -199,6 +216,7 @@ public class Shop : MonoBehaviour
             semi = new Weapon.SemiAutomatic();
             if (Main.S.gold >= semi.GetBuyingPrice())
             {
+                audioSourceBuing.Play();
                 Main.S.gold -= semi.GetBuyingPrice();
                 UI.S.gold.text = "Gold: " + Main.S.gold;
                 UI.S.semiUpgrade.text = "Cost: " + semi.GetMoneyForUpgrade() + "$";
@@ -210,6 +228,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
+            audioSourceBuing.Play();
             weapon.weapons.Find(gun => gun.GetType()==Weapon.WeaponType.eSemiAutomatic).Upgrade();
         }
     }
@@ -223,6 +242,7 @@ public class Shop : MonoBehaviour
             auto = new Weapon.Automatic();
             if (Main.S.gold >= auto.GetBuyingPrice())
             {
+                audioSourceBuing.Play();
                 Main.S.gold -= auto.GetBuyingPrice();
                 UI.S.gold.text = "Gold: " + Main.S.gold;
                 UI.S.autoUpgrade.text = "Cost: " + auto.GetMoneyForUpgrade() + "$";
@@ -234,21 +254,45 @@ public class Shop : MonoBehaviour
         }
         else
         {
+            audioSourceBuing.Play();
             weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).Upgrade();
         }
     }
 
     public void BuyStealFency()
     {
-        DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().Upgrade();
         Debug.Log("Kupuję kubuje płot stalowy");
-
+        DefensiveObject baricadeObject = DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>();
+        if (baricadeObject.Upgrade())
+        {
+            audioSourceBuing.Play();
+            UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP + " -> " + (baricadeObject.maxHP + baricadeObject.bonusHealtOnLevel);
+            UI.S.baricadeCost.text = "Upgrade: " + baricadeObject.upgradePrice + "$";
+        }
+        if (baricadeObject.currentLevel == baricadeObject.maxLevel)
+        {
+            UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP;
+            UI.S.baricadeCost.text = "MAX LEVEL REACHED";
+        }
     }
 
     public void BuySpikes()
     {
         Debug.Log("Kupuję kupuje kolce");
-        DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().Upgrade();
+        DefensiveSpikes spikesObject = DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>();
+        if(spikesObject.Upgrade())
+        {
+            audioSourceBuing.Play();
+            UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + " -> " + (spikesObject.damageEnemy + spikesObject.damageUpgrade) + "\n" +
+                "Endurance: " + spikesObject.health + " -> " + (spikesObject.health + spikesObject.healthUpgrade);
+            UI.S.spikeCost.text = "Upgrade: " + spikesObject.upgradePrice + "$";
+        }
+        if(spikesObject.currentLevel == spikesObject.maxLevel)
+        {
+            UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + "\n" +
+                "Endurance: " + spikesObject.health;
+            UI.S.spikeCost.text = "MAX LEVEL REACHED";
+        }
     }
 
     private void FindWeaponObject()

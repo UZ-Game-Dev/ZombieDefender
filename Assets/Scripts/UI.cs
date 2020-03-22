@@ -7,7 +7,8 @@ using TMPro;
 public class UI : MonoBehaviour
 {
     public Slider hp, reloadingProgress;
-    public TextMeshProUGUI ammo, gold, weaponName, wave, pistolUpgrade, semiUpgrade, autoUpgrade, hpAmount, hpUpgrade;
+    public TextMeshProUGUI ammo, gold, weaponName, wave, pistolUpgrade, semiUpgrade, autoUpgrade, hpAmount, hpUpgrade, baricadeUpgrade, baricadeCost,
+        spikeUpgrade, spikeCost;
     public TextMeshProUGUI gunReloadTime, gunDamage, semiReloadTime, semiDamage, autoReloadTime, autoDamage;
         
     public Button buyAmmoButton;

@@ -94,8 +94,8 @@ public class Main : MonoBehaviour
         isWaitingForNextWave = false;
         currentLevel++;
         waveCounter++;
-        LoadLevel();
         UI.S.wave.text= "Wave: " + (int)(Main.S.currentLevel + 1);
+        LoadLevel();
     }
 
     private IEnumerator EnableShop()
@@ -107,8 +107,11 @@ public class Main : MonoBehaviour
         shopPanel.SetActive(true);
         this.GetComponent<Shop>().SetTimer(levelArray[currentLevel].waveDelay);
         yield return new WaitForSeconds(levelArray[currentLevel].waveDelay);
-        UI.S.gold.text = "Gold: " + Main.S.gold;
+        
+       // UI.S.gold.text = "Gold: " + Main.S.gold;
         StopWaveCoroutine();
+        
+       
     }
 
     public void PickUpItem(eIteamsType type)

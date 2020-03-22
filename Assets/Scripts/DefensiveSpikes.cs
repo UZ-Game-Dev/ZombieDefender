@@ -7,21 +7,20 @@ public class DefensiveSpikes : MonoBehaviour
 {
     [Header("Wartości ustawiane na początku rozgrywki")]
     public int initialCurrentLevel = 0;
-    public float _Initialhealth = 3f;
-    public float _InitialdemageEnemy = 10;
+    public float initialhealth = 3f;
+    public float initialdemageEnemy = 10;
     public int initialUpgradePrice = 15;
 
     [Header("Wartości definiowane dynamicznie")]
     public int currentLevel;
-    public float _health; //Wytrzymałość obiektu
-    public float _demageEnemy; //Obrazenia zadawane wrogowi
+    public float health; //Wytrzymałość obiektu
+    public float damageEnemy; //Obrazenia zadawane wrogowi
     public int upgradePrice;
-    [SerializeField]
-    private float _maxHP;
+    private float maxHP;
 
     [Header("Definiowane w panelu inspekcyjnym")]
     public int maxLevel = 10;
-    public float _TakeDamage = 1; //Obrazenia zadawane obiektowi
+    public float takeDamage = 1; //Obrazenia zadawane obiektowi
     public int damageUpgrade = 1;
     public int healthUpgrade = 1; //Poprawienie wytrzymalosci obiektu
 
@@ -36,9 +35,9 @@ public class DefensiveSpikes : MonoBehaviour
     public void Initialize()
     {
         //Wywoływane prze funkcję Start() w skryocie Shop
-        _health = _Initialhealth;
-        _maxHP = _health;
-        _demageEnemy = _InitialdemageEnemy;
+        health = initialhealth;
+        maxHP = health;
+        damageEnemy = initialdemageEnemy;
         currentLevel = initialCurrentLevel;
         upgradePrice = initialUpgradePrice;
     }
@@ -59,26 +58,30 @@ public class DefensiveSpikes : MonoBehaviour
         if (_collider != null)
         {
             GetComponent<Animator>().SetBool("Attack", false);
-            _collider.transform.root.GetComponent<Enemy>().TakeDamage(_demageEnemy);
+            _collider.transform.root.GetComponent<Enemy>().TakeDamage(damageEnemy);
         }
 
-        _health -= _TakeDamage;
-        _healthUI.updateHP(_health, _maxHP);
+        health -= takeDamage;
+        _healthUI.updateHP(health, maxHP);
 
-        if (_health <= 0)
+        if (health <= 0)
         {
             Destroy(gameObject);
         }
     }
 
-    public void Upgrade()
+    public bool Upgrade()
     {
-        if (currentLevel < maxLevel)
+        if (currentLevel < maxLevel && Main.S.gold >= upgradePrice)
         {
-            _maxHP = _health += healthUpgrade;
-            _demageEnemy += damageUpgrade;
+            Main.S.gold -= upgradePrice;
+            maxHP = health += healthUpgrade;
+            damageEnemy += damageUpgrade;
             ++currentLevel;
             upgradePrice += 5;
+            UI.S.gold.text = "Gold: " + Main.S.gold;
+            return true;
         }
+        return false;
     }
 }
