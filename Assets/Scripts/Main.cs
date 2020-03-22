@@ -30,6 +30,7 @@ public class Main : MonoBehaviour
     private Player _player;
     private Weapon _weapon;
     public IEnumerator shopCoroutine;
+    public int waveCounter;
 
     // Start is called before the first frame update
     void Awake()
@@ -46,6 +47,7 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
+        waveCounter = currentLevel + 1;
         shopCoroutine = EnableShop();
         LoadLevel();
     }
@@ -91,8 +93,9 @@ public class Main : MonoBehaviour
         isEnableToShoot = true;
         isWaitingForNextWave = false;
         currentLevel++;
-        LoadLevel();
+        waveCounter++;
         UI.S.wave.text= "Wave: " + (int)(Main.S.currentLevel + 1);
+        LoadLevel();
     }
 
     private IEnumerator EnableShop()
@@ -104,8 +107,11 @@ public class Main : MonoBehaviour
         shopPanel.SetActive(true);
         this.GetComponent<Shop>().SetTimer(levelArray[currentLevel].waveDelay);
         yield return new WaitForSeconds(levelArray[currentLevel].waveDelay);
+        
         UI.S.gold.text = "Gold: " + Main.S.gold;
         StopWaveCoroutine();
+        
+       
     }
 
     public void PickUpItem(eIteamsType type)

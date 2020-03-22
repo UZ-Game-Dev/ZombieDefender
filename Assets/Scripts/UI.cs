@@ -7,7 +7,8 @@ using TMPro;
 public class UI : MonoBehaviour
 {
     public Slider hp, reloadingProgress;
-    public TextMeshProUGUI ammo, gold, weaponName, wave, pistolUpgrade, semiUpgrade, autoUpgrade, hpAmount, hpUpgrade;
+    public TextMeshProUGUI ammo, gold, weaponName, wave, pistolUpgrade, semiUpgrade, autoUpgrade, hpAmount, hpUpgrade, baricadeUpgrade, baricadeCost,
+        spikeUpgrade, spikeCost;
     public TextMeshProUGUI gunReloadTime, gunDamage, semiReloadTime, semiDamage, autoReloadTime, autoDamage;
         
     public Button buyAmmoButton;
@@ -33,7 +34,7 @@ public class UI : MonoBehaviour
         else ammo.text = _weapon.GetWeapon().GetCurrentAmmo() + "/" + _weapon.GetWeapon().GetCapacity();
         weaponName.text = _weapon.GetWeapon().GetName();
         gold.text = "Gold: " + Main.S.gold;
-        wave.text = "Wave: " + (int)(Main.S.currentLevel+1);
+        wave.text = "Wave: " + (int)(Main.S.waveCounter);
         hpAmount.text = _player.GetHP().ToString();
 
         pistolUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetMoneyForUpgrade() + "$";

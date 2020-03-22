@@ -206,9 +206,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c8f192c364b3b49b0cae54d4526453, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 3
-  _demageEnemy: 10
-  _TakeDamage: 1
+  initialCurrentLevel: 0
+  initialhealth: 3
+  initialdemageEnemy: 10
+  initialUpgradePrice: 15
+  currentLevel: 0
+  health: 3
+  damageEnemy: 10
+  upgradePrice: 15
+  maxLevel: 10
+  takeDamage: 1
+  damageUpgrade: 1
+  healthUpgrade: 1
 --- !u!114 &-7469165820373094828
 MonoBehaviour:
   m_ObjectHideFlags: 0

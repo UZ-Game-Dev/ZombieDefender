@@ -183,7 +183,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdec6e098cd774c4590be11e6172bf8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 6
+  initialCurrentLevel: 0
+  initialhealth: 10
+  initialUpgradePrice: 15
+  currentLevel: 0
+  health: 10
+  upgradePrice: 15
+  maxHP: 10
+  maxLevel: 10
+  bonusHealtOnLevel: 5
 --- !u!1001 &207546001424416013
 PrefabInstance:
   m_ObjectHideFlags: 0

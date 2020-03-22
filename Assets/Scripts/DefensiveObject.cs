@@ -5,25 +5,44 @@ using UnityEngine;
 [RequireComponent(typeof(HealthUI))]
 public class DefensiveObject : MonoBehaviour
 {
-    [Header("Definiowane w panelu")]
-    [SerializeField]
-    private float _health = 10f;
-    
+    [Header("Wartości ustawiane na początku rozgrywki")]
+    public int initialCurrentLevel = 0;
+    public float initialhealth = 10f;
+    public int initialUpgradePrice = 15;
+
+    [Header("Wartości definiowane dynamicznie")]
+    public int currentLevel = 0;
+    public float health = 10f; //Wytrzymałość obiektu
+    public int upgradePrice = 15;
+    public float maxHP; //Max wytrzymałość obiektu
+
+    [Header("Definiowane w panelu inspekcyjnym")]
+    public int maxLevel = 10;
+    public int bonusHealtOnLevel = 5;
+
     private HealthUI _healthUI;
-    private float _maxHP;
 
     private void Awake()
     {
         _healthUI = GetComponent<HealthUI>();
-        _maxHP = _health;
+        maxHP = health;
+    }
+
+    public void Initialize()
+    {
+        //Wywoływane prze funkcję Start() w skryocie Shop
+        health = initialhealth;
+        maxHP = health;
+        currentLevel = initialCurrentLevel;
+        upgradePrice = initialUpgradePrice;
     }
 
     public void TakeDamage(float dmg)
     {
-        _health -= 1;
-        _healthUI.updateHP(_health, _maxHP);
+        health -= 1;
+        _healthUI.updateHP(health, maxHP);
 
-        if (_health <= 0)
+        if (health <= 0)
         {
             Destroy(gameObject);
         }
@@ -39,5 +58,20 @@ public class DefensiveObject : MonoBehaviour
         {
             this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         }
+    }
+
+    public bool Upgrade()
+    {
+        if(currentLevel < maxLevel && Main.S.gold >= upgradePrice)
+        {
+            Main.S.gold -= upgradePrice;
+            currentLevel++;
+            health += bonusHealtOnLevel;
+            maxHP += bonusHealtOnLevel;
+            upgradePrice += currentLevel * 3;
+            UI.S.gold.text = "Gold: " + Main.S.gold;
+            return true;
+        }
+        return false;
     }
 }
