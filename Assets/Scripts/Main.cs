@@ -108,7 +108,7 @@ public class Main : MonoBehaviour
         this.GetComponent<Shop>().SetTimer(levelArray[currentLevel].waveDelay);
         yield return new WaitForSeconds(levelArray[currentLevel].waveDelay);
         
-       // UI.S.gold.text = "Gold: " + Main.S.gold;
+        UI.S.gold.text = "Gold: " + Main.S.gold;
         StopWaveCoroutine();
         
        
