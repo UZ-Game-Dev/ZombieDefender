@@ -22,6 +22,7 @@ public class Shop : MonoBehaviour
     public DefensiveObjects[] DefensiveObjectsArray; // [0] -> KOLCE   [1] -> PŁOT
     public int amunationPrice = 5;
     public int amunationPiecesToBuy = 50;
+    public GameObject _infoText; //← obiekt z napisami accept/cancel
 
     [Header("Definiowane dynamicznie")]
     public bool isActive = false;
@@ -58,6 +59,7 @@ public class Shop : MonoBehaviour
 
     private void MovingDefensiveObjects(int objectNumber)
     {
+        _infoText.SetActive(true);//← aktywacja napisów accept/cancel
         PauseMenu.S.enabled = false;
         _isisMovingDefensiveObjects = true;
         Main.S.isEnableToShoot = false;
@@ -79,6 +81,7 @@ public class Shop : MonoBehaviour
 
     private void ResetInfoDefensiveObject()
     {
+        _infoText.SetActive(false);//← ukrywanie napisów accept/cancel
         Destroy(_defensiveObjectGhost);
         _defensiveObjectGhost = null;
         _defensiveObject = null;
@@ -122,7 +125,14 @@ public class Shop : MonoBehaviour
             ResetInfoDefensiveObject();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && _isisMovingDefensiveObjects)
+        //↓ Wyświetlanie napisów "accept/cancel" gdy jest wybrany jakiś obiekt
+        if (_isisMovingDefensiveObjects)
+        {
+            _infoText.transform.position = Input.mousePosition;
+        }
+
+        //↓ Dodano prawy przycisk myszki do anulowania zakupu.
+        if ((Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Mouse1)) && _isisMovingDefensiveObjects)
         {
             ResetInfoDefensiveObject();
         }

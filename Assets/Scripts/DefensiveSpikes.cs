@@ -16,7 +16,7 @@ public class DefensiveSpikes : MonoBehaviour
     public float health; //Wytrzymałość obiektu
     public float damageEnemy; //Obrazenia zadawane wrogowi
     public int upgradePrice;
-    private float maxHP;
+    public float maxHP; // ← Przemwo - "Nie wiem dlaczego ma być publiczna".
 
     [Header("Definiowane w panelu inspekcyjnym")]
     public int maxLevel = 10;
