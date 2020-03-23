@@ -57,7 +57,7 @@ public class DefensiveObjectGhost : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.layer == 2 || collider.gameObject.layer == 8)
+        if (collider.gameObject.layer == 2 || collider.gameObject.layer == 8 || collider.gameObject.layer == 9)
         {
             for (int i1 = 0; i1 < theDefaultMaterial.Count; i1++)
             {
@@ -77,7 +77,7 @@ public class DefensiveObjectGhost : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        if (collider.gameObject.layer == 2 || collider.gameObject.layer == 8)
+        if (collider.gameObject.layer == 2 || collider.gameObject.layer == 8 || collider.gameObject.layer == 9)
         {
             for (int i1 = 0; i1 < theDefaultMaterial.Count; i1++)
             {
@@ -89,7 +89,7 @@ public class DefensiveObjectGhost : MonoBehaviour
 
     private void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.layer == 2 || collider.gameObject.layer == 8)
+        if (collider.gameObject.layer == 2 || collider.gameObject.layer == 8 || collider.gameObject.layer == 9)
         {
             for (int i1 = 0; i1 < theDefaultMaterial.Count; i1++)
             {
