@@ -13,10 +13,10 @@ public class Weapon : MonoBehaviour
     public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic }
     public List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public GameObject tracerBox;
-    private bool isReloading = false, _playedEcho = false;
+    private bool isReloading = false, _playedEcho = false, _isSemiShooting = false;
     private WeaponDefinition weapon;
     private UI _ui;
-    private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0;
+    private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0, _bulletsShot=0;
     public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased;
     public AudioSource audioSource;
 
@@ -216,13 +216,18 @@ public class Weapon : MonoBehaviour
 
         if (!PauseMenu.S.GetIsPaused())
         {
-            if (Input.GetButton("Fire1") && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
+            if ((Input.GetButton("Fire1") || _isSemiShooting) && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
             {
                 if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunShotEffect;
-                if (weapon.GetType() == WeaponType.eSemiAutomatic) audioSource.clip = semiShotEffect;
+                if (weapon.GetType() == WeaponType.eSemiAutomatic) { audioSource.clip = semiShotEffect; _bulletsShot++; _isSemiShooting = true; }
                 if (weapon.GetType() == WeaponType.eAutomatic) audioSource.clip = autoShotEffect;
 
                 Shoot();
+                if(_bulletsShot == 4)
+                {
+                    _bulletsShot = 0;
+                    _isSemiShooting = false;
+                }
                 if (weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
                 if (weapon.GetType() != WeaponType.ePistol) _lastShot++;
                 _nextShot = 8;
@@ -233,10 +238,13 @@ public class Weapon : MonoBehaviour
                 _playedEcho = true;
             }
 
-            if (Input.GetButtonUp("Fire1") && Main.S.isEnableToShoot)
+            if (Input.GetButtonUp("Fire1") && Main.S.isEnableToShoot && !(weapon.GetType() == WeaponType.eSemiAutomatic && _bulletsShot < 4))
             {
                 weapon.SetFireRate(weapon.GetMaxFireRate());
-                if (weapon.GetType() != WeaponType.ePistol && !_playedEcho) StartCoroutine("PlayShotEcho");
+                if (weapon.GetType() != WeaponType.ePistol && !_playedEcho)
+                {
+                    StartCoroutine("PlayShotEcho");
+                }
                 _playedEcho = false;
             }
 
@@ -258,10 +266,10 @@ public class Weapon : MonoBehaviour
                 audioSource.volume = 0.5f;
             }
 
-            if (Input.GetButtonDown("E") && !isReloading)
+            if (Input.GetButtonDown("E") && !isReloading && !_isSemiShooting)
                 SwapWeapons(1);
 
-            if (Input.GetButtonDown("Q") && !isReloading)
+            if (Input.GetButtonDown("Q") && !isReloading && !_isSemiShooting)
                 SwapWeapons(-1);
         }
     }
@@ -362,5 +370,6 @@ public class Weapon : MonoBehaviour
 
         if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
+        
     }
 }
