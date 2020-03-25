@@ -217,6 +217,7 @@ public class Shop : MonoBehaviour
             if (Main.S.gold >= semi.GetBuyingPrice())
             {
                 audioSourceBuing.Play();
+                UnlockWeaponSwapUI();
                 Main.S.gold -= semi.GetBuyingPrice();
                 UI.S.gold.text = "Gold: " + Main.S.gold;
                 UI.S.semiUpgrade.text = "Cost: " + semi.GetMoneyForUpgrade() + "$";
@@ -243,6 +244,7 @@ public class Shop : MonoBehaviour
             if (Main.S.gold >= auto.GetBuyingPrice())
             {
                 audioSourceBuing.Play();
+                UnlockWeaponSwapUI();
                 Main.S.gold -= auto.GetBuyingPrice();
                 UI.S.gold.text = "Gold: " + Main.S.gold;
                 UI.S.autoUpgrade.text = "Cost: " + auto.GetMoneyForUpgrade() + "$";
@@ -299,5 +301,11 @@ public class Shop : MonoBehaviour
     {
         GameObject gameObject = GameObject.FindGameObjectWithTag("Weapon");
         weapon = gameObject.GetComponent<Weapon>();
+    }
+
+    private void UnlockWeaponSwapUI()
+    {
+        UI.S.weaponName.transform.GetChild(0).gameObject.SetActive(true);
+        UI.S.weaponName.transform.GetChild(1).gameObject.SetActive(true);
     }
 }

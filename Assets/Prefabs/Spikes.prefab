@@ -214,6 +214,7 @@ MonoBehaviour:
   health: 3
   damageEnemy: 10
   upgradePrice: 15
+  maxHP: 3
   maxLevel: 10
   takeDamage: 1
   damageUpgrade: 1
