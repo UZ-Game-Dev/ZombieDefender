@@ -32,6 +32,8 @@ public class Main : MonoBehaviour
     public IEnumerator shopCoroutine;
     public int waveCounter;
 
+    
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -47,6 +49,21 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
+        if (SaveSystem.isGameLoaded)
+        {
+            gold = SaveSystem.GetData().gold;
+            Player.S.SetPlayer(SaveSystem.GetData().health);
+            currentLevel = SaveSystem.GetData().currentLevel;
+
+           // _weapon = SaveSystem.GetData().weapon;
+            /*
+            Shop shopObject = Camera.main.GetComponent<Shop>();
+            DefensiveSpikes defensiveSpikes = shopObject.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>();
+            defensiveSpikes = SaveSystem.GetData().defSpikes;
+            DefensiveObject defensiveObject = shopObject.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>();
+            defensiveObject = SaveSystem.GetData().defObject;*/
+        }
+
         waveCounter = currentLevel + 1;
         shopCoroutine = EnableShop();
         LoadLevel();

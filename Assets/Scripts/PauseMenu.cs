@@ -62,6 +62,14 @@ public class PauseMenu : MonoBehaviour
         //
     }
 
+    public void ButtonSaveGame()
+    {
+        Shop shopObject = Camera.main.GetComponent<Shop>();
+        GameObject gameObject = GameObject.FindGameObjectWithTag("Weapon");
+        Weapon weapon = gameObject.GetComponent<Weapon>();
+        SaveSystem.SaveGame(Player.S.GetHP(), Main.S, shopObject, weapon);
+    }
+
     //dodanie przycisków menu zapytania o potwierdzenie czy wyjść z gry
     public void ButtonYes()
     {

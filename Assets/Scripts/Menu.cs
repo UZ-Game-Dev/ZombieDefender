@@ -13,6 +13,14 @@ public class Menu : MonoBehaviour
     //
     public void ButtonNewGame()
     {
+        SaveSystem.isGameLoaded = false;
+        SceneManager.LoadScene("_MainScene");
+    }
+
+    public void LoadGame()
+    {
+        SaveSystem.isGameLoaded = true;
+        SaveSystem.LoadGame();
         SceneManager.LoadScene("_MainScene");
     }
 

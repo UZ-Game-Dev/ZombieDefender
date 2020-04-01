@@ -24,7 +24,11 @@ public class Player : MonoBehaviour
         _maxHP = 100;
         _hp = 100;
     }
-
+    public void SetPlayer(int hp)
+    {
+        _maxHP = hp;
+        _hp = hp;
+    }
     public void Heal(int amount)
     {
         if (_hp + amount > _maxHP) _hp = _maxHP;
