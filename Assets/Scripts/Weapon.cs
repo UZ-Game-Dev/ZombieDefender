@@ -2,21 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic }
+using UnityEngine.Audio;
 
 public class Weapon : MonoBehaviour
 {
     public GameObject weaponModel;
     public Transform DrawTrace;
 
-    public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic }
+    public enum WeaponType { ePistol, eSemiAutomatic, eAutomatic, eSniperRifle }
     public List<WeaponDefinition> weapons = new List<WeaponDefinition>();
     public GameObject tracerBox;
-    private bool isReloading = false, _playedEcho = false, _isSemiShooting = false;
+    private bool isReloading = false, _playedEcho = false, _isSemiShooting = false, _isMouseUp=false;
     private WeaponDefinition weapon;
     private UI _ui;
-    private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0, _bulletsShot=0;
+    private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0, _sniperAmmo = 0, _bulletsShot = 0;
     public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased;
     public AudioSource audioSource;
 
@@ -53,12 +52,12 @@ public class Weapon : MonoBehaviour
         {
             level = 1;
             maxLevel = 10;
-            capacity = 15;
+            capacity = 10;
             currentAmmo = capacity;
-            ammo = 15;
-            reloadSpeed = 1.40f;
+            ammo = 10;
+            reloadSpeed = 1.60f;
             maxReloadSpeed = 1.00f;
-            damage = 4.0f;
+            damage = 6.0f;
             name = "Beretta";
             type = WeaponType.ePistol;
             maxFireRate = 1;
@@ -185,6 +184,51 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    public class SniperRifle : WeaponDefinition
+    {
+        public SniperRifle()
+        {
+            level = 1;
+            maxLevel = 10;
+            capacity = 1;
+            currentAmmo = capacity;
+            reloadSpeed = 1.50f;
+            maxReloadSpeed = 1.0f;
+            damage = 25f;
+            name = "Sniper Rifle";
+            type = WeaponType.eSniperRifle;
+            maxFireRate = 1;
+            fireRate = maxFireRate;
+            moneyForUpgrade = 30;
+            buyingPrice = 60;
+        }
+
+        public override void Upgrade()
+        {
+            if (Main.S.gold >= moneyForUpgrade && level < maxLevel)
+            {
+                Main.S.gold -= moneyForUpgrade;
+                UI.S.gold.text = "Gold: " + Main.S.gold;
+                damage = (float)Math.Round(damage + 2f, 2);
+                if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.05f, 2);
+                moneyForUpgrade += 8 + level;
+                level++;
+
+                if (level == maxLevel)
+                {
+                    UI.S.autoUpgrade.text = "MAX LEVEL REACHED";
+                    UI.S.autoReloadTime.text = "";
+                    UI.S.autoDamage.text = "";
+                }
+                else
+                {
+                    UI.S.autoUpgrade.text = "Cost: " + moneyForUpgrade + "$";
+                    UI.S.autoReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.02f, 2);
+                    UI.S.autoDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 4f, 2);
+                }
+            }
+        }
+    }
 
 
     //-------------------------------------------------
@@ -216,21 +260,23 @@ public class Weapon : MonoBehaviour
 
         if (!PauseMenu.S.GetIsPaused())
         {
-            if ((Input.GetButton("Fire1") || _isSemiShooting) && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
+            if (Input.GetButtonUp("Fire1")) _isMouseUp = true;
+
+            if ((Input.GetButton("Fire1") || _isSemiShooting || Input.GetButtonDown("Fire1")) && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
             {
+                if(Input.GetButton("Fire1"))_isMouseUp = false;
                 if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunShotEffect;
                 if (weapon.GetType() == WeaponType.eSemiAutomatic) { audioSource.clip = semiShotEffect; _bulletsShot++; _isSemiShooting = true; }
                 if (weapon.GetType() == WeaponType.eAutomatic) audioSource.clip = autoShotEffect;
-
+                _nextShot = 8;
                 Shoot();
-                if(_bulletsShot == 4)
+                if (_bulletsShot == 4)
                 {
-                    _bulletsShot = 0;
                     _isSemiShooting = false;
+                    _nextShot = 20;
                 }
                 if (weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
                 if (weapon.GetType() != WeaponType.ePistol) _lastShot++;
-                _nextShot = 8;
             }
 
             if ((Input.GetButton("Fire1") && !_playedEcho && !isReloading && weapon.GetType() != WeaponType.ePistol) && (weapon.GetCurrentAmmo() == 0 || (weapon.GetType() == WeaponType.eSemiAutomatic && weapon.GetFireRate() == 0)))
@@ -238,9 +284,10 @@ public class Weapon : MonoBehaviour
                 _playedEcho = true;
             }
 
-            if (Input.GetButtonUp("Fire1") && Main.S.isEnableToShoot && !(weapon.GetType() == WeaponType.eSemiAutomatic && _bulletsShot < 4))
+            if (Main.S.isEnableToShoot && !_isSemiShooting && _isMouseUp)
             {
                 weapon.SetFireRate(weapon.GetMaxFireRate());
+                _bulletsShot = 0;
                 if (weapon.GetType() != WeaponType.ePistol && !_playedEcho)
                 {
                     StartCoroutine("PlayShotEcho");
@@ -289,6 +336,8 @@ public class Weapon : MonoBehaviour
     public WeaponDefinition GetWeapon() { return weapon; }
     public int GetRifleAmmo() { return _rifleAmmo; }
     public void AddRifleAmmo(int a) { _rifleAmmo += a; }
+    public int GetSniperAmmo() { return _sniperAmmo; }
+    public void AddSniperAmmo(int a) { _sniperAmmo += a; }
 
     void SwapWeapons(int dir)
     {
@@ -370,6 +419,5 @@ public class Weapon : MonoBehaviour
 
         if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
-        
     }
 }

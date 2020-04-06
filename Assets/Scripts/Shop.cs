@@ -269,6 +269,32 @@ public class Shop : MonoBehaviour
         }
     }
 
+    public void BuySniperRifle()
+    {
+        Weapon.SniperRifle snip = (Weapon.SniperRifle)weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSniperRifle);
+
+        if (snip == null)
+        {
+            snip = new Weapon.SniperRifle();
+            if (Main.S.gold >= snip.GetBuyingPrice())
+            {
+                audioSourceBuing.Play();
+                Main.S.gold -= snip.GetBuyingPrice();
+                UI.S.gold.text = "Gold: " + Main.S.gold;
+                UI.S.autoUpgrade.text = "Cost: " + snip.GetMoneyForUpgrade() + "$";
+                UI.S.autoReloadTime.text = "Reload Spd.: " + snip.GetReloadSpeed() + " -> " + (snip.GetReloadSpeed() - 0.05);
+                UI.S.autoDamage.text = "Damage: " + snip.GetDamage() + " -> " + (snip.GetDamage() + 2f);
+                weapon.weapons.Add(snip);
+                weapon.AddSniperAmmo(10);
+            }
+        }
+        else
+        {
+            audioSourceBuing.Play();
+            weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).Upgrade();
+        }
+    }
+
     public void BuyStealFency()
     {
         Debug.Log("Kupuję kubuje płot stalowy");

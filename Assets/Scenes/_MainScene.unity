@@ -2585,6 +2585,12 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!23 &320621334 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1504981713932161579, guid: 3dd80b9ed12a49e48a0d21532792dfa0,
+    type: 3}
+  m_PrefabInstance: {fileID: 2093132026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &322491251
 GameObject:
   m_ObjectHideFlags: 0
@@ -13122,6 +13128,12 @@ Transform:
   m_Father: {fileID: 1866419560}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &833780591 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1504981713932161579, guid: 3dd80b9ed12a49e48a0d21532792dfa0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1977819002}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &834081512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14041,7 +14053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56711cd09389d9f4284ed7402425eb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 100
+  gold: 8
   levelArray:
   - maxEnemyCountOnLevel: 5
     waveDelay: 20
@@ -16562,7 +16574,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light: {fileID: 694202739}
+  light2: {fileID: 985530238}
   source: {fileID: 317500414}
+  source2: {fileID: 1328899334}
+  poswiata: {fileID: 320621334}
+  poswiata2: {fileID: 833780591}
 --- !u!1 &1270820391
 GameObject:
   m_ObjectHideFlags: 0
