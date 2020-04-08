@@ -49,6 +49,17 @@ public class SaveData
     public float AutoReloadSpeed;
     public float AutoDamage;
     public bool isAutoExist = false;
+    //Rifle
+    public int RifleCurrentAmmo;
+    public int RifleAmmo;
+    public int RifleCapacity;
+    public int RifleLevel;
+    public int RifleFireRate;
+    public int RifleMoneyForUpgrade;
+    public int RifleBuyingPrice;
+    public float RifleReloadSpeed;
+    public float RifleDamage;
+    public bool isRifleExist = false;
     //______DEFENSIVE________
     //Płot
     public int FencyCurrentLevel;
@@ -114,7 +125,22 @@ public class SaveData
             AutoDamage = _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetDamage();
             isAutoExist = true;
         }
-        
+
+        //Rifle
+        if (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle) != null)
+        {
+            RifleCurrentAmmo =       _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetCurrentAmmo();
+            RifleAmmo =              _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetAmmo();
+            RifleCapacity =          _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetCapacity();
+            RifleLevel =             _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetLevel();
+            RifleFireRate =          _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetFireRate();
+            RifleMoneyForUpgrade =   _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetMoneyForUpgrade();
+            RifleBuyingPrice =       _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetBuyingPrice();
+            RifleReloadSpeed =       _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetReloadSpeed();
+            RifleDamage =            _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetDamage();
+            isRifleExist = true;
+        }
+
         //______DEFENSIVE________
         //Płot
         FencyCurrentLevel = shop.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().currentLevel;

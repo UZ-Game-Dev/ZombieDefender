@@ -69,12 +69,7 @@ public class UI : MonoBehaviour
         else
         {
             autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
-            if (auto.GetLevel() == auto.GetMaxLevel())
-            {
-                UI.S.autoUpgrade.text = "MAX LEVEL REACHED";
-                UI.S.autoReloadTime.text = "";
-                UI.S.autoDamage.text = "";
-            }
+           
         }
 
         Weapon.SniperRifle snip = (Weapon.SniperRifle)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSniperRifle);
@@ -144,6 +139,12 @@ public class UI : MonoBehaviour
         {
             autoReloadTime.text = "Reload Spd.: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetReloadSpeed() + " -> " + (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetReloadSpeed() - 0.05f);
             autoDamage.text = "Damage: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetDamage() + " -> " + (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetDamage() + 2);
+            if (auto.GetLevel() == auto.GetMaxLevel())
+            {
+                UI.S.autoUpgrade.text = "MAX LEVEL REACHED";
+                UI.S.autoReloadTime.text = "";
+                UI.S.autoDamage.text = "";
+            }
         }
         else
         {
@@ -152,16 +153,24 @@ public class UI : MonoBehaviour
         }
 
         Weapon.SniperRifle sniper = (Weapon.SniperRifle)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSniperRifle);
-        if (autom != null)
+        if (sniper != null)
         {
             sniperReloadTime.text = "Reload Spd.: " + sniper.GetReloadSpeed() + " -> " + (sniper.GetReloadSpeed() - 0.05f);
             sniperDamage.text = "Damage: " + sniper.GetDamage() + " -> " + (sniper.GetDamage() + 4);
+            if (sniper.GetLevel() == sniper.GetMaxLevel())
+            {
+                UI.S.sniperUpgrade.text = "MAX LEVEL REACHED";
+                UI.S.sniperReloadTime.text = "";
+                UI.S.sniperDamage.text = "";
+            }
         }
         else
         {
             sniperReloadTime.text = "";
             sniperDamage.text = "";
         }
+
+            
     }
 
     public void SetAmmoTexts()

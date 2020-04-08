@@ -501,5 +501,20 @@ public class Weapon : MonoBehaviour
             auto.SetDamage(         SaveSystem.GetData().AutoDamage);
             this.weapons.Add(auto);
         }
+
+        if (SaveSystem.GetData().isRifleExist)
+        {
+            Weapon.SniperRifle rifle = new Weapon.SniperRifle();
+            rifle.SetCurrentAmmo(       SaveSystem.GetData().RifleCurrentAmmo);
+            rifle.SetAmmo(              SaveSystem.GetData().RifleAmmo);
+            rifle.SetCapacity(          SaveSystem.GetData().RifleCapacity);
+            rifle.SetLevel(             SaveSystem.GetData().RifleLevel);
+            rifle.SetFireRate(          SaveSystem.GetData().RifleFireRate);
+            rifle.SetMoneyForUpgrade(   SaveSystem.GetData().RifleMoneyForUpgrade);
+            rifle.SetBuyPrice(          SaveSystem.GetData().RifleBuyingPrice);
+            rifle.SetReloadSpeed(       SaveSystem.GetData().RifleReloadSpeed);
+            rifle.SetDamage(            SaveSystem.GetData().RifleDamage);
+            this.weapons.Add(rifle);
+        }
     }
 }

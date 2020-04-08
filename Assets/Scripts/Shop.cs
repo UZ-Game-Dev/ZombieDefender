@@ -166,7 +166,7 @@ public class Shop : MonoBehaviour
             Image image = gameObject.GetComponent<Image>();
             if(gameObject.name == "BuyAmmo")
             {
-                if (Main.S.gold >= amunationPrice && weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol)
+                if (Main.S.gold >= rifleAmmoPrice && weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol)
                     image.color = greenToBuy;
                 else
                     image.color = redToBuy;
@@ -253,6 +253,28 @@ public class Shop : MonoBehaviour
                 else
                     image.color = redToBuy;
                 if (spikesObject.maxLevel == spikesObject.currentLevel)
+                    image.color = yellowToBuy;
+            }
+            else if (gameObject.name == "BuySniperRifle")
+            {
+                Weapon.SniperRifle rifle = (Weapon.SniperRifle)weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSniperRifle);
+                if (rifle == null)
+                {
+                    rifle = new Weapon.SniperRifle();
+                    if (Main.S.gold >= rifle.GetBuyingPrice())
+                        image.color = greenToBuy;
+                    else
+                        image.color = redToBuy;
+                }
+                else
+                {
+                    if (Main.S.gold >= rifle.GetMoneyForUpgrade())
+                        image.color = greenToBuy;
+                    else
+                        image.color = redToBuy;
+                }
+
+                if (rifle.GetMaxLevel() == rifle.GetLevel())
                     image.color = yellowToBuy;
             }
         }
@@ -408,7 +430,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            audioSourceBuing.Play();
+            if (snip.GetMaxLevel() > snip.GetLevel()) audioSourceBuing.Play();
             weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).Upgrade();
         }
     }
