@@ -16,7 +16,7 @@ public class Weapon : MonoBehaviour
     private WeaponDefinition weapon;
     private UI _ui;
     private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0, _sniperAmmo = 0, _bulletsShot = 0;
-    public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased;
+    public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased, emptyGunEffect;
     public AudioSource audioSource;
 
     //--------------------------------------------------
@@ -192,9 +192,9 @@ public class Weapon : MonoBehaviour
             maxLevel = 10;
             capacity = 1;
             currentAmmo = capacity;
-            reloadSpeed = 1.50f;
-            maxReloadSpeed = 1.0f;
-            damage = 25f;
+            reloadSpeed = 2.00f;
+            maxReloadSpeed = 1.20f;
+            damage = 55f;
             name = "Sniper Rifle";
             type = WeaponType.eSniperRifle;
             maxFireRate = 1;
@@ -209,22 +209,22 @@ public class Weapon : MonoBehaviour
             {
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
-                damage = (float)Math.Round(damage + 2f, 2);
+                damage = (float)Math.Round(damage + 4f, 2);
                 if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.05f, 2);
                 moneyForUpgrade += 8 + level;
                 level++;
 
                 if (level == maxLevel)
                 {
-                    UI.S.autoUpgrade.text = "MAX LEVEL REACHED";
-                    UI.S.autoReloadTime.text = "";
-                    UI.S.autoDamage.text = "";
+                    UI.S.sniperUpgrade.text = "MAX LEVEL REACHED";
+                    UI.S.sniperReloadTime.text = "";
+                    UI.S.sniperDamage.text = "";
                 }
                 else
                 {
-                    UI.S.autoUpgrade.text = "Cost: " + moneyForUpgrade + "$";
-                    UI.S.autoReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.02f, 2);
-                    UI.S.autoDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 4f, 2);
+                    UI.S.sniperUpgrade.text = "Cost: " + moneyForUpgrade + "$";
+                    UI.S.sniperReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.02f, 2);
+                    UI.S.sniperDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 4f, 2);
                 }
             }
         }
@@ -262,12 +262,15 @@ public class Weapon : MonoBehaviour
         {
             if (Input.GetButtonUp("Fire1")) _isMouseUp = true;
 
+            if ((Input.GetButtonUp("Fire1") || weapon.GetCurrentAmmo() == 0) && audioSource.clip == autoShotEffect) audioSource.Stop();
+
             if ((Input.GetButton("Fire1") || _isSemiShooting || Input.GetButtonDown("Fire1")) && weapon.GetCurrentAmmo() > 0 && !isReloading && weapon.GetFireRate() > 0 && _nextShot == 0 && Main.S.isEnableToShoot)
             {
                 if(Input.GetButton("Fire1"))_isMouseUp = false;
                 if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunShotEffect;
                 if (weapon.GetType() == WeaponType.eSemiAutomatic) { audioSource.clip = semiShotEffect; _bulletsShot++; _isSemiShooting = true; }
                 if (weapon.GetType() == WeaponType.eAutomatic) audioSource.clip = autoShotEffect;
+                if (weapon.GetType() == WeaponType.eSniperRifle) audioSource.clip = gunShotEffect;
                 _nextShot = 8;
                 Shoot();
                 if (_bulletsShot == 4)
@@ -277,6 +280,12 @@ public class Weapon : MonoBehaviour
                 }
                 if (weapon.GetType() != WeaponType.eAutomatic) weapon.SetFireRate(weapon.GetFireRate() - 1);
                 if (weapon.GetType() != WeaponType.ePistol) _lastShot++;
+            }
+            else if(weapon.GetCurrentAmmo() == 0 && Input.GetButtonDown("Fire1") && Main.S.isEnableToShoot && !_playedEcho)
+            {
+                audioSource.Stop();
+                audioSource.clip = emptyGunEffect;
+                audioSource.Play();
             }
 
             if ((Input.GetButton("Fire1") && !_playedEcho && !isReloading && weapon.GetType() != WeaponType.ePistol) && (weapon.GetCurrentAmmo() == 0 || (weapon.GetType() == WeaponType.eSemiAutomatic && weapon.GetFireRate() == 0)))
@@ -295,23 +304,23 @@ public class Weapon : MonoBehaviour
                 _playedEcho = false;
             }
 
-            if (Input.GetButtonDown("R") && !isReloading && ((weapon.GetType() != WeaponType.ePistol && _rifleAmmo != 0) || weapon.GetType() == WeaponType.ePistol) && weapon.GetCurrentAmmo() != weapon.GetCapacity())
+            if (Input.GetButtonDown("R") && !isReloading && ((weapon.GetType() != WeaponType.ePistol && _rifleAmmo != 0) || weapon.GetType() == WeaponType.ePistol || (weapon.GetType() == WeaponType.eSniperRifle && _sniperAmmo != 0)) && weapon.GetCurrentAmmo() != weapon.GetCapacity())
             {
-                if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunReloadEffect;
+                if (weapon.GetType() == WeaponType.ePistol || weapon.GetType() == WeaponType.eSniperRifle) audioSource.clip = gunReloadEffect;
                 else audioSource.clip = semiReloadEffect;
                 audioSource.Play();
                 StartCoroutine("Reload");
                 isReloading = true;
             }
 
-            if (!Main.S.isEnableToShoot || (weapon.GetCurrentAmmo() <= 0 && !isReloading && weapon.GetType() != WeaponType.ePistol))
+            /*if (!Main.S.isEnableToShoot || (weapon.GetCurrentAmmo() <= 0 && !isReloading && weapon.GetType() != WeaponType.ePistol && weapon.GetType() != WeaponType.eSniperRifle))
             {
                 audioSource.Stop();
                 audioSource.volume = 1;
                 audioSource.clip = triggerReleased;
                 audioSource.Play();
                 audioSource.volume = 0.5f;
-            }
+            }*/
 
             if (Input.GetButtonDown("E") && !isReloading && !_isSemiShooting)
                 SwapWeapons(1);
@@ -322,15 +331,16 @@ public class Weapon : MonoBehaviour
     }
 
     private IEnumerator PlayShotEcho()
-    {
-        if (_lastShot < 10 && weapon.GetType() == WeaponType.eAutomatic) yield return new WaitForSeconds(0.16f);
+    {/*
+        if (false) (_lastShot < 10 && weapon.GetType() == WeaponType.eAutomatic) yield return new WaitForSeconds(0.16f);
         else if (_lastShot < 10 && weapon.GetType() == WeaponType.eSemiAutomatic) yield return new WaitForSeconds(0.10f);
         _lastShot = 0;
 
         audioSource.Stop();
         audioSource.volume = 1;
         audioSource.clip = triggerReleased;
-        audioSource.Play();
+        audioSource.Play();*/
+        yield return new WaitForSeconds(0f);
     }
 
     public WeaponDefinition GetWeapon() { return weapon; }
@@ -352,7 +362,8 @@ public class Weapon : MonoBehaviour
         else weapon = weapons[index + dir];
 
         UI.S.weaponName.text = weapon.GetName();
-        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
+        if (weapon.GetType() != Weapon.WeaponType.ePistol && weapon.GetType() != Weapon.WeaponType.eSniperRifle) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
+        if (weapon.GetType() == Weapon.WeaponType.eSniperRifle) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _sniperAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
 
         if (!Main.S.isEnableToShoot) UI.S.SetAmmoTexts();
@@ -363,7 +374,7 @@ public class Weapon : MonoBehaviour
         yield return new WaitForSeconds(weapon.GetReloadSpeed());
         int amount = weapon.GetCapacity() - weapon.GetCurrentAmmo();
 
-        if (weapon.GetType() != WeaponType.ePistol)
+        if (weapon.GetType() == WeaponType.eSemiAutomatic || weapon.GetType() == WeaponType.eAutomatic)
         {
             if (_rifleAmmo >= amount)
             {
@@ -376,11 +387,27 @@ public class Weapon : MonoBehaviour
                 _rifleAmmo = 0;
             }
         }
+        else if (weapon.GetType() == WeaponType.eSniperRifle) 
+        {
+            if (_sniperAmmo >= amount)
+            {
+                weapon.SetCurrentAmmo(weapon.GetCapacity());
+                _sniperAmmo -= amount;
+            }
+            else
+            {
+                weapon.SetCurrentAmmo(weapon.GetCurrentAmmo() + _sniperAmmo);
+                _sniperAmmo = 0;
+            }
+        }
         else weapon.SetCurrentAmmo(weapon.GetCapacity());
 
         audioSource.clip = gunShotEffect;
 
-        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
+        if (weapon.GetType() == WeaponType.eSemiAutomatic || weapon.GetType() == WeaponType.eAutomatic)
+            UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
+        else if(weapon.GetType() == WeaponType.eSniperRifle)
+            UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _sniperAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
     }
 
@@ -417,7 +444,8 @@ public class Weapon : MonoBehaviour
         Transform _traceBox = Instantiate(DrawTrace, weaponModel.transform.position, weaponModel.transform.rotation);
         _traceBox.GetComponent<Trace>().waypoint = weaponModel.transform.position + ray.direction * shotDistance;
 
-        if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
+        if (weapon.GetType() != WeaponType.ePistol && weapon.GetType() != WeaponType.eSniperRifle) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
+        else if (weapon.GetType() == WeaponType.eSniperRifle) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _sniperAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
     }
 }

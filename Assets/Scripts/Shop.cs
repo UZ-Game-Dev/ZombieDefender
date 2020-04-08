@@ -20,8 +20,10 @@ public class Shop : MonoBehaviour
     public TextMeshProUGUI timerToNextWave;
     public int maxGoldForSkip = 20;
     public DefensiveObjects[] DefensiveObjectsArray; // [0] -> KOLCE   [1] -> PŁOT
-    public int amunationPrice = 5;
-    public int amunationPiecesToBuy = 50;
+    public int rifleAmmoPrice = 5;
+    public int sniperAmmoPrice = 5;
+    public int rifleAmmoPiecesToBuy = 50;
+    public int sniperAmmoPiecesToBuy = 10;
     public GameObject _infoText; //← obiekt z napisami accept/cancel
 
     [Header("Definiowane dynamicznie")]
@@ -177,16 +179,25 @@ public class Shop : MonoBehaviour
 
     public void BuyAmmunation()
     {
-        if (Main.S.gold >= amunationPrice && weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol)
+        if (Main.S.gold >= rifleAmmoPrice && weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol && weapon.GetWeapon().GetType() != Weapon.WeaponType.eSniperRifle)
         {
-            
             Debug.Log("KUPUJE AMMO");
             audioSourceBuing.Play();
-            Main.S.gold -= amunationPrice;
+            Main.S.gold -= rifleAmmoPrice;
             UI.S.gold.text = "Gold: " + Main.S.gold;
             if (weapon == null) FindWeaponObject();
-            weapon.AddRifleAmmo(amunationPiecesToBuy);
+            weapon.AddRifleAmmo(rifleAmmoPiecesToBuy);
             UI.S.ammo.text = weapon.GetWeapon().GetCurrentAmmo() + "/" + weapon.GetWeapon().GetCapacity() + "  [" + weapon.GetRifleAmmo() + "]";
+        }
+        else if (weapon.GetWeapon().GetType() == Weapon.WeaponType.eSniperRifle && Main.S.gold >= sniperAmmoPrice)
+        {
+            Debug.Log("KUPUJE AMMO");
+            audioSourceBuing.Play();
+            Main.S.gold -= sniperAmmoPrice;
+            UI.S.gold.text = "Gold: " + Main.S.gold;
+            if (weapon == null) FindWeaponObject();
+            weapon.AddSniperAmmo(sniperAmmoPiecesToBuy);
+            UI.S.ammo.text = weapon.GetWeapon().GetCurrentAmmo() + "/" + weapon.GetWeapon().GetCapacity() + "  [" + weapon.GetSniperAmmo() + "]";
         }
     }
 
@@ -281,9 +292,9 @@ public class Shop : MonoBehaviour
                 audioSourceBuing.Play();
                 Main.S.gold -= snip.GetBuyingPrice();
                 UI.S.gold.text = "Gold: " + Main.S.gold;
-                UI.S.autoUpgrade.text = "Cost: " + snip.GetMoneyForUpgrade() + "$";
-                UI.S.autoReloadTime.text = "Reload Spd.: " + snip.GetReloadSpeed() + " -> " + (snip.GetReloadSpeed() - 0.05);
-                UI.S.autoDamage.text = "Damage: " + snip.GetDamage() + " -> " + (snip.GetDamage() + 2f);
+                UI.S.sniperUpgrade.text = "Cost: " + snip.GetMoneyForUpgrade() + "$";
+                UI.S.sniperReloadTime.text = "Reload Spd.: " + snip.GetReloadSpeed() + " -> " + (snip.GetReloadSpeed() - 0.05);
+                UI.S.sniperDamage.text = "Damage: " + snip.GetDamage() + " -> " + (snip.GetDamage() + 2f);
                 weapon.weapons.Add(snip);
                 weapon.AddSniperAmmo(10);
             }

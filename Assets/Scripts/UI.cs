@@ -7,9 +7,9 @@ using TMPro;
 public class UI : MonoBehaviour
 {
     public Slider hp, reloadingProgress;
-    public TextMeshProUGUI ammo, gold, weaponName, wave, pistolUpgrade, semiUpgrade, autoUpgrade, hpAmount, hpUpgrade, baricadeUpgrade, baricadeCost,
+    public TextMeshProUGUI ammo, gold, weaponName, wave, pistolUpgrade, semiUpgrade, autoUpgrade, sniperUpgrade, hpAmount, hpUpgrade, baricadeUpgrade, baricadeCost,
         spikeUpgrade, spikeCost;
-    public TextMeshProUGUI gunReloadTime, gunDamage, semiReloadTime, semiDamage, autoReloadTime, autoDamage;
+    public TextMeshProUGUI gunReloadTime, gunDamage, semiReloadTime, semiDamage, autoReloadTime, autoDamage, sniperReloadTime, sniperDamage;
         
     public Button buyAmmoButton;
     public Image hpColor;
@@ -55,6 +55,14 @@ public class UI : MonoBehaviour
         }
         else autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
 
+        Weapon.SniperRifle snip = (Weapon.SniperRifle)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSniperRifle);
+        if (snip == null)
+        {
+            snip = new Weapon.SniperRifle();
+            sniperUpgrade.text = "Cost: " + snip.GetBuyingPrice() + "$\n \n ";
+        }
+        else autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
+
         //Sklep - Panel HP
         if (_player.GetHpLevel() == _player.GetMaxHpLevel())
         {
@@ -74,14 +82,14 @@ public class UI : MonoBehaviour
         //Sklep - Panel Ammo
         if (_weapon.GetWeapon().GetType() == Weapon.WeaponType.ePistol)
         {
-            buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().amunationPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().amunationPrice + "$\n ";
+            buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
             buyAmmoButton.interactable = false;
             buyAmmoButton.GetComponent<Image>().enabled = false;
             buyAmmoText.text += "You can not buy ammunation for " + _weapon.GetWeapon().GetName();
         }
         else
         {
-            buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().amunationPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().amunationPrice + "$\n ";
+            buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
             buyAmmoButton.interactable = true;
             buyAmmoButton.GetComponent<Image>().enabled = true;
             buyAmmoText.text += "\n \n ";
@@ -113,20 +121,39 @@ public class UI : MonoBehaviour
             autoReloadTime.text = "";
             autoDamage.text = "";
         }
+
+        Weapon.SniperRifle sniper = (Weapon.SniperRifle)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSniperRifle);
+        if (autom != null)
+        {
+            sniperReloadTime.text = "Reload Spd.: " + sniper.GetReloadSpeed() + " -> " + (sniper.GetReloadSpeed() - 0.05f);
+            sniperDamage.text = "Damage: " + sniper.GetDamage() + " -> " + (sniper.GetDamage() + 4);
+        }
+        else
+        {
+            sniperReloadTime.text = "";
+            sniperDamage.text = "";
+        }
     }
 
     public void SetAmmoTexts()
     {
         if (_weapon.GetWeapon().GetType() == Weapon.WeaponType.ePistol)
         {
-            UI.S.buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().amunationPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().amunationPrice + "$\n ";
+            UI.S.buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
             UI.S.buyAmmoButton.interactable = false;
             UI.S.buyAmmoButton.GetComponent<Image>().enabled = false;
             UI.S.buyAmmoText.text += "You can not buy ammunation for " + _weapon.GetWeapon().GetName();
         }
+        else if(_weapon.GetWeapon().GetType() == Weapon.WeaponType.eSniperRifle)
+        {
+            UI.S.buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().sniperAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().sniperAmmoPrice + "$\n ";
+            UI.S.buyAmmoButton.interactable = true;
+            UI.S.buyAmmoButton.GetComponent<Image>().enabled = true;
+            UI.S.buyAmmoText.text += "\n \n ";
+        }
         else
         {
-            UI.S.buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().amunationPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().amunationPrice + "$\n ";
+            UI.S.buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
             UI.S.buyAmmoButton.interactable = true;
             UI.S.buyAmmoButton.GetComponent<Image>().enabled = true;
             UI.S.buyAmmoText.text += "\n \n ";

@@ -60,7 +60,7 @@ public class DefensiveSpikes : MonoBehaviour
             GetComponent<Animator>().SetBool("Attack", false);
             _collider.transform.root.GetComponent<Enemy>().TakeDamage(damageEnemy);
         }
-
+        SoundsMenager.S.PlaySpikesAttack();
         health -= takeDamage;
         _healthUI.updateHP(health, maxHP);
 

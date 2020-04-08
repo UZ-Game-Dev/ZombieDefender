@@ -8,6 +8,7 @@ public class SoundsMenager : MonoBehaviour
     public AudioClip clickButton;
     public AudioClip zombieDeath;
     public AudioClip itemPickedup;
+    public AudioClip spikesAttack; 
 
     AudioSource audioSource;
     // Start is called before the first frame update
@@ -45,6 +46,13 @@ public class SoundsMenager : MonoBehaviour
     {
         audioSource.volume = 1f;
         audioSource.clip = itemPickedup;
+        Play();
+    }
+
+    public void PlaySpikesAttack()
+    {
+        audioSource.volume = 1f;
+        audioSource.clip = spikesAttack;
         Play();
     }
 
