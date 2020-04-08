@@ -49,6 +49,7 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
+        shopCoroutine = EnableShop();
         if (SaveSystem.isGameLoaded)
         {
             //Player
@@ -71,10 +72,11 @@ public class Main : MonoBehaviour
             shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().upgradePrice = SaveSystem.GetData().SpikeUpgradePrice;
             shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().takeDamage = SaveSystem.GetData().SpikeTakeDamage;
         }
-
+        else
+        {
+            LoadLevel();
+        }
         waveCounter = currentLevel + 1;
-        shopCoroutine = EnableShop();
-        LoadLevel();
     }
 
     // Update is called once per frame
@@ -85,6 +87,7 @@ public class Main : MonoBehaviour
 
         if (countEnemy <= 0 && !isWaitingForNextWave)
         {
+            SaveGame();
             isWaitingForNextWave = true;
             StartCoroutine(AreThereItems());
         }
@@ -173,5 +176,13 @@ public class Main : MonoBehaviour
 
         countEnemy = levelArray[currentLevel].maxEnemyCountOnLevel;
         Spawner.S.SpawnStart(levelArray[currentLevel].maxEnemyCountOnLevel);
+    }
+
+    private void SaveGame()
+    {
+        Shop shopObject = Camera.main.GetComponent<Shop>();
+        GameObject gameObject = GameObject.FindGameObjectWithTag("Weapon");
+        Weapon weapon = gameObject.GetComponent<Weapon>();
+        SaveSystem.SaveGame(Player.S.GetHP(), Main.S, shopObject, weapon);
     }
 }

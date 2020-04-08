@@ -12,6 +12,7 @@ TagManager:
   - UI
   - DefensiveObject
   - DefensiveSpikes
+  - ShopPanelSection
   layers:
   - Default
   - TransparentFX
