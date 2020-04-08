@@ -32,6 +32,8 @@ public class Main : MonoBehaviour
     public IEnumerator shopCoroutine;
     public int waveCounter;
 
+    
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -47,9 +49,34 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
-        waveCounter = currentLevel + 1;
         shopCoroutine = EnableShop();
-        LoadLevel();
+        if (SaveSystem.isGameLoaded)
+        {
+            //Player
+            Player.S.OnLoadGame();
+            //Global
+            gold = SaveSystem.GetData().gold; 
+            currentLevel = SaveSystem.GetData().currentLevel;
+            //Weapons
+            _weapon.OnLoadLevel();
+
+            //Defensive Objects
+            Shop shop = this.GetComponent<Shop>();
+            shop.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().currentLevel = SaveSystem.GetData().FencyCurrentLevel;
+            shop.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().health = SaveSystem.GetData().FencyHealth;
+            shop.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().upgradePrice = SaveSystem.GetData().FencyUpgradePrice;
+
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().currentLevel = SaveSystem.GetData().SpikeCurrentLevel;
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().health = SaveSystem.GetData().SpikeHealth;
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().damageEnemy = SaveSystem.GetData().SpikeDamageEnemy;
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().upgradePrice = SaveSystem.GetData().SpikeUpgradePrice;
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().takeDamage = SaveSystem.GetData().SpikeTakeDamage;
+        }
+        else
+        {
+            LoadLevel();
+        }
+        waveCounter = currentLevel + 1;
     }
 
     // Update is called once per frame
@@ -60,6 +87,7 @@ public class Main : MonoBehaviour
 
         if (countEnemy <= 0 && !isWaitingForNextWave)
         {
+            SaveGame();
             isWaitingForNextWave = true;
             StartCoroutine(AreThereItems());
         }
@@ -148,5 +176,13 @@ public class Main : MonoBehaviour
 
         countEnemy = levelArray[currentLevel].maxEnemyCountOnLevel;
         Spawner.S.SpawnStart(levelArray[currentLevel].maxEnemyCountOnLevel);
+    }
+
+    private void SaveGame()
+    {
+        Shop shopObject = Camera.main.GetComponent<Shop>();
+        GameObject gameObject = GameObject.FindGameObjectWithTag("Weapon");
+        Weapon weapon = gameObject.GetComponent<Weapon>();
+        SaveSystem.SaveGame(Player.S.GetHP(), Main.S, shopObject, weapon);
     }
 }

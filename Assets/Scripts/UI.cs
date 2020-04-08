@@ -30,14 +30,18 @@ public class UI : MonoBehaviour
 
         //TEXTS
 
-        if(_weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol) ammo.text = _weapon.GetWeapon().GetCurrentAmmo() + "/" + _weapon.GetWeapon().GetCapacity() + "  [" + _weapon.GetRifleAmmo() + "]";
-        else ammo.text = _weapon.GetWeapon().GetCurrentAmmo() + "/" + _weapon.GetWeapon().GetCapacity();
+        if(_weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol) 
+            ammo.text = _weapon.GetWeapon().GetCurrentAmmo() + "/" + _weapon.GetWeapon().GetCapacity() + "  [" + _weapon.GetRifleAmmo() + "]";
+        else 
+            ammo.text = _weapon.GetWeapon().GetCurrentAmmo() + "/" + _weapon.GetWeapon().GetCapacity();
         weaponName.text = _weapon.GetWeapon().GetName();
+       
         gold.text = "Gold: " + Main.S.gold;
         wave.text = "Wave: " + (int)(Main.S.waveCounter);
         hpAmount.text = _player.GetHP().ToString();
 
-        pistolUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetMoneyForUpgrade() + "$";
+        Weapon.Pistol pistol = (Weapon.Pistol)_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol);
+        pistolUpgrade.text = "Cost: " + pistol.GetMoneyForUpgrade() + "$";
 
         Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
         if (semi == null)
@@ -45,7 +49,16 @@ public class UI : MonoBehaviour
             semi = new Weapon.SemiAutomatic();
             semiUpgrade.text = "Cost: " + semi.GetBuyingPrice() + "$\n \n ";
         }
-        else semiUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).GetMoneyForUpgrade() + "$";
+        else
+        {
+            semiUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic).GetMoneyForUpgrade() + "$";
+            if (semi.GetLevel() == semi.GetMaxLevel())
+            {
+                UI.S.semiUpgrade.text = "MAX LEVEL REACHED";
+                UI.S.semiReloadTime.text = "";
+                UI.S.semiDamage.text = "";
+            }
+        }
 
         Weapon.Automatic auto = (Weapon.Automatic)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eAutomatic);
         if (auto == null)
@@ -53,7 +66,16 @@ public class UI : MonoBehaviour
             auto = new Weapon.Automatic();
             autoUpgrade.text = "Cost: " + auto.GetBuyingPrice() + "$\n \n ";
         }
-        else autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
+        else
+        {
+            autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
+            if (auto.GetLevel() == auto.GetMaxLevel())
+            {
+                UI.S.autoUpgrade.text = "MAX LEVEL REACHED";
+                UI.S.autoReloadTime.text = "";
+                UI.S.autoDamage.text = "";
+            }
+        }
 
         Weapon.SniperRifle snip = (Weapon.SniperRifle)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSniperRifle);
         if (snip == null)
@@ -97,6 +119,13 @@ public class UI : MonoBehaviour
 
         gunReloadTime.text = "Reload Spd.: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetReloadSpeed() + " -> " + (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetReloadSpeed() - 0.05f);
         gunDamage.text = "Damage: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetDamage() + " -> " + (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).GetDamage() + 1);
+        if (pistol.GetLevel() == pistol.GetMaxLevel())
+        {
+            UI.S.pistolUpgrade.text = "MAX LEVEL REACHED";
+            UI.S.gunReloadTime.text = "";
+            UI.S.gunDamage.text = "";
+        }
+
 
         Weapon.SemiAutomatic semic = (Weapon.SemiAutomatic)_weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
         if (semic != null)

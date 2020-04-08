@@ -24,7 +24,11 @@ public class Player : MonoBehaviour
         _maxHP = 100;
         _hp = 100;
     }
-
+    public void SetPlayer(int hp)
+    {
+        _maxHP = hp;
+        _hp = hp;
+    }
     public void Heal(int amount)
     {
         if (_hp + amount > _maxHP) _hp = _maxHP;
@@ -105,5 +109,20 @@ public class Player : MonoBehaviour
     public int GetMaxHpLevel()
     {
         return _maxHpLevel;
+    }
+
+    public int GetCost()
+    {
+        return _cost;
+    }
+
+    public void OnLoadGame()
+    {
+        _hp = SaveSystem.GetData().health;
+        _maxHP = SaveSystem.GetData().maxHP;
+        _hpLevel = SaveSystem.GetData().hpLevel;
+        _maxHpLevel = SaveSystem.GetData().maxHpLevel;
+        _hpBonusPerLevel = SaveSystem.GetData().hpBonusPerLevel;
+        _cost = SaveSystem.GetData().cost;
     }
 }

@@ -25,6 +25,9 @@ public class Shop : MonoBehaviour
     public int rifleAmmoPiecesToBuy = 50;
     public int sniperAmmoPiecesToBuy = 10;
     public GameObject _infoText; //← obiekt z napisami accept/cancel
+    public Color greenToBuy;
+    public Color redToBuy;
+    public Color yellowToBuy;
 
     [Header("Definiowane dynamicznie")]
     public bool isActive = false;
@@ -34,25 +37,26 @@ public class Shop : MonoBehaviour
     private GameObject _defensiveObjectGhost;
     private GameObject _defensiveObject;
     private int _defensiveObjectsNumber;
-    private Button[] shopButtonsArray;
+    private List<GameObject> shopPanelsArray = new List<GameObject>();
     private AudioSource audioSourceBuing;
 
     private void Start()
     {
-        DefensiveSpikes spikesObject = DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>(); //KOLCE
-        spikesObject.Initialize();
-        DefensiveObject baricadeObject = DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>(); //PŁOT
-        baricadeObject.Initialize();
-        FindWeaponObject();
-        shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
+        LoadDefensiveObjectsStatus();
 
-        //BARRICADE
-        UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP + " -> " + (baricadeObject.maxHP + baricadeObject.bonusHealtOnLevel);
-        UI.S.baricadeCost.text = "Upgrade: " + baricadeObject.upgradePrice + "$";
-        //SPIKES 
-        UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + " -> " + (spikesObject.damageEnemy + spikesObject.damageUpgrade) + "\n" +
-                "Endurance: " + spikesObject.health + " -> " + (spikesObject.health + spikesObject.healthUpgrade);
-        UI.S.spikeCost.text = "Upgrade: " + spikesObject.upgradePrice + "$";
+        FindWeaponObject();
+        Transform parent = Main.S.shopPanel.transform;
+        foreach(Transform obj in parent)
+        {
+            if(obj.tag == "ShopPanelSection")
+            {
+                shopPanelsArray.Add(obj.gameObject);
+            }
+        }
+
+        //Czy gracz posiada juz broń?
+        if (weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic) != null || weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic) != null)
+            this.UnlockWeaponSwapUI();
 
         audioSourceBuing = shopPanel.GetComponent<AudioSource>();
     }
@@ -143,6 +147,8 @@ public class Shop : MonoBehaviour
 
         if (isActive)
         {
+            UpdateButtonsStatus();
+
             if (_isisMovingDefensiveObjects)
                 ResetInfoDefensiveObject();
 
@@ -151,6 +157,104 @@ public class Shop : MonoBehaviour
 
             if (_timer < 0)
                 isActive = false;
+        }
+    }
+    private void UpdateButtonsStatus()
+    {
+        foreach(GameObject gameObject in shopPanelsArray)
+        {
+            Image image = gameObject.GetComponent<Image>();
+            if(gameObject.name == "BuyAmmo")
+            {
+                if (Main.S.gold >= amunationPrice && weapon.GetWeapon().GetType() != Weapon.WeaponType.ePistol)
+                    image.color = greenToBuy;
+                else
+                    image.color = redToBuy;
+
+            }
+            else if (gameObject.name == "BuyHealth")
+            {
+                if(Main.S.gold >= Player.S.GetHpUpgradeCost())
+                    image.color = greenToBuy;
+                else
+                    image.color = redToBuy;
+                if (Player.S.GetMaxHpLevel() == Player.S.GetHpLevel())
+                    image.color = yellowToBuy;
+            }
+            else if(gameObject.name == "BuyGun")
+            {
+                Weapon.Pistol pistol = (Weapon.Pistol)weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.ePistol);
+                if (Main.S.gold >= pistol.GetMoneyForUpgrade())
+                    image.color = greenToBuy;
+                else
+                    image.color = redToBuy;
+                if (pistol.GetMaxLevel() == pistol.GetLevel())
+                    image.color = yellowToBuy;
+            }
+            else if(gameObject.name == "BuySemiAutomaticGun")
+            {
+                Weapon.SemiAutomatic semi = (Weapon.SemiAutomatic)weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eSemiAutomatic);
+                if (semi == null)
+                {
+                    semi = new Weapon.SemiAutomatic();
+                    if (Main.S.gold >= semi.GetBuyingPrice())
+                        image.color = greenToBuy;
+                    else
+                        image.color = redToBuy;
+                } 
+                else
+                {
+                    if (Main.S.gold >= semi.GetMoneyForUpgrade())
+                        image.color = greenToBuy;
+                    else
+                        image.color = redToBuy;
+                }
+                
+                if (semi.GetMaxLevel() == semi.GetLevel())
+                    image.color = yellowToBuy;
+            }
+            else if(gameObject.name == "BuyAutomaticGun")
+            {
+                Weapon.Automatic auto = (Weapon.Automatic)weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.eAutomatic);
+                if (auto == null)
+                {
+                    auto = new Weapon.Automatic();
+                    if (Main.S.gold >= auto.GetBuyingPrice())
+                        image.color = greenToBuy;
+                    else
+                        image.color = redToBuy;
+                }
+                else
+                {
+                    if (Main.S.gold >= auto.GetMoneyForUpgrade())
+                        image.color = greenToBuy;
+                    else
+                        image.color = redToBuy;
+                }
+                
+                if (auto.GetMaxLevel() == auto.GetLevel())
+                    image.color = yellowToBuy;
+            }
+            else if(gameObject.name == "BuyFencyUpgrade")
+            {                
+                DefensiveObject baricadeObject = DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>(); //PŁOT
+                if (Main.S.gold >= baricadeObject.upgradePrice)
+                    image.color = greenToBuy;
+                else
+                    image.color = redToBuy;
+                if (baricadeObject.maxLevel == baricadeObject.currentLevel)
+                    image.color = yellowToBuy;
+            }
+            else if(gameObject.name == "BuySpikeUpgrade")
+            {
+                DefensiveSpikes spikesObject = DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>(); //KOLCE
+                if (Main.S.gold >= spikesObject.upgradePrice)
+                    image.color = greenToBuy;
+                else
+                    image.color = redToBuy;
+                if (spikesObject.maxLevel == spikesObject.currentLevel)
+                    image.color = yellowToBuy;
+            }
         }
     }
 
@@ -225,7 +329,8 @@ public class Shop : MonoBehaviour
     public void BuyPistol()
     {
         weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.ePistol).Upgrade();
-        audioSourceBuing.Play();
+        if (weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.ePistol).GetMaxLevel() > weapon.weapons.Find(w => w.GetType() == Weapon.WeaponType.ePistol).GetLevel())
+            audioSourceBuing.Play();
     }
 
     public void BuySemiAutomaticGun()
@@ -250,7 +355,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            audioSourceBuing.Play();
+            if(semi.GetMaxLevel() > semi.GetLevel()) audioSourceBuing.Play();
             weapon.weapons.Find(gun => gun.GetType()==Weapon.WeaponType.eSemiAutomatic).Upgrade();
         }
     }
@@ -277,7 +382,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            audioSourceBuing.Play();
+            if (auto.GetMaxLevel() > auto.GetLevel()) audioSourceBuing.Play();
             weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).Upgrade();
         }
     }
@@ -354,5 +459,25 @@ public class Shop : MonoBehaviour
     {
         UI.S.weaponName.transform.GetChild(0).gameObject.SetActive(true);
         UI.S.weaponName.transform.GetChild(1).gameObject.SetActive(true);
+    }
+
+    private void LoadDefensiveObjectsStatus()
+    {
+        DefensiveSpikes spikesObject = DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>(); //KOLCE
+        DefensiveObject baricadeObject = DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>(); //PŁOT
+        if(!SaveSystem.isGameLoaded)
+        {
+            spikesObject.Initialize();
+            baricadeObject.Initialize();
+        }
+        
+
+        //BARRICADE
+        UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP + " -> " + (baricadeObject.maxHP + baricadeObject.bonusHealtOnLevel);
+        UI.S.baricadeCost.text = "Upgrade: " + baricadeObject.upgradePrice + "$";
+        //SPIKES 
+        UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + " -> " + (spikesObject.damageEnemy + spikesObject.damageUpgrade) + "\n" +
+                "Endurance: " + spikesObject.health + " -> " + (spikesObject.health + spikesObject.healthUpgrade);
+        UI.S.spikeCost.text = "Upgrade: " + spikesObject.upgradePrice + "$";
     }
 }
