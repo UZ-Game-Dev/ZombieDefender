@@ -37,20 +37,14 @@ public class Shop : MonoBehaviour
 
     private void Start()
     {
-        DefensiveSpikes spikesObject = DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>(); //KOLCE
-        spikesObject.Initialize();
-        DefensiveObject baricadeObject = DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>(); //PŁOT
-        baricadeObject.Initialize();
+        LoadDefensiveObjectsStatus();
+
         FindWeaponObject();
         shopButtonsArray = Main.S.shopPanel.GetComponentsInChildren<Button>();
 
-        //BARRICADE
-        UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP + " -> " + (baricadeObject.maxHP + baricadeObject.bonusHealtOnLevel);
-        UI.S.baricadeCost.text = "Upgrade: " + baricadeObject.upgradePrice + "$";
-        //SPIKES 
-        UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + " -> " + (spikesObject.damageEnemy + spikesObject.damageUpgrade) + "\n" +
-                "Endurance: " + spikesObject.health + " -> " + (spikesObject.health + spikesObject.healthUpgrade);
-        UI.S.spikeCost.text = "Upgrade: " + spikesObject.upgradePrice + "$";
+        //Czy gracz posiada juz broń?
+        if (weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic) != null || weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic) != null)
+            this.UnlockWeaponSwapUI();
 
         audioSourceBuing = shopPanel.GetComponent<AudioSource>();
     }
@@ -317,5 +311,25 @@ public class Shop : MonoBehaviour
     {
         UI.S.weaponName.transform.GetChild(0).gameObject.SetActive(true);
         UI.S.weaponName.transform.GetChild(1).gameObject.SetActive(true);
+    }
+
+    private void LoadDefensiveObjectsStatus()
+    {
+        DefensiveSpikes spikesObject = DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>(); //KOLCE
+        DefensiveObject baricadeObject = DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>(); //PŁOT
+        if(!SaveSystem.isGameLoaded)
+        {
+            spikesObject.Initialize();
+            baricadeObject.Initialize();
+        }
+        
+
+        //BARRICADE
+        UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP + " -> " + (baricadeObject.maxHP + baricadeObject.bonusHealtOnLevel);
+        UI.S.baricadeCost.text = "Upgrade: " + baricadeObject.upgradePrice + "$";
+        //SPIKES 
+        UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + " -> " + (spikesObject.damageEnemy + spikesObject.damageUpgrade) + "\n" +
+                "Endurance: " + spikesObject.health + " -> " + (spikesObject.health + spikesObject.healthUpgrade);
+        UI.S.spikeCost.text = "Upgrade: " + spikesObject.upgradePrice + "$";
     }
 }

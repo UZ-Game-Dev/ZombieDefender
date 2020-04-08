@@ -110,4 +110,19 @@ public class Player : MonoBehaviour
     {
         return _maxHpLevel;
     }
+
+    public int GetCost()
+    {
+        return _cost;
+    }
+
+    public void OnLoadGame()
+    {
+        _hp = SaveSystem.GetData().health;
+        _maxHP = SaveSystem.GetData().maxHP;
+        _hpLevel = SaveSystem.GetData().hpLevel;
+        _maxHpLevel = SaveSystem.GetData().maxHpLevel;
+        _hpBonusPerLevel = SaveSystem.GetData().hpBonusPerLevel;
+        _cost = SaveSystem.GetData().cost;
+    }
 }

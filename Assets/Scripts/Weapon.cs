@@ -37,6 +37,8 @@ public class Weapon : MonoBehaviour
         public int GetMaxFireRate() { return maxFireRate; }
         public int GetBuyingPrice() { return buyingPrice; }
         public int GetMoneyForUpgrade() { return moneyForUpgrade; }
+        public int GetLevel() { return level; }
+        public int GetMaxLevel() { return maxLevel; }
         public float GetReloadSpeed() { return reloadSpeed; }
         public float GetDamage() { return damage; }
         public string GetName() { return name; }
@@ -45,6 +47,13 @@ public class Weapon : MonoBehaviour
         public void SetFireRate(int a) { fireRate = a; }
         public void SetCurrentAmmo(int a) { currentAmmo = a; }
         public void SetAmmo(int a) { ammo = a; }
+        public void SetCapacity(int a) { capacity = a; }
+        public void SetLevel(int a) { level = a; }
+        public void SetMoneyForUpgrade(int a) { moneyForUpgrade = a; }
+        public void SetBuyPrice(int a) { buyingPrice = a; }
+        public void SetReloadSpeed(float a) { reloadSpeed = a; }
+        public void SetDamage(float a) { damage = a; }
+
     }
 
     public class Pistol : WeaponDefinition
@@ -362,5 +371,50 @@ public class Weapon : MonoBehaviour
 
         if (weapon.GetType() != Weapon.WeaponType.ePistol) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
+    }
+
+    public void OnLoadLevel()
+    {
+        this.AddRifleAmmo(SaveSystem.GetData().riffleAmmo);
+
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetCurrentAmmo(    SaveSystem.GetData().PisCurrentAmmo);
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetAmmo(           SaveSystem.GetData().PisAmmo);
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetCapacity(       SaveSystem.GetData().PisCapacity);
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetLevel(          SaveSystem.GetData().PisLevel);
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetFireRate(       SaveSystem.GetData().PisFireRate);
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetMoneyForUpgrade(SaveSystem.GetData().PisMoneyForUpgrade);
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetBuyPrice(       SaveSystem.GetData().PisBuyingPrice);
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetReloadSpeed(    SaveSystem.GetData().PisReloadSpeed);
+        this.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.ePistol).SetDamage(         SaveSystem.GetData().PisDamage);
+
+        if (SaveSystem.GetData().isSemiExist)
+        {
+            Weapon.SemiAutomatic semi = new Weapon.SemiAutomatic();
+            semi.SetCurrentAmmo(    SaveSystem.GetData().SemiCurrentAmmo);
+            semi.SetAmmo(           SaveSystem.GetData().SemiAmmo);
+            semi.SetCapacity(       SaveSystem.GetData().SemiCapacity);
+            semi.SetLevel(          SaveSystem.GetData().SemiLevel);
+            semi.SetFireRate(       SaveSystem.GetData().SemiFireRate);
+            semi.SetMoneyForUpgrade(SaveSystem.GetData().SemiMoneyForUpgrade);
+            semi.SetBuyPrice(       SaveSystem.GetData().SemiBuyingPrice);
+            semi.SetReloadSpeed(    SaveSystem.GetData().SemiReloadSpeed);
+            semi.SetDamage(         SaveSystem.GetData().SemiDamage);
+            this.weapons.Add(semi);
+        }
+
+        if (SaveSystem.GetData().isAutoExist)
+        {
+            Weapon.Automatic auto = new Weapon.Automatic();
+            auto.SetCurrentAmmo(    SaveSystem.GetData().AutoCurrentAmmo);
+            auto.SetAmmo(           SaveSystem.GetData().AutoAmmo);
+            auto.SetCapacity(       SaveSystem.GetData().AutoCapacity);
+            auto.SetLevel(          SaveSystem.GetData().AutoLevel);
+            auto.SetFireRate(       SaveSystem.GetData().AutoFireRate);
+            auto.SetMoneyForUpgrade(SaveSystem.GetData().AutoMoneyForUpgrade);
+            auto.SetBuyPrice(       SaveSystem.GetData().AutoBuyingPrice);
+            auto.SetReloadSpeed(    SaveSystem.GetData().AutoReloadSpeed);
+            auto.SetDamage(         SaveSystem.GetData().AutoDamage);
+            this.weapons.Add(auto);
+        }
     }
 }

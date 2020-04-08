@@ -51,17 +51,25 @@ public class Main : MonoBehaviour
     {
         if (SaveSystem.isGameLoaded)
         {
-            gold = SaveSystem.GetData().gold;
-            Player.S.SetPlayer(SaveSystem.GetData().health);
+            //Player
+            Player.S.OnLoadGame();
+            //Global
+            gold = SaveSystem.GetData().gold; 
             currentLevel = SaveSystem.GetData().currentLevel;
+            //Weapons
+            _weapon.OnLoadLevel();
 
-           // _weapon = SaveSystem.GetData().weapon;
-            /*
-            Shop shopObject = Camera.main.GetComponent<Shop>();
-            DefensiveSpikes defensiveSpikes = shopObject.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>();
-            defensiveSpikes = SaveSystem.GetData().defSpikes;
-            DefensiveObject defensiveObject = shopObject.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>();
-            defensiveObject = SaveSystem.GetData().defObject;*/
+            //Defensive Objects
+            Shop shop = this.GetComponent<Shop>();
+            shop.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().currentLevel = SaveSystem.GetData().FencyCurrentLevel;
+            shop.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().health = SaveSystem.GetData().FencyHealth;
+            shop.DefensiveObjectsArray[1].prefabs.GetComponent<DefensiveObject>().upgradePrice = SaveSystem.GetData().FencyUpgradePrice;
+
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().currentLevel = SaveSystem.GetData().SpikeCurrentLevel;
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().health = SaveSystem.GetData().SpikeHealth;
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().damageEnemy = SaveSystem.GetData().SpikeDamageEnemy;
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().upgradePrice = SaveSystem.GetData().SpikeUpgradePrice;
+            shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().takeDamage = SaveSystem.GetData().SpikeTakeDamage;
         }
 
         waveCounter = currentLevel + 1;
