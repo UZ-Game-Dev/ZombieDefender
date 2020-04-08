@@ -5,28 +5,29 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    //Kursor po przejściu do menu/ekranu śmierci zmienia się na standardowy
     private void Start()
     {
         Cursor.SetCursor(null, Vector2.zero.normalized, CursorMode.ForceSoftware);
     }
-    //
-    public void ButtonNewGame()
+
+    public void ButtonNewGame(GameObject blackBackgroundPanel)
     {
+        blackBackgroundPanel.SetActive(true);
         SceneManager.LoadScene("_MainScene");
     }
 
-    public void ButtonCredits(GameObject creditsPanel)
+    public void ButtonOpenPanel(GameObject panel)
     {
-        creditsPanel.SetActive(true);
+        panel.SetActive(true);
 
     }
-    public void ButtonCloseCredits(GameObject creditsPanel)
+    public void ButtonClosePanel(GameObject panel)
     {
-        creditsPanel.SetActive(false);
+        panel.SetActive(false);
     }
-    public void ButtonExit()
+    public void ButtonExit(GameObject blackBackgroundPanel)
     {
+        blackBackgroundPanel.SetActive(true);
         Application.Quit();
     }
 
