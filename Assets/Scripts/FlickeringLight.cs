@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class FlickeringLight : MonoBehaviour
 {
-    public Light light, light2, source, source2;
+    public new Light light;
+    public Light light2, source, source2;
     public MeshRenderer poswiata, poswiata2;
     private int[] _nextChange = { 18, 8}, _changesCount= { 0, 0 };
 

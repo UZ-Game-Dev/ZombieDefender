@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
+    public GameObject buttonLoadGame;
+
     private void Start()
     {
         Cursor.SetCursor(null, Vector2.zero.normalized, CursorMode.ForceSoftware);
+
+        if (!File.Exists(Application.persistentDataPath + "/save01.save")) buttonLoadGame.GetComponent<Button>().interactable = false;
     }
 
     public void ButtonNewGame(GameObject blackBackgroundPanel)
@@ -40,8 +46,9 @@ public class Menu : MonoBehaviour
         Application.Quit();
     }
 
-    public void ButtonBackToMenu()
+    public void ButtonBackToMenu(GameObject blackBackgroundPanel)
     {
+        blackBackgroundPanel.SetActive(true);
         SceneManager.LoadScene("MenuScene");
     }
 }

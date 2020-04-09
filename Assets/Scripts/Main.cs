@@ -87,7 +87,6 @@ public class Main : MonoBehaviour
 
         if (countEnemy <= 0 && !isWaitingForNextWave)
         {
-            SaveGame();
             isWaitingForNextWave = true;
             StartCoroutine(AreThereItems());
         }
@@ -103,6 +102,7 @@ public class Main : MonoBehaviour
 
             if (_gos.Length == 0)
             {
+                SaveGame();
                 StartCoroutine(shopCoroutine);
                 break;
             }
