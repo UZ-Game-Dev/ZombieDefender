@@ -11,16 +11,10 @@ public class SoundsMenager : MonoBehaviour
     public AudioClip spikesAttack; 
 
     AudioSource audioSource;
-    // Start is called before the first frame update
+
     void Start()
     {
         audioSource = this.gameObject.GetComponent<AudioSource>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void Awake()

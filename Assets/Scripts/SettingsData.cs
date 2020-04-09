@@ -23,15 +23,3 @@ public class SettingsData
     public float musicVolume = 0;
     public float effectVolume = 0;
 }
-
-/* (Przykład pobierania i zapisywania pliku json)
- * SettingsData settingsData = new SettingsData();
- * settingsData.quality = 1;
- * settingsData.shadows = false;
- * string json = JsonUtility.ToJson(settingsData);
- * Debug.Log(json);
- * File.WriteAllText(Application.dataPath + "/Settings.json",json);
- * string json = File.ReadAllText(Application.dataPath + "/Settings.json");
- * SettingsData loadSettingsData = JsonUtility.FromJson<SettingsData>(json);
- * Debug.Log(loadSettingsData.quality+", "+loadSettingsData.shadows);
- */

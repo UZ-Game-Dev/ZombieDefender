@@ -137,13 +137,10 @@ public class Shop : MonoBehaviour
             _infoText.transform.position = Input.mousePosition;
         }
 
-        //↓ Dodano prawy przycisk myszki do anulowania zakupu.
         if ((Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Mouse1)) && _isisMovingDefensiveObjects)
         {
             ResetInfoDefensiveObject();
         }
-
-        //
 
         if (isActive)
         {

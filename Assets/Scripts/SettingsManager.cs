@@ -5,7 +5,6 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class SettingsManager : MonoBehaviour
 {
-
     public GameObject[] tableSpecialEffects;
 
     public GameObject ambientOcclusion;

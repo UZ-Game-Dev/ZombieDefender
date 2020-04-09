@@ -6,7 +6,6 @@ public static class SaveSystem
 {
     private static SaveData _data;
     public static bool isGameLoaded;
-    
 
     public static void SaveGame(int HP, Main main, Shop shop, Weapon weapon)
     {

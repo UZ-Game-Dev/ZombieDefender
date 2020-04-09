@@ -72,7 +72,6 @@ public class Spawner : MonoBehaviour
             enemy.SetAttackSpeed(2);
             enemy.SetDamageOnHit(2, 6);
         }
-        //Main.S.countEnemy++; //Nie potrzebne 
     }
 
     //Rysuje przestrzeń w której będzie odbywać się gra

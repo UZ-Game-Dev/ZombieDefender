@@ -11,10 +11,8 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject pauseMenuUI;
 
-    //dodanie UI zapytania o potwierdzenie czy wyjść z gry
     public GameObject infoExitUI;
     public GameObject blackBackground;
-    //
 
     void Awake()
     {
@@ -39,14 +37,12 @@ public class PauseMenu : MonoBehaviour
     private void ActivateMenu()
     {
         Time.timeScale = 0;
-        //AudioListener.pause = true; <- linijka do usunięcia
         pauseMenuUI.SetActive(true);
     }
 
     public void DeactivateMenu()
     {
         Time.timeScale = 1;
-        //AudioListener.pause = false; <- linijka do usunięcia
         // Zamyka okno zapytania po wciśnięciu Esc
         infoExitUI.SetActive(false);
         pauseMenuUI.SetActive(false);
@@ -55,14 +51,9 @@ public class PauseMenu : MonoBehaviour
 
     public void ButtonBackToMenu()
     {
-        //Time.timeScale = 1f; < -linijka do usunięcia
-        //SceneManager.LoadScene("MenuScene"); < -linijka do usunięcia
-        //zmiana, teraz otwiera się menu zapytania o potwierdzenie czy wyjść z gry
         infoExitUI.SetActive(true);
-        //
     }
 
-    //dodanie przycisków menu zapytania o potwierdzenie czy wyjść z gry
     public void ButtonYes()
     {
         blackBackground.SetActive(true);
@@ -74,5 +65,4 @@ public class PauseMenu : MonoBehaviour
     {
         infoExitUI.SetActive(false);
     }
-    //
 }
