@@ -186,10 +186,10 @@ MonoBehaviour:
   initialCurrentLevel: 0
   initialhealth: 10
   initialUpgradePrice: 15
-  currentLevel: 0
-  health: 10
-  upgradePrice: 15
-  maxHP: 10
+  currentLevel: 3
+  health: 25
+  upgradePrice: 33
+  maxHP: 25
   maxLevel: 10
   bonusHealtOnLevel: 5
 --- !u!1001 &207546001424416013

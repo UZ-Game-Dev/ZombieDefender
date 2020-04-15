@@ -22,7 +22,7 @@ public class Shop : MonoBehaviour
     public DefensiveObjects[] DefensiveObjectsArray; // [0] -> KOLCE   [1] -> PŁOT
     public int rifleAmmoPrice = 5;
     public int sniperAmmoPrice = 5;
-    public int rifleAmmoPiecesToBuy = 50;
+    public int rifleAmmoPiecesToBuy = 25;
     public int sniperAmmoPiecesToBuy = 10;
     public GameObject _infoText; //← obiekt z napisami accept/cancel
 

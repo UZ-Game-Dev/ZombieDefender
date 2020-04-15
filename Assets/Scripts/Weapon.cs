@@ -16,7 +16,7 @@ public class Weapon : MonoBehaviour
     private WeaponDefinition weapon;
     private UI _ui;
     private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0, _sniperAmmo = 0, _bulletsShot = 0;
-    public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased, emptyGunEffect;
+    public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased, emptyGunEffect ,sniperShotEffect, sniperReloadEffect;
     public AudioSource audioSource;
 
     //--------------------------------------------------
@@ -55,9 +55,9 @@ public class Weapon : MonoBehaviour
             capacity = 10;
             currentAmmo = capacity;
             ammo = 10;
-            reloadSpeed = 1.60f;
+            reloadSpeed = 1.66f;
             maxReloadSpeed = 1.00f;
-            damage = 6.0f;
+            damage = 4.5f;
             name = "Beretta";
             type = WeaponType.ePistol;
             maxFireRate = 1;
@@ -101,8 +101,8 @@ public class Weapon : MonoBehaviour
             capacity = 24;
             currentAmmo = capacity;
             reloadSpeed = 1.70f;
-            maxReloadSpeed = 1.0f;
-            damage = 7.0f;
+            maxReloadSpeed = 1.00f;
+            damage = 6.0f;
             name = "Semi M.G.";
             type = WeaponType.eSemiAutomatic;
             maxFireRate = 4;
@@ -117,7 +117,7 @@ public class Weapon : MonoBehaviour
             {
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
-                damage = (float)Math.Round(damage + 1.5f, 2);
+                damage = (float)Math.Round(damage + 1.0f, 2);
                 if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.05f, 2);
                 moneyForUpgrade += 4 + level;
                 level++;
@@ -132,7 +132,7 @@ public class Weapon : MonoBehaviour
                 {
                     UI.S.semiUpgrade.text = "Cost: " + moneyForUpgrade + "$";
                     UI.S.semiReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.05f, 2);
-                    UI.S.semiDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 1.5f, 2);
+                    UI.S.semiDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 1.0f, 2);
                 }
             }
         }
@@ -146,9 +146,9 @@ public class Weapon : MonoBehaviour
             maxLevel = 10;
             capacity = 30;
             currentAmmo = capacity;
-            reloadSpeed = 2.00f;
+            reloadSpeed = 2.30f;
             maxReloadSpeed = 1.0f;
-            damage = 10f;
+            damage = 5.5f;
             name = "AK-47";
             type = WeaponType.eAutomatic;
             maxFireRate = 1;
@@ -163,7 +163,7 @@ public class Weapon : MonoBehaviour
             {
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
-                damage = (float)Math.Round(damage + 2f, 2);
+                damage = (float)Math.Round(damage + 1f, 2);
                 if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.05f, 2);
                 moneyForUpgrade += 6 + level;
                 level++;
@@ -200,7 +200,7 @@ public class Weapon : MonoBehaviour
             maxFireRate = 1;
             fireRate = maxFireRate;
             moneyForUpgrade = 30;
-            buyingPrice = 60;
+            buyingPrice = 50;
         }
 
         public override void Upgrade()
@@ -209,8 +209,8 @@ public class Weapon : MonoBehaviour
             {
                 Main.S.gold -= moneyForUpgrade;
                 UI.S.gold.text = "Gold: " + Main.S.gold;
-                damage = (float)Math.Round(damage + 4f, 2);
-                if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.05f, 2);
+                damage = (float)Math.Round(damage + 2f, 2);
+                if (reloadSpeed > maxReloadSpeed) reloadSpeed = (float)Math.Round(reloadSpeed - 0.07f, 2);
                 moneyForUpgrade += 8 + level;
                 level++;
 
@@ -223,8 +223,8 @@ public class Weapon : MonoBehaviour
                 else
                 {
                     UI.S.sniperUpgrade.text = "Cost: " + moneyForUpgrade + "$";
-                    UI.S.sniperReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.02f, 2);
-                    UI.S.sniperDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 4f, 2);
+                    UI.S.sniperReloadTime.text = "Reload Spd.: " + reloadSpeed + " -> " + (float)Math.Round(reloadSpeed - 0.07f, 2);
+                    UI.S.sniperDamage.text = "Damage: " + damage + " -> " + (float)Math.Round(damage + 2f, 2);
                 }
             }
         }
@@ -270,7 +270,7 @@ public class Weapon : MonoBehaviour
                 if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunShotEffect;
                 if (weapon.GetType() == WeaponType.eSemiAutomatic) { audioSource.clip = semiShotEffect; _bulletsShot++; _isSemiShooting = true; }
                 if (weapon.GetType() == WeaponType.eAutomatic) audioSource.clip = autoShotEffect;
-                if (weapon.GetType() == WeaponType.eSniperRifle) audioSource.clip = gunShotEffect;
+                if (weapon.GetType() == WeaponType.eSniperRifle) audioSource.clip = sniperShotEffect;
                 _nextShot = 8;
                 Shoot();
                 if (_bulletsShot == 4)
@@ -306,7 +306,8 @@ public class Weapon : MonoBehaviour
 
             if (Input.GetButtonDown("R") && !isReloading && ((weapon.GetType() != WeaponType.ePistol && _rifleAmmo != 0) || weapon.GetType() == WeaponType.ePistol || (weapon.GetType() == WeaponType.eSniperRifle && _sniperAmmo != 0)) && weapon.GetCurrentAmmo() != weapon.GetCapacity())
             {
-                if (weapon.GetType() == WeaponType.ePistol || weapon.GetType() == WeaponType.eSniperRifle) audioSource.clip = gunReloadEffect;
+                if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunReloadEffect;
+                else if (weapon.GetType() == WeaponType.eSniperRifle) audioSource.clip = sniperReloadEffect;
                 else audioSource.clip = semiReloadEffect;
                 audioSource.Play();
                 StartCoroutine("Reload");

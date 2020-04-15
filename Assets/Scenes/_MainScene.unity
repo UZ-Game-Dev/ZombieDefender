@@ -2509,6 +2509,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -913805095967464099, guid: f287d6d8deac86142adf59c91cb45eb9,
+        type: 3}
+      propertyPath: initialdemageEnemy
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -913805095967464099, guid: f287d6d8deac86142adf59c91cb45eb9,
+        type: 3}
+      propertyPath: initialUpgradePrice
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: -913805095967464099, guid: f287d6d8deac86142adf59c91cb45eb9,
+        type: 3}
+      propertyPath: damageUpgrade
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6067040661931549595, guid: f287d6d8deac86142adf59c91cb45eb9,
         type: 3}
       propertyPath: m_Name
@@ -14286,7 +14301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56711cd09389d9f4284ed7402425eb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 1000
+  gold: 8
   levelArray:
   - maxEnemyCountOnLevel: 5
     waveDelay: 20
@@ -14453,8 +14468,8 @@ MonoBehaviour:
     price: 10
   rifleAmmoPrice: 5
   sniperAmmoPrice: 5
-  rifleAmmoPiecesToBuy: 50
-  sniperAmmoPiecesToBuy: 10
+  rifleAmmoPiecesToBuy: 25
+  sniperAmmoPiecesToBuy: 5
   _infoText: {fileID: 1906577169}
   isActive: 0
 --- !u!82 &963194233
@@ -16006,6 +16021,8 @@ MonoBehaviour:
   semiReloadEffect: {fileID: 8300000, guid: 7a83d6326adcd2b40ad0133ce18bb73e, type: 3}
   triggerReleased: {fileID: 8300000, guid: 5f12128e802014a459077ec3830aa1cd, type: 3}
   emptyGunEffect: {fileID: 8300000, guid: ae3b687f82fc5744ca7ad3b073beb1b3, type: 3}
+  sniperShotEffect: {fileID: 8300000, guid: ae287cae51cea0940a1f169c9cff7e88, type: 3}
+  sniperReloadEffect: {fileID: 8300000, guid: a3048f8be6a9fcc449eaff68dd5ff693, type: 3}
   audioSource: {fileID: 1153468971}
 --- !u!23 &1153468969
 MeshRenderer:

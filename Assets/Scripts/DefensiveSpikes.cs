@@ -8,8 +8,8 @@ public class DefensiveSpikes : MonoBehaviour
     [Header("Wartości ustawiane na początku rozgrywki")]
     public int initialCurrentLevel = 0;
     public float initialhealth = 3f;
-    public float initialdemageEnemy = 10;
-    public int initialUpgradePrice = 15;
+    public float initialdemageEnemy = 8;
+    public int initialUpgradePrice = 18;
 
     [Header("Wartości definiowane dynamicznie")]
     public int currentLevel;
