@@ -52,7 +52,7 @@ public class SoundsMenager : MonoBehaviour
 
     private void Play()
     {
-        if (!audioSource.isPlaying)
+        //if (!audioSource.isPlaying)
             audioSource.Play();
     }
 }

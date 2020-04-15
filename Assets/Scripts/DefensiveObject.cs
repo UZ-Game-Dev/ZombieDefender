@@ -19,6 +19,7 @@ public class DefensiveObject : MonoBehaviour
     [Header("Definiowane w panelu inspekcyjnym")]
     public int maxLevel = 10;
     public int bonusHealtOnLevel = 5;
+    public Transform prefabsFragments;
 
     private HealthUI _healthUI;
 
@@ -44,6 +45,7 @@ public class DefensiveObject : MonoBehaviour
 
         if (health <= 0)
         {
+            Instantiate(prefabsFragments, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
             Destroy(gameObject);
         }
     }

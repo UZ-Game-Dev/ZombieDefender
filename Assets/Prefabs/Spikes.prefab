@@ -219,6 +219,8 @@ MonoBehaviour:
   takeDamage: 1
   damageUpgrade: 1
   healthUpgrade: 1
+  prefabsFragments: {fileID: 5664290740763327341, guid: 88d2102eec45e5646b5a25680c2bbe62,
+    type: 3}
 --- !u!114 &-7469165820373094828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,6 +236,21 @@ MonoBehaviour:
   uiProfab: {fileID: 3908071524511783841, guid: 1148b561c7d563a40aae0071fcd56bb4,
     type: 3}
   target: {fileID: 5751313478683786386}
+  destructionEffectArray:
+  - hp: 60
+    gameObjectFragments:
+    - {fileID: 408144223649294507}
+    - {fileID: 7366133755011324599}
+    gameObjectFragmentsPrefabs:
+    - {fileID: -7462036371361415008, guid: 61f98a8da3f1e3240a48d49edf6fd43d, type: 3}
+    - {fileID: -492420421572216379, guid: 61f98a8da3f1e3240a48d49edf6fd43d, type: 3}
+  - hp: 30
+    gameObjectFragments:
+    - {fileID: 408144223649294507}
+    - {fileID: 7366133755011324599}
+    gameObjectFragmentsPrefabs:
+    - {fileID: 7469484624682501897, guid: 7dce7a7ae6d605846ad7c81bb413d64e, type: 3}
+    - {fileID: -594094835925579944, guid: 7dce7a7ae6d605846ad7c81bb413d64e, type: 3}
 --- !u!1 &7366133755011324599
 GameObject:
   m_ObjectHideFlags: 0

@@ -857,6 +857,8 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 4
+  zombieFragments: {fileID: 5460093544720069776, guid: 7eb41abc1b0ec7b4cb50f1a11fdd2adc,
+    type: 3}
   _health: 25
   _attackSpeed: 1
   _attackCooldownStart: 0.6

@@ -23,6 +23,7 @@ public class DefensiveSpikes : MonoBehaviour
     public float takeDamage = 1; //Obrazenia zadawane obiektowi
     public int damageUpgrade = 1;
     public int healthUpgrade = 1; //Poprawienie wytrzymalosci obiektu
+    public Transform prefabsFragments;
 
     private HealthUI _healthUI;
 
@@ -66,6 +67,7 @@ public class DefensiveSpikes : MonoBehaviour
 
         if (health <= 0)
         {
+            Instantiate(prefabsFragments, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
             Destroy(gameObject);
         }
     }

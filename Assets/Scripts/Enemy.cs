@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
 {
     [Header("Definiowane w panelu")]
     public LayerMask mask;
+    public Transform zombieFragments;
 
     [SerializeField]
     private float _health = 10f;
@@ -141,6 +142,7 @@ public class Enemy : MonoBehaviour
     {
         Main.S.countEnemy--;
         SoundsMenager.S.PlayZombieDeathSound();
+        Instantiate(zombieFragments,new Vector3(transform.position.x, transform.position.y - 0.9702432f,transform.position.z),transform.rotation);
         Destroy(gameObject);
     }
 

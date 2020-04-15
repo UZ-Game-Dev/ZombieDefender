@@ -60,7 +60,7 @@ public class RandomItem : MonoBehaviour
                     {
                         items = Instantiate(_itemList[j].item, this.transform.position, UnityEngine.Random.rotation) as GameObject;
                     }
-                    items.GetComponent<Rigidbody>().AddForce(-this.transform.right * UnityEngine.Random.Range(25f, 50f) + this.transform.up * UnityEngine.Random.Range(0, 25));
+                    items.GetComponent<Rigidbody>().AddForce(-this.transform.right * UnityEngine.Random.Range(100f, 125f) + this.transform.up * UnityEngine.Random.Range(0, 25));
                     
                     return;
                 }

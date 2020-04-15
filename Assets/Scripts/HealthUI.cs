@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class DestructionEffect
+{
+    public float hp;
+    public GameObject[] gameObjectFragments;
+    public GameObject[] gameObjectFragmentsPrefabs;
+}
+
 public class HealthUI : MonoBehaviour
 {
     [Header("Definiowane w panelu")]
     public GameObject uiProfab;
     public Transform target;
+    public DestructionEffect[] destructionEffectArray;
 
     private Transform _ui;
     private Slider _healthSlider;
@@ -24,6 +33,7 @@ public class HealthUI : MonoBehaviour
             }
         }
     }
+
     private void LateUpdate()
     {
         if (_ui != null)
@@ -41,6 +51,20 @@ public class HealthUI : MonoBehaviour
         }
 
         _healthSlider.value = HP/maxHP;
+        
+        if (destructionEffectArray != null)
+        {
+            for (int i = 0; i < destructionEffectArray.Length; i++)
+            {
+                if ((HP / maxHP) * 100 < destructionEffectArray[i].hp)
+                {
+                    for (int i2 = 0; i2 < destructionEffectArray[i].gameObjectFragments.Length; i2++)
+                    {
+                        destructionEffectArray[i].gameObjectFragments[i2].GetComponent<MeshFilter>().sharedMesh = destructionEffectArray[i].gameObjectFragmentsPrefabs[i2].GetComponent<MeshFilter>().sharedMesh;
+                    }
+                }
+            }
+        }
     }
 
     public void SetActive(bool active)
