@@ -104,9 +104,16 @@ public class UI : MonoBehaviour
             buyAmmoButton.GetComponent<Image>().enabled = false;
             buyAmmoText.text += "You can not buy ammunation for " + _weapon.GetWeapon().GetName();
         }
+        else if(_weapon.GetWeapon().GetType() == Weapon.WeaponType.eSniperRifle)
+        {
+            buyAmmoText.text = "\nAmmo for Sniper\n+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
+            buyAmmoButton.interactable = true;
+            buyAmmoButton.GetComponent<Image>().enabled = true;
+            buyAmmoText.text += "\n \n ";
+        }
         else
         {
-            buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
+            buyAmmoText.text = "\nAmmo for machine guns\n+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
             buyAmmoButton.interactable = true;
             buyAmmoButton.GetComponent<Image>().enabled = true;
             buyAmmoText.text += "\n \n ";
@@ -184,14 +191,14 @@ public class UI : MonoBehaviour
         }
         else if(_weapon.GetWeapon().GetType() == Weapon.WeaponType.eSniperRifle)
         {
-            UI.S.buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().sniperAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().sniperAmmoPrice + "$\n ";
+            UI.S.buyAmmoText.text = "\nAmmo for Sniper\n+" + Main.S.GetComponent<Shop>().sniperAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().sniperAmmoPrice + "$\n ";
             UI.S.buyAmmoButton.interactable = true;
             UI.S.buyAmmoButton.GetComponent<Image>().enabled = true;
             UI.S.buyAmmoText.text += "\n \n ";
         }
         else
         {
-            UI.S.buyAmmoText.text = "+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
+            UI.S.buyAmmoText.text = "\nAmmo for machine guns\n+" + Main.S.GetComponent<Shop>().rifleAmmoPiecesToBuy + "\nCost: " + Main.S.GetComponent<Shop>().rifleAmmoPrice + "$\n ";
             UI.S.buyAmmoButton.interactable = true;
             UI.S.buyAmmoButton.GetComponent<Image>().enabled = true;
             UI.S.buyAmmoText.text += "\n \n ";

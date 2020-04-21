@@ -33,6 +33,7 @@ public class DefensiveSpikes : MonoBehaviour
         _healthUI = GetComponent<HealthUI>();
 
     }
+ 
     public void Initialize()
     {
         //Wywoływane prze funkcję Start() w skryocie Shop
@@ -85,5 +86,10 @@ public class DefensiveSpikes : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public HealthUI GetHealthUI()
+    {
+        return _healthUI;
     }
 }

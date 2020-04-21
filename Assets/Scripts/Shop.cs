@@ -28,6 +28,7 @@ public class Shop : MonoBehaviour
     public Color greenToBuy;
     public Color redToBuy;
     public Color yellowToBuy;
+    public Transform objectAnchor;
 
     [Header("Definiowane dynamicznie")]
     public bool isActive = false;
@@ -126,7 +127,8 @@ public class Shop : MonoBehaviour
             Debug.Log("KUMIONO OBIEKT");
             Main.S.gold -= DefensiveObjectsArray[_defensiveObjectsNumber].price;
             UI.S.gold.text = "Gold: " + Main.S.gold;
-            Instantiate(_defensiveObject, _defensiveObjectGhost.transform.position, _defensiveObjectGhost.transform.rotation);
+            GameObject go = Instantiate(_defensiveObject, _defensiveObjectGhost.transform.position, _defensiveObjectGhost.transform.rotation);
+            go.transform.SetParent(objectAnchor, true);
             _defensiveObject.SetActive(true);
             ResetInfoDefensiveObject();
         }
@@ -494,9 +496,20 @@ public class Shop : MonoBehaviour
         //BARRICADE
         UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP + " -> " + (baricadeObject.maxHP + baricadeObject.bonusHealtOnLevel);
         UI.S.baricadeCost.text = "Upgrade: " + baricadeObject.upgradePrice + "$";
+        if (baricadeObject.currentLevel == baricadeObject.maxLevel)
+        {
+            UI.S.baricadeUpgrade.text = "Endurance: " + baricadeObject.maxHP;
+            UI.S.baricadeCost.text = "MAX LEVEL REACHED";
+        }
         //SPIKES 
         UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + " -> " + (spikesObject.damageEnemy + spikesObject.damageUpgrade) + "\n" +
                 "Endurance: " + spikesObject.health + " -> " + (spikesObject.health + spikesObject.healthUpgrade);
         UI.S.spikeCost.text = "Upgrade: " + spikesObject.upgradePrice + "$";
+        if (spikesObject.currentLevel == spikesObject.maxLevel)
+        {
+            UI.S.spikeUpgrade.text = "Damage: " + spikesObject.damageEnemy + "\n" +
+                "Endurance: " + spikesObject.health;
+            UI.S.spikeCost.text = "MAX LEVEL REACHED";
+        }
     }
 }

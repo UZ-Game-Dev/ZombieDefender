@@ -55,7 +55,8 @@ public class Main : MonoBehaviour
             //Player
             Player.S.OnLoadGame();
             //Global
-            gold = SaveSystem.GetData().gold; 
+            gold = SaveSystem.GetData().gold;
+            waveCounter = SaveSystem.GetData().currentWave;
             currentLevel = SaveSystem.GetData().currentLevel;
             //Weapons
             _weapon.OnLoadLevel();
@@ -71,12 +72,33 @@ public class Main : MonoBehaviour
             shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().damageEnemy = SaveSystem.GetData().SpikeDamageEnemy;
             shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().upgradePrice = SaveSystem.GetData().SpikeUpgradePrice;
             shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().takeDamage = SaveSystem.GetData().SpikeTakeDamage;
+
+            foreach (ObjectData value in SaveSystem.GetData().objectOnMap)
+            {
+                if (value.tag == "DefensiveObject")
+                {
+                    GameObject gameObject = Instantiate(shop.DefensiveObjectsArray[1].prefabs);
+                    gameObject.transform.position = new Vector3(value.x, value.y, value.z);
+                    gameObject.GetComponent<DefensiveObject>().health = value.Health;
+                    gameObject.transform.SetParent(shop.objectAnchor, true);
+                    gameObject.SetActive(true);
+                }
+                if (value.tag == "DefensiveSpikes")
+                {
+                    GameObject gameObject = Instantiate<GameObject>(shop.DefensiveObjectsArray[0].prefabs);
+                    gameObject.transform.position = new Vector3(value.x, value.y, value.z);
+                    gameObject.GetComponent<DefensiveSpikes>().health = value.Health;
+                    gameObject.transform.SetParent(shop.objectAnchor, true);
+                    gameObject.SetActive(true);
+                }
+            }
         }
         else
         {
             LoadLevel();
+            waveCounter = currentLevel + 1;
         }
-        waveCounter = currentLevel + 1;
+        
     }
 
     // Update is called once per frame
@@ -122,7 +144,7 @@ public class Main : MonoBehaviour
         isWaitingForNextWave = false;
         currentLevel++;
         waveCounter++;
-        UI.S.wave.text= "Wave: " + (int)(Main.S.currentLevel + 1);
+        UI.S.wave.text= "Wave: " + (int)(Main.S.waveCounter);
         LoadLevel();
     }
 

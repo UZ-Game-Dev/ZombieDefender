@@ -372,7 +372,7 @@ public class Weapon : MonoBehaviour
 
         UI.S.weaponName.text = weapon.GetName();
         if (weapon.GetType() != Weapon.WeaponType.ePistol && weapon.GetType() != Weapon.WeaponType.eSniperRifle) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _rifleAmmo + "]";
-        if (weapon.GetType() == Weapon.WeaponType.eSniperRifle) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _sniperAmmo + "]";
+        else if (weapon.GetType() == Weapon.WeaponType.eSniperRifle) UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity() + "  [" + _sniperAmmo + "]";
         else UI.S.ammo.text = weapon.GetCurrentAmmo() + "/" + weapon.GetCapacity();
 
         if (!Main.S.isEnableToShoot) UI.S.SetAmmoTexts();

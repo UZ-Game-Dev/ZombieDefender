@@ -31,7 +31,7 @@ public class DefensiveObject : MonoBehaviour
 
     public void Initialize()
     {
-        //Wywoływane prze funkcję Start() w skryocie Shop
+        //Wywoływane prze funkcję Start() w skrypcie Shop
         health = initialhealth;
         maxHP = health;
         currentLevel = initialCurrentLevel;
@@ -75,5 +75,10 @@ public class DefensiveObject : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public HealthUI GetHealthUI()
+    {
+        return _healthUI;
     }
 }

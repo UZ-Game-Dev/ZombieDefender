@@ -3,8 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+public class ObjectData
+{
+    public float x;
+    public float y;
+    public float z;
+
+    public float Health;
+    public string tag;
+}
+
+[System.Serializable]
 public class SaveData
 {
+    
     //Player
     public int health;
     public int maxHP;
@@ -15,6 +27,7 @@ public class SaveData
     //Global
     public int gold;
     public int currentLevel;
+    public int currentWave;
     //______WEAPONS________
     public int riffleAmmo;
     //Pistolet
@@ -71,6 +84,8 @@ public class SaveData
     public float SpikeDamageEnemy;
     public int SpikeUpgradePrice;
     public float SpikeTakeDamage;
+    //Na mapie
+    public List<ObjectData> objectOnMap;
 
     public SaveData(int HP, Main main, Shop shop, Weapon _weapon)
     {
@@ -84,6 +99,7 @@ public class SaveData
         //Global
         gold = Main.S.gold;
         currentLevel = Main.S.currentLevel;
+        currentWave = Main.S.waveCounter;
         //______WEAPONS________
         riffleAmmo = _weapon.GetRifleAmmo();
         //Pistolet
@@ -152,5 +168,33 @@ public class SaveData
         SpikeDamageEnemy = shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().damageEnemy;
         SpikeUpgradePrice = shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().upgradePrice;
         SpikeTakeDamage = shop.DefensiveObjectsArray[0].prefabs.GetComponent<DefensiveSpikes>().takeDamage;
+
+        GameObject objects = Camera.main.GetComponent<Shop>().objectAnchor.gameObject;
+        
+        int number = objects.transform.childCount;
+        objectOnMap = new List<ObjectData>();
+
+        for(int i = 0; i < number; ++i)
+        {
+            ObjectData objectData = new ObjectData();
+            Transform go = objects.transform.GetChild(i);
+            
+            objectData.x = go.position.x;
+            objectData.y = go.position.y;
+            objectData.z = go.position.z;
+
+            if (go.tag == "DefensiveObject")
+            {
+                objectData.Health = go.GetComponent<DefensiveObject>().health;
+                objectData.tag = "DefensiveObject";
+            }
+            if (go.tag == "DefensiveSpikes")
+            {
+                objectData.Health = go.GetComponent<DefensiveSpikes>().health;
+                objectData.tag = "DefensiveSpikes";
+            }
+
+            objectOnMap.Add(objectData);
+        }     
     }
 }
