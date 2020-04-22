@@ -17,7 +17,7 @@ public class Weapon : MonoBehaviour
     private UI _ui;
     private int _nextShot = 8, _lastShot = 0, _rifleAmmo = 0, _sniperAmmo = 0, _bulletsShot = 0;
     public AudioClip gunShotEffect, gunReloadEffect, semiShotEffect, autoShotEffect, semiReloadEffect, triggerReleased, emptyGunEffect ,sniperShotEffect, sniperReloadEffect;
-    public AudioSource audioSource;
+    public AudioSource audioSource, reloading;
 
     //--------------------------------------------------
 
@@ -245,6 +245,7 @@ public class Weapon : MonoBehaviour
         _ui = ui.GetComponentInChildren<UI>();
         //SOUND
         audioSource = this.gameObject.GetComponent<AudioSource>();
+        reloading = GameObject.Find("ReloadingAudioSource").GetComponent<AudioSource>();
         audioSource.clip = gunShotEffect;
     }
 
@@ -306,10 +307,10 @@ public class Weapon : MonoBehaviour
 
             if (Input.GetButtonDown("R") && !isReloading && ((weapon.GetType() != WeaponType.ePistol && _rifleAmmo != 0) || weapon.GetType() == WeaponType.ePistol || (weapon.GetType() == WeaponType.eSniperRifle && _sniperAmmo != 0)) && weapon.GetCurrentAmmo() != weapon.GetCapacity())
             {
-                if (weapon.GetType() == WeaponType.ePistol) audioSource.clip = gunReloadEffect;
-                else if (weapon.GetType() == WeaponType.eSniperRifle) audioSource.clip = sniperReloadEffect;
-                else audioSource.clip = semiReloadEffect;
-                audioSource.Play();
+                if (weapon.GetType() == WeaponType.ePistol) reloading.clip = gunReloadEffect;
+                else if (weapon.GetType() == WeaponType.eSniperRifle) reloading.clip = sniperReloadEffect;
+                else reloading.clip = semiReloadEffect;
+                reloading.Play();
                 StartCoroutine("Reload");
                 isReloading = true;
             }
@@ -373,6 +374,7 @@ public class Weapon : MonoBehaviour
     private IEnumerator Reload()
     {
         yield return new WaitForSeconds(weapon.GetReloadSpeed());
+        reloading.Stop();
         int amount = weapon.GetCapacity() - weapon.GetCurrentAmmo();
 
         if (weapon.GetType() == WeaponType.eSemiAutomatic || weapon.GetType() == WeaponType.eAutomatic)

@@ -66,6 +66,7 @@ public class DefensiveSpikes : MonoBehaviour
 
         if (health <= 0)
         {
+            SoundsMenager.S.PlayDefenseDestroyed();
             Destroy(gameObject);
         }
     }

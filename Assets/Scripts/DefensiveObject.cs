@@ -44,6 +44,7 @@ public class DefensiveObject : MonoBehaviour
 
         if (health <= 0)
         {
+            SoundsMenager.S.PlayDefenseDestroyed();
             Destroy(gameObject);
         }
     }

@@ -122,6 +122,7 @@ public class Shop : MonoBehaviour
             Debug.Log("KUMIONO OBIEKT");
             Main.S.gold -= DefensiveObjectsArray[_defensiveObjectsNumber].price;
             UI.S.gold.text = "Gold: " + Main.S.gold;
+            SoundsMenager.S.PlayDefensePlaced();
             Instantiate(_defensiveObject, _defensiveObjectGhost.transform.position, _defensiveObjectGhost.transform.rotation);
             _defensiveObject.SetActive(true);
             ResetInfoDefensiveObject();
