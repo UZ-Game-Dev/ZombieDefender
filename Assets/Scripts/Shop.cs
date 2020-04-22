@@ -22,7 +22,7 @@ public class Shop : MonoBehaviour
     public DefensiveObjects[] DefensiveObjectsArray; // [0] -> KOLCE   [1] -> PŁOT
     public int rifleAmmoPrice = 5;
     public int sniperAmmoPrice = 5;
-    public int rifleAmmoPiecesToBuy = 50;
+    public int rifleAmmoPiecesToBuy = 25;
     public int sniperAmmoPiecesToBuy = 10;
     public GameObject _infoText; //← obiekt z napisami accept/cancel
     public Color greenToBuy;
@@ -127,8 +127,10 @@ public class Shop : MonoBehaviour
             Debug.Log("KUMIONO OBIEKT");
             Main.S.gold -= DefensiveObjectsArray[_defensiveObjectsNumber].price;
             UI.S.gold.text = "Gold: " + Main.S.gold;
+
             GameObject go = Instantiate(_defensiveObject, _defensiveObjectGhost.transform.position, _defensiveObjectGhost.transform.rotation);
             go.transform.SetParent(objectAnchor, true);
+            SoundsMenager.S.PlayDefensePlaced();
             _defensiveObject.SetActive(true);
             ResetInfoDefensiveObject();
         }

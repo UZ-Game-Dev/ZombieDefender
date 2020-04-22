@@ -51,6 +51,7 @@ public class DefensiveObject : MonoBehaviour
         if (health <= 0)
         {
             Instantiate(prefabsFragments, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+            SoundsMenager.S.PlayDefenseDestroyed();
             Destroy(gameObject);
         }
     }

@@ -8,13 +8,16 @@ public class SoundsMenager : MonoBehaviour
     public AudioClip clickButton;
     public AudioClip zombieDeath;
     public AudioClip itemPickedup;
-    public AudioClip spikesAttack; 
+    public AudioClip spikesAttack;
+    public AudioClip defenseDestroyed;
+    public AudioClip defensePlaced;
 
     AudioSource audioSource;
-
+    AudioSource defense;
     void Start()
     {
         audioSource = this.gameObject.GetComponent<AudioSource>();
+        defense = GameObject.Find("DefenseAudioSource").GetComponent<AudioSource>();
     }
 
     void Awake()
@@ -48,6 +51,18 @@ public class SoundsMenager : MonoBehaviour
         audioSource.volume = 1f;
         audioSource.clip = spikesAttack;
         Play();
+    }
+
+    public void PlayDefenseDestroyed()
+    {
+        defense.clip = defenseDestroyed;
+        defense.Play();
+    }
+
+    public void PlayDefensePlaced()
+    {
+        defense.clip = defensePlaced;
+        defense.Play();
     }
 
     private void Play()
