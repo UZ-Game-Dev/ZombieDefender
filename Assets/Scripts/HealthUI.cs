@@ -21,7 +21,7 @@ public class HealthUI : MonoBehaviour
     private Transform _ui;
     private Slider _healthSlider;
 
-    private void Start()
+    private void Awake()
     {
         foreach(Canvas c in FindObjectsOfType<Canvas>())
         {

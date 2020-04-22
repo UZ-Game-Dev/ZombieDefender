@@ -31,9 +31,14 @@ public class DefensiveSpikes : MonoBehaviour
     private void Awake()
     {
         _healthUI = GetComponent<HealthUI>();
-
+        maxHP = health;
     }
- 
+
+    private void Start()
+    {
+        _healthUI.updateHP(health, maxHP);
+    }
+
     public void Initialize()
     {
         //Wywoływane prze funkcję Start() w skryocie Shop

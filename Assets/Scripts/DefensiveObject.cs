@@ -29,6 +29,11 @@ public class DefensiveObject : MonoBehaviour
         maxHP = health;
     }
 
+    private void Start()
+    {
+        _healthUI.updateHP(health, maxHP);
+    }
+
     public void Initialize()
     {
         //Wywoływane prze funkcję Start() w skrypcie Shop
