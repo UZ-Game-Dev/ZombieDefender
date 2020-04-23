@@ -56,7 +56,7 @@ public class Shop : MonoBehaviour
         }
 
         //Czy gracz posiada juz broń?
-        if (weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic) != null || weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic) != null)
+        if (weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSemiAutomatic) != null || weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic) != null || weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle) != null)
             this.UnlockWeaponSwapUI();
 
         audioSourceBuing = shopPanel.GetComponent<AudioSource>();

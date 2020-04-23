@@ -146,7 +146,7 @@ public class SaveData
         if (_weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle) != null)
         {
             RifleCurrentAmmo =       _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetCurrentAmmo();
-            RifleAmmo =              _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetAmmo();
+            RifleAmmo =              _weapon.GetSniperAmmo();
             RifleCapacity =          _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetCapacity();
             RifleLevel =             _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetLevel();
             RifleFireRate =          _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetFireRate();

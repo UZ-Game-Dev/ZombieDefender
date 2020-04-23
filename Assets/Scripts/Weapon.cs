@@ -509,7 +509,7 @@ public class Weapon : MonoBehaviour
         {
             Weapon.SniperRifle rifle = new Weapon.SniperRifle();
             rifle.SetCurrentAmmo(       SaveSystem.GetData().RifleCurrentAmmo);
-            rifle.SetAmmo(              SaveSystem.GetData().RifleAmmo);
+            AddSniperAmmo(              SaveSystem.GetData().RifleAmmo);
             rifle.SetCapacity(          SaveSystem.GetData().RifleCapacity);
             rifle.SetLevel(             SaveSystem.GetData().RifleLevel);
             rifle.SetFireRate(          SaveSystem.GetData().RifleFireRate);

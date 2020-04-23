@@ -78,7 +78,7 @@ public class UI : MonoBehaviour
             snip = new Weapon.SniperRifle();
             sniperUpgrade.text = "Cost: " + snip.GetBuyingPrice() + "$\n \n ";
         }
-        else autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eAutomatic).GetMoneyForUpgrade() + "$";
+        else autoUpgrade.text = "Cost: " + _weapon.weapons.Find(gun => gun.GetType() == Weapon.WeaponType.eSniperRifle).GetMoneyForUpgrade() + "$";
 
         //Sklep - Panel HP
         if (_player.GetHpLevel() == _player.GetMaxHpLevel())
